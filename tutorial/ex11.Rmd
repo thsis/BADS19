@@ -1,0 +1,257 @@
+---
+title: "Exercise 11"
+subtitle: Business Analytics and Data Science WS18/19
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+# NEED FOR CHANGE ---- 
+# Note that this code will not work on your computer. 
+#wdir <- "~/Seafile/lecture/BADS/Exercise BADS"
+#setwd(wdir)
+
+# You can uncomment the next line and specify the directory for the exercise on your computer
+# wdir <- "C://Your/own/path"
+# End of NEED FOR CHANGE ----
+
+#knitr::opts_knit$set(root.dir = wdir)
+# results = c("all", "hide")
+knitr::opts_chunk$set(echo = TRUE, results = 'all', message = FALSE, warning = FALSE, fig.keep = 'none', cache = FALSE)
+options(repos=c(CRAN = "https://cran.uni-muenster.de/"))
+```
+
+## Introduction
+With increasing complexity of models interpretability becomes an issue. 'Old-school' models like regression or tree-based family are still around not only because of their robustness, but also due to insights they provide on the feature importance. Neural Networks can boast impressive predictive power, yet they remain mostly a 'black box' (although there are extensive attempts to fix it). Both model-dependent and -independent tools have been developed in order to enhance the our understanding of the internal processes hapenning inside the model.  We will use some of these to answer the important questions which variables are important and what is the size and direction of the influence of the variables.
+
+
+## Logit and steps
+In many cases you will find yourself using a linear regression to get a quick look at the interactions within data. There are several methods that would allow you to make a judgement about the variable importance, starting with size and p-values of coefficients and ending with automated tools that consider all possible subsets of the pool of explanatory variables and find the model that best fits the data according to some criteria (think Adjusted R2, AIC and BIC). In the process different combinations get scored and you end up with the set of variables deemed optimal for your criteria of choice.
+
+**stepAIC** function from the package **MASS* makes use of Akaike Information Criterion to compare models. It's universal for regression and classification tasks. If you increase the number of parameters while fitting the model, you will improve the log likelihood (we will refresh what that is in the tutorial) but will run into the danger of overfitting. The AIC penalizes for increasing the number of parameters thus minimizing the AIC selects the model where the improvement in log likelihood is no longer worth the penalty for increasing the number of parameters. In a way, it does similar work with our regularization technics like LASSO and Ridge.
+
+1. Start with building several regressions that use an increasing number variables to predict BAD. Loop over variables 1,2,3,... , incrementally add them to the model and see what happens to your AUC. Plot the results. What is a drawback of such manual looping?
+2. Use *stepAIC* function to perform a step-wise regression and see what is the best AIC you can get (refresh your knowledge of AIC if needed). To do it, you will need to build two models first: one logit with only Intercept as an aexplanatory variable and then a full logit. Save the variables selected by stepAIC - we want to compare it with RF results later on.
+
+Note: We will perform the feature selection on train set and predict on validation set. Test set should be used after feature selection.
+
+```{r}
+library(leaps)
+library(MASS)
+library(caret)
+library(hmeasure)
+library(randomForest)
+library(xgboost)
+
+source("BADS-HelperFunctions.R")
+loans <- get.loan.dataset()
+
+# Splitting the data into a test and a training set 
+# and now an additional woe set
+set.seed(123)
+idx.test <- createDataPartition(y = loans$BAD, p = 0.3, list = FALSE) # Draw a random, stratified sample including p percent of the data
+ts <-  loans[idx.test, ] # test set - put it aside
+
+idx.val <- createDataPartition(y = loans$BAD[-idx.test], p = 0.35, list = FALSE)
+val <- loans[-idx.test, ][idx.val,]
+tr <- loans[-idx.test, ][-idx.val,] # training set
+
+auc <- rep(NA, 14)
+#pulling column names
+varn <- colnames(loans)[-c(15,16)]
+
+for (i in 1:length(varn)){
+  # Add the (arbitrarily) first i variables in the dataset
+ Formula <- formula(paste("BAD ~ ", paste(varn[1:i], collapse=" + ")))
+ # Train a logit model
+ lm <- glm(Formula,tr,family="binomial") 
+ yhat <- predict(lm, val[,c(1:i,15)],type="response")
+ # Calculate the AUC score on the test data
+ h <- HMeasure(true.class = as.numeric(val$BAD=="bad"), scores = yhat) 
+ auc[i]<- h$metrics["AUC"]
+}
+plot(unlist(auc),type="l")
+
+```
+              
+```{r}           
+basic <- glm(BAD~1, data=tr,family = "binomial") 
+basic# this will give us only the intercept
+full <- glm(BAD~., data=tr,family = "binomial")
+# you can select the direction of selection, you would then look for a model with lowest AIC.
+glm_stepwise <- stepAIC(basic, scope = list(lower = basic, upper = full), direction = "both", trace = TRUE, steps = 100) 
+#glm_stepwise <- stepAIC(full, direction = "backward", trace = TRUE, steps = 100) 
+stepvar <- glm_stepwise$coefficients # Check and save the selected variables
+
+performance <- HMeasure(true.class=as.numeric(val$BAD=="bad"), scores = cbind(
+  "full" = predict(full, newdata = val, type="response"),
+  "stepwise" = predict(glm_stepwise, newdata = val, type="response")))
+
+performance$metrics["AUC"]
+
+```
+
+## Variable importance for tree-based models
+For both the random forest and the gradient boosting model, we can calculate which variables have the largest influence on the prediction. This *variable importance* is often model-based, i.e. caluclated in a specific way for a certain model. Two measures of variable importance, one for all tree-based models and one specific to random forests, will be discussed in detail in the lecture. For other models or approaches that are not model dependent, see the caret page on [variable importance]{http://topepo.github.io/caret/variable-importance.html} or the recommended literature.     
+- *Tree-based Gini importance*: The mean squared relative importance of each variable is the sum of squared improvement in the error risk over all internal nodes for which it was chosen as the splitting variable, averaged over all trees.    
+- *Random forest OOB importance*: The decrease in accuracy when randomly permuting the values of each variable in turn for each tree, averaged over all trees. The test sample for each tree are the observations not contained in the bootstrap training set for that tree a.k.a. out-of-bag observations.
+
+Note: These measures do not capture the effect on prediction in case a variable were not available, because other variables could be used as surrogates.    
+Note: The importance of highly correlated variables will not be accurate. Expect RF to split the importance between correlated features and boosting to focus on one of them.
+
+1. Train a random forest model and gradient boosted trees. For random forest, set **importance = TRUE** to calculate the performance on the out-of-bag samples.
+2. Calculate the variable importance of the random forest and the gradient boosting model using the package specific importance functions or mlr's **getFeatureImportance()**. How are the respective importance values calculated for the random forest and gradient boosting model?
+3. Sort the variable importance for both models and remember the most important variables. Does the importance order of the variables fit your expectation?
+
+```{r}
+library(rpart)
+Accuracy <- function(prediction, class, threshold = 0.5){
+  # Predict class 1 if prob. is higher than threshold
+  predClass <-  ifelse(prediction > 0.5, levels(class)[2], levels(class)[1])
+  # Accuracy = ratio of predictions equal to actual observations
+  acc <- sum(factor(predClass) == class) / length(class)
+  return(acc)
+}
+
+set.seed(123)
+boot <- sample(1:nrow(loans), 1000, replace=TRUE) #Take bootstrap sample(replace = TRUE)
+bootstrap <- loans[boot,]
+temptest <- loans[-boot,] #put samples not in bootstrap into temporary test set
+# Build tree. Remember that random forest builds randomized trees instead
+dt <- rpart(BAD~., bootstrap, method="class") 
+# Predict on temporary test set
+yhat <- predict(dt, temptest, type = "prob")[,2]
+acctotal <- Accuracy(prediction = yhat, temptest$BAD, threshold = 0.5)
+
+acc <- c()
+#bootidx <- sample(1:nrow(loans), 1000, replace=TRUE) #Take bootstrap sample(replace = TRUE)
+for (i in 1:14){
+temptest_permuted <- temptest
+temptest_permuted[,i]<- sample(temptest[,i],replace=FALSE)
+yhat <- predict(dt,temptest_permuted,type = "prob")[,2]
+acc[i] <- Accuracy(prediction = yhat,temptest$BAD, threshold = 0.5)
+}
+plot(acc,type="l")
+abline(h=acctotal,col="red")
+#In case of the RF application, the algorithm would run this loop for every tree and further calculate the mean accuracy for every var permution.
+
+dt_var_importance <- acctotal-acc
+names(dt_var_importance) <- colnames(loans)[1:14]
+
+
+
+```
+
+```{r}
+# Explicitly transform factor variables to dummy variables for the xgboost implementation of gradient boosting
+tr.dummy <- mlr::createDummyFeatures(tr, target = "BAD")
+val.dummy <- mlr::createDummyFeatures(val, target = "BAD")
+ts.dummy <- mlr::createDummyFeatures(ts, target = "BAD")
+
+# Train random forest with the optimal parameters found before
+
+set.seed(123)
+rf.randomForest <- randomForest(BAD~., data = tr,  
+                                method = "rf", ntree = 1000, mtry = 4, sampsize = 200,
+                                importance = TRUE)
+varImpPlot(rf.randomForest,type=1)
+# mlr random forest for illustration
+library("mlr")
+task <- makeClassifTask(data = tr.dummy, target = "BAD", positive = "bad")
+rf.mlr <- makeLearner("classif.randomForest", predict.type = "prob", 
+                      par.vals = list("replace" = TRUE, "importance" = TRUE, 
+                                      "mtry" = 4, "sampsize" = 200, "ntree" = 1000))
+set.seed(123)
+rf <- mlr::train(rf.mlr, task = task)
+
+### Random forest variable importance
+featureImportance <- list()
+# Remember to set importance = TRUE in the call to randomForest() to calculate OOB importance
+
+# To use importance() from the randomForest package on mlr train objects (e.g. rf.mlr) extract rf.mlr$learner.model
+# Remember that mlr is only a wrapper function around the underlying packages, so
+# mlr will return a "randomForest" object with its other results
+class(rf$learner.model)
+importance(rf$learner.model)
+importance(rf.randomForest)
+
+# Naturally, you can use the mlr wrapper function to calculate the variable importance
+# The specific measure for variable importance (e.g. MeanDecreaseGini, OOB descrease in accuracy)
+# is selected with argument 'type'
+getFeatureImportance(rf, type = 2)
+featureImportance[["rf"]] <- unlist(getFeatureImportance(rf, type = 2)$res)
+# Although the GINI and OOB importance should be somewhat consistent, there is no gurantee
+# that they are. That is, one variable may be considered important by one 
+# measure but less important by another. If in doubt, the OOB-based
+# measure (meanDecreaseAccuracy) is considered more reliable than the Gini-based
+# measure (meanDecreaseImpurity)
+rf.importance <- importance(rf.randomForest)
+row.names(rf.importance[order(rf.importance[,"MeanDecreaseAccuracy"], decreasing = TRUE),])
+row.names(rf.importance[order(rf.importance[,"MeanDecreaseGini"], decreasing = TRUE),])
+# GINI importance measures the average gain of purity by splits of a given variable. If the variable is useful, it tends to split mixed labeled nodes into pure single class nodes. Splitting by a permuted variables tend neither to increase nor decrease node purities. Permuting a useful variable, tend to give relatively large decrease in mean gini-gain.
+```
+
+```{r}
+### Xgboost variable importance
+
+# Train xgb model
+# NOTE: We do not do model selection here but use the optimal parameters we have previously found.
+xgb.mlr <- makeLearner("classif.xgboost", predict.type = "prob", 
+                       par.vals = list("nrounds" = 100, "verbose" = 0, "max_depth" = 4, "eta" = 0.15, 
+                                       "gamma" = 0, "colsample_bytree" = 0.8, "min_child_weight" = 1, "subsample" = 0.8))
+xgb <- mlr::train(xgb.mlr, task = task)
+
+# the xgboost package has a function xgb.importance()
+# Gain: Gini gain as in RF
+# Cover: Relative number of observations split by each feature
+xgb.importance(model = xgb$learner.model, feature_names = colnames(task$env$data))
+
+getFeatureImportance(xgb)
+featureImportance[["xgb"]] <- unlist(getFeatureImportance(xgb)$res)
+#The measures are based on the number of times a variable is selected for splitting, weighted by the squared improvement to the model as a result of each split, and averaged over all trees.
+# Plot relative variable importance scaled from 0 to 100
+# When interpreting these, it's crucial to consider how the
+# importance is calculated
+maxMinStandardize <- function(x) ( (x - min(x)) / (max(x) - min(x)) ) * 100
+importanceTable <- as.data.frame(sapply(featureImportance, maxMinStandardize, USE.NAMES = TRUE))
+importanceTable[order(rowSums(importanceTable), decreasing = TRUE),]
+```
+
+Use the test set to compare the AUC performance for step function, RF and XGboost variable sets.
+```{r}
+#Let's compare models after feature selection on the test set
+AUC <- list()
+selectedlr <- glm(glm_stepwise$formula,rbind(tr,val),family = "binomial")
+ylr<- HMeasure(true.class=as.numeric(ts$BAD=="bad"), scores = predict(selectedlr, ts, type="response"))
+AUC["lr"] <- ylr$metrics["AUC"]
+
+#rf
+
+selectedrf <- row.names(rf.importance[order(rf.importance[,"MeanDecreaseAccuracy"], decreasing = TRUE),])
+rf <- randomForest(formula(paste("BAD ~ ", paste(selectedrf[1:10], collapse=" + "))), data = rbind(tr,val),method = "rf", ntree = 1000, mtry = 4, sampsize = 200)
+
+yrf<- HMeasure(true.class=as.numeric(ts.dummy$BAD=="bad"), scores = (predict(rf, ts, type = "prob")[, 2]))
+AUC["rf"] <- yrf$metrics["AUC"]
+
+#xgboost
+selectedxgb <-unlist(getFeatureImportance(xgb)$res)
+selectedxgb <- selectedxgb[order(selectedxgb, decreasing = TRUE)][1:10]
+
+set <- loans[colnames(loans)%in%names(selectedxgb)]
+set$BAD <- loans$BAD
+set_dummy <- mlr::createDummyFeatures(set, target="BAD")
+
+idx<- caret::createDataPartition(y = set_dummy$BAD, p = 0.7, list = FALSE)
+trd<-set_dummy[idx, ] # training set
+tsd<-  set_dummy[-idx, ]
+task <- makeClassifTask(data =trd, target = "BAD", positive = "bad")
+xgb <- mlr::train(xgb.mlr, task = task)
+yxgb <- predict(xgb, newdata=tsd)
+
+AUC["xgb"]  <- mlr::performance(yxgb,measures = mlr::auc) 
+AUC
+
+```
+
+
