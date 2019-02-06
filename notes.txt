@@ -13,13 +13,13 @@
 USERS:
 + days until delivery # Done
 + days between order and registration: user_tenure # Done
-+ basket size: number of other products in order
-+ number of previous orders
++ basket size: number of other distinct products in order # Done
++ number of previous orders # Done
 + avg. orders per month
-+ avg. item price per order
-+ total money ordered (not necessarily spent) until current order
++ avg. item price per order # Done
++ total money ordered (not necessarily spent) until current order # Done
 + avg order size: i.e. num_items / num_orders
-+ total order size on this day
++ total order size on this day # Done
 + provided day of birth
 + fit decision tree to age variable  # maybe later?
 + cluster users based on their avg orders/avg basket size
