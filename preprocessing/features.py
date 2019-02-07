@@ -26,39 +26,36 @@ class FeatureGenerator(object):
         woe.name = var + "_woe"
         return woe
 
-    def fit(self, data):
-        """Calculate features for known dataset."""
+    def __get_woe_cols(self, DF):
+        """Fit WOE and store tables as attributes."""
+        self.WOE_item_id = self.get_woe(DF, "item_id")
+        self.WOE_item_size = self.get_woe(DF, "item_size")
+        self.WOE_item_color = self.get_woe(DF, "item_color")
+        self.WOE_brand_id = self.get_woe(DF, "brand_id")
 
-        self.data = copy.deepcopy(data)
-        # ----- Weight of Evidence -----
-        self.WOE_item_id = self.get_woe(self.data, "item_id")
-        self.WOE_item_size = self.get_woe(self.data, "item_size")
-        self.WOE_item_color = self.get_woe(self.data, "item_color")
-        self.WOE_brand_id = self.get_woe(self.data, "brand_id")
+        outdata = DF.merge(self.WOE_item_id.reset_index(),
+                           how="left").fillna(0)
+        outdata = outdata.merge(self.WOE_item_size.reset_index(),
+                                how="left").fillna(0)
+        outdata = outdata.merge(self.WOE_item_color.reset_index(),
+                                how="left").fillna(0)
+        outdata = outdata.merge(self.WOE_brand_id.reset_index(),
+                                how="left").fillna(0)
+        return outdata
 
-        # ----- 'Creative' Engineered Features -----
-        # Days until item was delivered
-        days_until_delivery = (self.data.delivery_date - self.data.order_date)
-        self.data["days_until_delivery"] = days_until_delivery.dt.days
-
-        # Days between order and registration date
-        tenure = (self.data.order_date - self.data.user_reg_date).dt.days
-        self.data["user_tenure"] = tenure
-
-        # basket size
-        # Create item identifier, that also reflects sizes
-        item_size_id = self.data["item_id"] + "-" + self.data["item_size"]
-        self.data["item_size_id"] = item_size_id
-
+    def __get_order_cols(self, DF):
         # ----- ORDERS -----
-        orders = self.data.groupby(["user_id", "order_date"]).agg({
-            "item_size_id": "count",
+        orders = DF.groupby(["user_id", "order_date"]).agg({
             "item_id": "count",
-            "item_price": ["sum", "mean"]})
+            "item_price": ["sum", "mean", "median"]})
         orders.reset_index(inplace=True)
         orders.columns = ["user_id", "order_date", "basket_size",
-                          "order_distinct_items",
-                          "basket_value", "avg_price_basket"]
+                          "basket_value", "avg_price_basket",
+                          "median_price_basket"]
+
+        # Skewness measure: deviation from median value in current order
+        skew_basket = orders.avg_price_basket - orders.median_price_basket
+        orders["skew_price_basket"] = skew_basket
 
         # Calculate number of previous orders
         orders["num_prev_orders"] = orders.reset_index().groupby(
@@ -69,38 +66,134 @@ class FeatureGenerator(object):
             "user_id").basket_value.cumsum() - orders.basket_value
 
         # Calculate items ordered before current order
-        prev_orders = orders.groupby("user_id").order_distinct_items.cumsum()
-        orders["item_prev_orders"] = prev_orders - orders.order_distinct_items
+        prev_orders = orders.groupby("user_id").basket_size.cumsum()
+        orders["item_prev_orders"] = prev_orders - orders.basket_size
 
-        # Merge orders into data
-        self.data = self.data.merge(orders)
+        return orders
 
-        # ----- USERS -----
-        self.data["first_timer"] = self.data.num_prev_orders == 0
+    def __get_item_cols(self, DF):
+        # ----- ITEMS -----
+        items = DF.groupby("item_id").agg({
+            "item_price": "max",
+            "user_id": "count"})
+        items.reset_index(inplace=True)
+        items.columns = ["item_id", "max_price", "num_item_orders"]
 
+        return items
+
+    def __get_dummy_cols(self, DF):
         # ----- TIME -----
-        dow_order = pd.get_dummies(self.data.order_date.dt.dayofweek,
+        dow_order = pd.get_dummies(DF.order_date.dt.dayofweek,
                                    prefix="is_order_dow")
-        dow_delivery = pd.get_dummies(self.data.delivery_date.dt.dayofweek,
+        dow_delivery = pd.get_dummies(DF.delivery_date.dt.dayofweek,
                                       prefix="is_delivery_dow")
-        month_order = pd.get_dummies(self.data.order_date.dt.month,
+        month_order = pd.get_dummies(DF.order_date.dt.month,
                                      prefix="is_order_month")
 
         # ----- DUMMIES -----
-        user_title = pd.get_dummies(self.data.user_title,
+        user_title = pd.get_dummies(DF.user_title,
                                     prefix="is_title")
 
-        self.data = pd.concat([self.data, dow_order, dow_delivery,
-                               month_order, user_title],
-                              axis=1)
+        region = pd.get_dummies(DF.user_state,
+                                prefix="is_state")
+
+        out = pd.concat([DF, dow_order, dow_delivery,
+                         month_order, user_title, region],
+                        join_axes=[DF.index],
+                        axis=1)
+        return out
+
+    def fit(self, data):
+        self.data = copy.deepcopy(data)
+        # ----- Weight of Evidence -----
+        self.features = self.__get_woe_cols(data)
+
+        return self
+
+    def transform(self, data):
+        # ----- Weight of Evidence -----
+        outdata = data.merge(self.WOE_item_id.reset_index(),
+                             how="left").fillna(0)
+        outdata = outdata.merge(self.WOE_item_size.reset_index(),
+                                how="left").fillna(0)
+        outdata = outdata.merge(self.WOE_item_color.reset_index(),
+                                how="left").fillna(0)
+        outdata = outdata.merge(self.WOE_brand_id.reset_index(),
+                                how="left").fillna(0)
+
+
+        # ----- 'Creative' Engineered Features -----
+        # ----- ORDERS -----
+        orders = self.__get_order_cols(data)
+        outdata = outdata.merge(orders, how="left")
+
+        # Deviation from median item price per order
+        outdata["item_skew"] = outdata.item_price - outdata.median_price_basket
+
+        # ----- ITEMS -----
+        items = self.__get_item_cols(data)
+        outdata = outdata.merge(items, how="left")
+
+        # ----- DUMMIES -----
+        outdata = self.__get_dummy_cols(outdata)
+
+        # ----- CASE-VARIABLES ----- (i.e. no join needed)
+        # Days until item was delivered
+        days_until_delivery = outdata.delivery_date - outdata.order_date
+        outdata["days_until_delivery"] = days_until_delivery.dt.days
+
+        # Days between order and registration date
+        tenure = (outdata.order_date - outdata.user_reg_date).dt.days
+        outdata["user_tenure"] = tenure
+
+        price_off = (outdata.max_price-outdata.item_price) / outdata.max_price
+        outdata["price_off"] = price_off.fillna(0)
+
+        # ----- USERS -----
+        outdata["first_timer"] = outdata.num_prev_orders == 0
 
         # TODO:
         # ----- 'Dull' Features: i.e. ratios over numerical variables
-        return self.data
+        outdata["log_price"] = np.log(outdata.item_price.values + 1)
+
+        # TODO:
+        # Log(variable)
+        outdata = outdata._get_numeric_data()
+        X = outdata.loc[:, outdata.columns != "return"].values
+        y = outdata["return"].values
+
+        self.features = outdata
+        return X, y
+
+    def fit_transform(self, data):
+        """Calculate features and return features & labels."""
+        self.data = copy.deepcopy(data)
+        self.fit(data)
+        X, y = self.transform(data)
+        return X, y
+
+    def generate(self, newdata):
+        """Generate features from unknown data,"""
+        self.newdata = copy.deepcopy(newdata)
+        data = pd.concat([self.data, self.newdata], sort=True).sort_values(
+            ["user_id", "order_date"])
+        self.test = data
+
+        X, y = self.transform(data)
+        return X, y
 
 
 if __name__ == "__main__":
     datapath = os.path.join("data", "BADS_WS1819_known.csv")
-    data = cleaning.clean(datapath)
+    unknownpath = os.path.join("data", "BADS_WS1819_unknown.csv")
+
+    known = cleaning.clean(datapath)
+    unknown = cleaning.clean(unknownpath)
     fg = FeatureGenerator()
-    dataset = fg.fit(data)
+    fg.fit(known)
+    X_test, y_test = fg.generate(unknown)
+    dataset = fg.features
+
+dataset.shape
+desc = dataset.describe().T
+fg.features.index
