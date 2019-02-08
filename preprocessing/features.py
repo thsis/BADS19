@@ -189,7 +189,9 @@ class FeatureGenerator(object):
         self.new_features = data
         self.predict_data = data.loc[self.newdata.index]
 
-        X, _ = self.transform(data)
+        _, _ = self.transform(data)
+        X = self.features.loc[self.newdata.index,
+                              self.features.columns != "return"].values
         return X
 
 
