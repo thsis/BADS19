@@ -1,4 +1,6 @@
 import os
+import logging
+import json
 import numpy as np
 import pandas as pd
 
@@ -14,6 +16,16 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
 from sklearn.pipeline import Pipeline
 from tqdm import tqdm
+
+
+# Get logger.
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+fh = logging.FileHandler("random_forest.log")
+format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+formatter = logging.Formatter(format)
+fh.setFormatter(formatter)
+logger.addHandler(fh)
 
 
 def minimizer(objective):
@@ -43,6 +55,8 @@ def max_auc(params):
     y_pred = model.predict_proba(X_test)
     score = roc_auc_score(y_true=y_test,
                           y_score=y_pred[:, 1])
+    oob_score = model.named_steps['rf'].oob_score
+    logger.info('OOB score: {0:.{2}f}\t Test score: {1:.{2}f}'.format(oob_score, score, 5))
     return {"loss": -score, "status": STATUS_OK}
 
 
@@ -64,18 +78,22 @@ steps = [('scaler', StandardScaler()),
 pipeline = Pipeline(steps)
 
 paramspace = {
-    "rf__n_estimators": scope.int(hp.qnormal("n_estimators", 10000, 5000, 1)),
+    "rf__n_estimators": scope.int(hp.quniform("n_estimators", 1000, 5000, 1)),
     "rf__max_features": hp.uniform("max_features", 0.5, 1),
     "rf__n_jobs": -1,
     "rf__oob_score": True}
 
 trials = Trials()
-best = max_auc(paramspace=paramspace, trials=trials, max_evals=1)
+best = max_auc(paramspace=paramspace, trials=trials, max_evals=20)
 best["n_estimators"] = int(best["n_estimators"])
 
+
 # Predictions:
-print("Calculate Predictions and save to file.")
-clf = RandomForestClassifier(**best)
+print("Calculate Predictions")
+clf = RandomForestClassifier(n_jobs=-1, **best)
 clf.fit(X, y)
-predictions = clf.predict_proba(X_pred)
-predictions.to_csv()
+preds = clf.predict_proba(X_pred)
+print("Save to file.")
+
+predictions = pd.DataFrame(preds[:, 1]).set_index(fg.predict_data.index)
+predictions.to_csv(outpath)
