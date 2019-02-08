@@ -33,14 +33,18 @@ class FeatureGenerator(object):
         self.WOE_item_color = self.get_woe(DF, "item_color")
         self.WOE_brand_id = self.get_woe(DF, "brand_id")
 
-        outdata = DF.merge(self.WOE_item_id.reset_index(),
-                           how="left").fillna(0)
-        outdata = outdata.merge(self.WOE_item_size.reset_index(),
-                                how="left").fillna(0)
-        outdata = outdata.merge(self.WOE_item_color.reset_index(),
-                                how="left").fillna(0)
-        outdata = outdata.merge(self.WOE_brand_id.reset_index(),
-                                how="left").fillna(0)
+        outdata = DF.reset_index().merge(
+            self.WOE_item_id.reset_index(),
+            how="left").set_index("order_item_id").fillna(0)
+        outdata = outdata.reset_index().merge(
+            self.WOE_item_size.reset_index(),
+            how="left").set_index("order_item_id").fillna(0)
+        outdata = outdata.reset_index().merge(
+            self.WOE_item_color.reset_index(),
+            how="left").set_index("order_item_id").fillna(0)
+        outdata = outdata.reset_index().merge(
+            self.WOE_brand_id.reset_index(),
+            how="left").set_index("order_item_id").fillna(0)
         return outdata
 
     def __get_order_cols(self, DF):
@@ -112,27 +116,32 @@ class FeatureGenerator(object):
 
     def transform(self, data):
         # ----- Weight of Evidence -----
-        outdata = data.merge(self.WOE_item_id.reset_index(),
-                             how="left").fillna(0)
-        outdata = outdata.merge(self.WOE_item_size.reset_index(),
-                                how="left").fillna(0)
-        outdata = outdata.merge(self.WOE_item_color.reset_index(),
-                                how="left").fillna(0)
-        outdata = outdata.merge(self.WOE_brand_id.reset_index(),
-                                how="left").fillna(0)
-
+        outdata = data.reset_index().merge(
+            self.WOE_item_id.reset_index(),
+            how="left").set_index("order_item_id").fillna(0)
+        outdata = outdata.reset_index().merge(
+            self.WOE_item_size.reset_index(),
+            how="left").set_index("order_item_id").fillna(0)
+        outdata = outdata.reset_index().merge(
+            self.WOE_item_color.reset_index(),
+            how="left").set_index("order_item_id").fillna(0)
+        outdata = outdata.reset_index().merge(
+            self.WOE_brand_id.reset_index(),
+            how="left").set_index("order_item_id").fillna(0)
 
         # ----- 'Creative' Engineered Features -----
         # ----- ORDERS -----
         orders = self.__get_order_cols(data)
-        outdata = outdata.merge(orders, how="left")
+        outdata = outdata.reset_index().merge(
+            orders, how="left").set_index("order_item_id")
 
         # Deviation from median item price per order
         outdata["item_skew"] = outdata.item_price - outdata.median_price_basket
 
         # ----- ITEMS -----
         items = self.__get_item_cols(data)
-        outdata = outdata.merge(items, how="left")
+        outdata = outdata.reset_index().merge(
+                items, how="left").set_index("order_item_id")
 
         # ----- DUMMIES -----
         outdata = self.__get_dummy_cols(outdata)
@@ -150,7 +159,7 @@ class FeatureGenerator(object):
         outdata["price_off"] = price_off.fillna(0)
 
         # ----- USERS -----
-        outdata["first_timer"] = outdata.num_prev_orders == 0
+        outdata["first_timer"] = (outdata.num_prev_orders == 0).astype(int)
 
         # TODO:
         # ----- 'Dull' Features: i.e. ratios over numerical variables
@@ -177,10 +186,11 @@ class FeatureGenerator(object):
         self.newdata = copy.deepcopy(newdata)
         data = pd.concat([self.data, self.newdata], sort=True).sort_values(
             ["user_id", "order_date"])
-        self.test = data
+        self.new_features = data
+        self.predict_data = data.loc[self.newdata.index]
 
-        X, y = self.transform(data)
-        return X, y
+        X, _ = self.transform(data)
+        return X
 
 
 if __name__ == "__main__":
@@ -191,9 +201,5 @@ if __name__ == "__main__":
     unknown = cleaning.clean(unknownpath)
     fg = FeatureGenerator()
     fg.fit(known)
-    X_test, y_test = fg.generate(unknown)
-    dataset = fg.features
-
-dataset.shape
-desc = dataset.describe().T
-fg.features.index
+    X_test = fg.generate(unknown)
+    dataset = fg.predict_data
