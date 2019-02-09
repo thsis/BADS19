@@ -2,7 +2,7 @@ import os
 import logging
 import datetime
 import pandas as pd
-
+import numpy as np
 from preprocessing.features import FeatureGenerator
 from preprocessing.cleaning import clean
 
@@ -10,6 +10,7 @@ from hyperopt import tpe, hp, fmin, STATUS_OK, Trials
 from hyperopt.pyll.base import scope
 
 from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
@@ -82,18 +83,25 @@ X_train, y_train = fg.fit_transform(train, 'return')
 X_test, y_test = fg.transform(test)
 
 steps = [('scaler', StandardScaler()),
+         ('pca', PCA()),
          ('rf', RandomForestClassifier())]
 pipeline = Pipeline(steps)
 
 paramspace = {
+    "pca__n_components": scope.int(hp.quniform("pca__n_components",
+                                               1, X_train.shape[1], 1)),
     "rf__n_estimators": scope.int(hp.quniform("rf__n_estimators",
-                                              100, 5000, 1)),
+                                              100, 10000, 1)),
     "rf__max_features": hp.uniform("rf__max_features", 0.2, 1),
+    "rf__max_depth": scope.int(hp.quniform("rf__max_depth",
+                                           10, 1000, 1)),
+    "rf__min_samples_leaf": hp.uniform("rf__min_samples_leaf", 0.00001, 0.005),
     "rf__n_jobs": -1}
 
 trials = Trials()
 best = max_auc(paramspace=paramspace, trials=trials, max_evals=1000)
 best["rf__n_estimators"] = int(best["rf__n_estimators"])
+best["pca__n_components"] = int(best["pca__n_components"])
 
 # Predictions:
 print("Generate Features")
@@ -108,3 +116,18 @@ print("Save to file.")
 
 predictions = pd.DataFrame(preds[:, 1]).set_index(unknown.index)
 predictions.to_csv(outpath)
+
+
+forest = pipeline.named_steps["rf"]
+importances = forest.feature_importances_.round(3)
+std = np.std([tree.feature_importances_ for tree in forest.estimators_],
+             axis=0)
+indices = np.argsort(importances)[::-1]
+
+# Print the feature ranking
+print("Feature ranking:")
+
+for f in range(best["pca__n_components"]):
+    logger.info("Variable Importance")
+    msg = "\t{0}. component\t ({1:.4})".format(f + 1, importances[indices[f]])
+    logger.info(msg)

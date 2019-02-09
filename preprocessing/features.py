@@ -29,6 +29,7 @@ class FeatureGenerator(object):
         out = self.__merge(out, self.brands)
         out = self.__merge(out, self.states)
 
+        self.outfeatures = out._get_numeric_data()
         out = out._get_numeric_data().astype(np.float64).values
 
         # TODO: Create ratios
@@ -104,5 +105,5 @@ if __name__ == "__main__":
 
     out = X_known.copy()
     out.min()
-    out["price_off"] = (out.item_max_price - out.item_price) / out.item_max_price
+    out["price_off"] = (out.item_max_price-out.item_price) / out.item_max_price
     out["r1"] = out.item_price / out.item_orders
