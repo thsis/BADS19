@@ -1,7 +1,6 @@
 import os
 import logging
-import json
-import numpy as np
+import datetime
 import pandas as pd
 
 from preprocessing.features import FeatureGenerator
@@ -26,6 +25,7 @@ format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 formatter = logging.Formatter(format)
 fh.setFormatter(formatter)
 logger.addHandler(fh)
+logger.info("{0} Start new run {0}".format("=" * 10))
 
 
 def minimizer(objective):
@@ -52,45 +52,55 @@ def minimizer(objective):
 def max_auc(params):
     model = pipeline.set_params(**params)
     model.fit(X_train, y_train)
-    y_pred = model.predict_proba(X_test)
-    score = roc_auc_score(y_true=y_test,
-                          y_score=y_pred[:, 1])
-    oob_score = model.named_steps['rf'].oob_score
-    logger.info('OOB score: {0:.{2}f}\t Test score: {1:.{2}f}'.format(oob_score, score, 5))
-    return {"loss": -score, "status": STATUS_OK}
+    y_pred_test = model.predict_proba(X_test)
+    test_score = roc_auc_score(y_true=y_test,
+                               y_score=y_pred_test[:, 1])
+    y_pred_train = model.predict_proba(X_train)
+    train_score = roc_auc_score(y_true=y_train,
+                                y_score=y_pred_train[:, 1])
+    info = "Train AUC: {0:.{2}f}\tTest AUC: {1:.{2}f}".format(train_score,
+                                                              test_score, 3)
+    logger.info(info)
+
+    return {"loss": -test_score, "status": STATUS_OK}
 
 
 datapath = os.path.join("data", "BADS_WS1819_known.csv")
 unknownpath = os.path.join("data", "BADS_WS1819_unknown.csv")
-outpath = os.path.join("data", "predictions.csv")
+
+timecode = datetime.datetime.now().strftime("%Y%m%d_%H%M")
+outpath = os.path.join("predictions",  "rf_predictions" + timecode + ".csv")
 
 known = clean(datapath)
 unknown = clean(unknownpath)
 
-fg = FeatureGenerator()
-X, y = fg.fit_transform(known)
-X_pred = fg.generate(unknown)
+train, test = train_test_split(known, test_size=0.2)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+fg = FeatureGenerator()
+X_train, y_train = fg.fit_transform(train)
+X_test, y_test = fg.transform(test)
 
 steps = [('scaler', StandardScaler()),
          ('rf', RandomForestClassifier())]
 pipeline = Pipeline(steps)
 
 paramspace = {
-    "rf__n_estimators": scope.int(hp.quniform("n_estimators", 1000, 5000, 1)),
+    "rf__n_estimators": scope.int(hp.quniform("n_estimators", 10, 10, 1)),
     "rf__max_features": hp.uniform("max_features", 0.5, 1),
-    "rf__n_jobs": -1,
-    "rf__oob_score": True}
+    "rf__n_jobs": -1}
 
 trials = Trials()
-best = max_auc(paramspace=paramspace, trials=trials, max_evals=20)
+best = max_auc(paramspace=paramspace, trials=trials, max_evals=10)
 best["n_estimators"] = int(best["n_estimators"])
 
-
 # Predictions:
+print("Generate Features")
+fg = FeatureGenerator()
+X, y = fg.fit_transform(known)
+X_pred = fg.generate(unknown)
 print("Calculate Predictions")
-clf = RandomForestClassifier(n_jobs=-1, **best)
+clf = pipeline.set_params(**best)
 clf.fit(X, y)
 preds = clf.predict_proba(X_pred)
 print("Save to file.")
