@@ -11,22 +11,22 @@
 ## Feature - engineering:
 
 USERS:
-+ days until delivery # Done
-+ days between order and registration: user_tenure # Done
-+ basket size: number of other distinct products in order # Done
-+ number of previous orders # Done
++ days until delivery
++ days between order and registration: user_tenure
++ basket size: number of other distinct products in order
++ number of previous orders
 + avg. orders per month
-+ avg. item price per order # Done
-+ total money ordered (not necessarily spent) until current order # Done
++ avg. item price per order
++ total money ordered (not necessarily spent) until current order
 + avg order size: i.e. num_items / num_orders
-+ total order size on this day # Done
++ total order size on this day
 + provided day of birth
-+ fit decision tree to age variable  # maybe later?
++ fit decision tree to age variable
 + cluster users based on their avg orders/avg basket size
 
 ITEMS:
 + Nr. of the same `item_id` in current delivery
-+ WOE on:
++ WOE on: # Weight of Evidence seems to be some major ass bullshit.
     * brand_id,
     * item_size,
     * item_id

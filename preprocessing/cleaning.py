@@ -43,11 +43,25 @@ def clean(datapath):
     # Remove user_dob from 1900
     data.loc[data.user_dob.dt.year <= 1926, "user_dob"] = np.nan
 
+    # Mark missing birth-date
+    data["is_dob_missing"] = data.user_dob.isna()
+
     # Compute Mean Timedelta between user registration and day of birth
     na_dob = pd.isna(data.user_dob)
     dob_diff = (data.user_reg_date - data.user_dob).mean()
     # Impute missing values for "user_dob" by mean of Timedelta
     data.loc[na_dob, "user_dob"] = data.loc[na_dob, "user_reg_date"] - dob_diff
+
+    # Mark pants
+    data["is_item_pants"] = data.item_size.str.match("[0-9]{4}")
+    # Mark underwear
+    data["is_item_underwear"] = data.item_size.str.match("^[3-9]\\+?$")
+    # Mark letter denomination
+    data["is_letter_coded"] = data.item_size.str.match("[xlsmXLSM]")
+
+    # Time related features
+    data["days_to_delivery"] = (data.delivery_date-data.order_date).dt.days
+    data["user_tenure"] = (data.order_date - data.user_reg_date).dt.days
 
     return data
 
