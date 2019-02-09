@@ -29,8 +29,14 @@ class FeatureGenerator(object):
         out = self.__merge(out, self.brands)
         out = self.__merge(out, self.states)
 
+        out = out._get_numeric_data().astype(np.float64).values
+
         # TODO: Create ratios
-        return out._get_numeric_data().values, self.target.values
+        # HACK:
+        if self.target_col in X.columns:
+            return out, X.loc[:, self.target_col]
+        else:
+            return out
 
     def fit_transform(self, data, target_col):
         self.fit(data, target_col)

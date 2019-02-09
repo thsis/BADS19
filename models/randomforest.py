@@ -53,9 +53,9 @@ def max_auc(params):
     model = pipeline.set_params(**params)
     model.fit(X_train, y_train)
     y_pred_test = model.predict_proba(X_test)
+    y_pred_train = model.predict_proba(X_train)
     test_score = roc_auc_score(y_true=y_test,
                                y_score=y_pred_test[:, 1])
-    y_pred_train = model.predict_proba(X_train)
     train_score = roc_auc_score(y_true=y_train,
                                 y_score=y_pred_train[:, 1])
     info = "Train AUC: {0:.{2}f}\tTest AUC: {1:.{2}f}".format(train_score,
@@ -78,7 +78,7 @@ train, test = train_test_split(known, test_size=0.2)
 
 
 fg = FeatureGenerator()
-X_train, y_train = fg.fit_transform(train)
+X_train, y_train = fg.fit_transform(train, 'return')
 X_test, y_test = fg.transform(test)
 
 steps = [('scaler', StandardScaler()),
@@ -86,24 +86,25 @@ steps = [('scaler', StandardScaler()),
 pipeline = Pipeline(steps)
 
 paramspace = {
-    "rf__n_estimators": scope.int(hp.quniform("n_estimators", 10, 10, 1)),
-    "rf__max_features": hp.uniform("max_features", 0.5, 1),
+    "rf__n_estimators": scope.int(hp.quniform("rf__n_estimators",
+                                              100, 5000, 1)),
+    "rf__max_features": hp.uniform("rf__max_features", 0.2, 1),
     "rf__n_jobs": -1}
 
 trials = Trials()
-best = max_auc(paramspace=paramspace, trials=trials, max_evals=10)
-best["n_estimators"] = int(best["n_estimators"])
+best = max_auc(paramspace=paramspace, trials=trials, max_evals=1000)
+best["rf__n_estimators"] = int(best["rf__n_estimators"])
 
 # Predictions:
 print("Generate Features")
 fg = FeatureGenerator()
-X, y = fg.fit_transform(known)
-X_pred = fg.generate(unknown)
+X, y = fg.fit_transform(known, "return")
+X_pred = fg.transform(unknown)
 print("Calculate Predictions")
 clf = pipeline.set_params(**best)
 clf.fit(X, y)
 preds = clf.predict_proba(X_pred)
 print("Save to file.")
 
-predictions = pd.DataFrame(preds[:, 1]).set_index(fg.predict_data.index)
+predictions = pd.DataFrame(preds[:, 1]).set_index(unknown.index)
 predictions.to_csv(outpath)
