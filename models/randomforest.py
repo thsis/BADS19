@@ -115,7 +115,7 @@ preds = clf.predict_proba(X_pred)
 print("Save to file.")
 
 predictions = pd.DataFrame(preds[:, 1]).set_index(unknown.index)
-predictions.to_csv(outpath)
+predictions.to_csv(outpath, header=["return"])
 
 
 forest = pipeline.named_steps["rf"]
