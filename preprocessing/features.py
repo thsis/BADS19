@@ -101,6 +101,7 @@ class FeatureGenerator(object):
 
         self.outfeatures = out
         self.column_names = out.columns
+        out = out.fillna(out.mean())
         out = out.astype(np.float64).values
         # HACK:
         if self.target_col in X.columns:
