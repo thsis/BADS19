@@ -92,7 +92,7 @@ paramspace = {
     "rf__max_features": hp.uniform("rf__max_features", 0.2, 1),
     "rf__max_depth": scope.int(hp.quniform("rf__max_depth",
                                            100, 1000, 1)),
-    "rf__min_samples_leaf": hp.uniform("rf__min_samples_leaf", 0.0001, 0.05),
+    "rf__min_samples_leaf": hp.uniform("rf__min_samples_leaf", 0.001, 0.05),
     "rf__n_jobs": -1}
 
 trials = Trials()
@@ -127,8 +127,8 @@ std = np.std([tree.feature_importances_ for tree in forest.estimators_],
 indices = np.argsort(importances)[::-1]
 
 logger.info("{0} Variable Importance {0}".format("-" * 5))
-for f in range(5):
+for f in range(15):
     varname = fg.column_names[indices[f]]
     importance = importances[indices[f]]
-    msg = "{0}. ({2:.4}): {1}".format(f + 1, varname, importance)
+    msg = "{0}. {1:50s}({2:.4})".format(f + 1, varname, importance)
     logger.info(msg)
