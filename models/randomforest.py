@@ -9,7 +9,7 @@ from preprocessing.cleaning import clean
 from hyperopt import tpe, hp, fmin, STATUS_OK, Trials
 from hyperopt.pyll.base import scope
 
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, PolynomialFeatures
 from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
@@ -83,25 +83,27 @@ X_train, y_train = fg.fit_transform(train, 'return')
 X_test, y_test = fg.transform(test)
 
 steps = [('scaler', StandardScaler()),
-         ('pca', PCA()),
          ('rf', RandomForestClassifier())]
 pipeline = Pipeline(steps)
 
 paramspace = {
-    "pca__n_components": scope.int(hp.quniform("pca__n_components",
-                                               1, X_train.shape[1], 1)),
     "rf__n_estimators": scope.int(hp.quniform("rf__n_estimators",
-                                              100, 10000, 1)),
+                                              20, 20, 1)),
     "rf__max_features": hp.uniform("rf__max_features", 0.2, 1),
     "rf__max_depth": scope.int(hp.quniform("rf__max_depth",
-                                           10, 1000, 1)),
-    "rf__min_samples_leaf": hp.uniform("rf__min_samples_leaf", 0.00001, 0.005),
+                                           100, 1000, 1)),
+    "rf__min_samples_leaf": hp.uniform("rf__min_samples_leaf", 0.0001, 0.05),
     "rf__n_jobs": -1}
 
 trials = Trials()
-best = max_auc(paramspace=paramspace, trials=trials, max_evals=1000)
+best = max_auc(paramspace=paramspace, trials=trials, max_evals=10)
+
+logger.info("{0} Optimal Parameter Space {0}".format("-" * 5))
+for param, val in best.items():
+    logger.info("{}:\t\t{:.5}".format(param, val))
+
 best["rf__n_estimators"] = int(best["rf__n_estimators"])
-best["pca__n_components"] = int(best["pca__n_components"])
+best["rf__max_depth"] = int(best["rf__max_depth"])
 
 # Predictions:
 print("Generate Features")
@@ -124,10 +126,9 @@ std = np.std([tree.feature_importances_ for tree in forest.estimators_],
              axis=0)
 indices = np.argsort(importances)[::-1]
 
-# Print the feature ranking
-print("Feature ranking:")
-
-for f in range(best["pca__n_components"]):
-    logger.info("Variable Importance")
-    msg = "\t{0}. component\t ({1:.4})".format(f + 1, importances[indices[f]])
+logger.info("{0} Variable Importance {0}".format("-" * 5))
+for f in range(5):
+    varname = fg.column_names[indices[f]]
+    importance = importances[indices[f]]
+    msg = "{0}. ({2:.4}): {1}".format(f + 1, varname, importance)
     logger.info(msg)
