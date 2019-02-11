@@ -7,10 +7,9 @@ from preprocessing.features import FeatureGenerator
 from preprocessing.cleaning import clean
 
 from hyperopt import tpe, hp, fmin, STATUS_OK, Trials
-from hyperopt.pyll.base import scope
 
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
 from sklearn.pipeline import Pipeline
@@ -20,7 +19,7 @@ from tqdm import tqdm
 # Get logger.
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-fh = logging.FileHandler("random_forest.log")
+fh = logging.FileHandler("svm.log")
 format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 formatter = logging.Formatter(format)
 fh.setFormatter(formatter)
@@ -71,7 +70,7 @@ datapath = os.path.join("data", "BADS_WS1819_known.csv")
 unknownpath = os.path.join("data", "BADS_WS1819_unknown.csv")
 
 timecode = datetime.datetime.now().strftime("%Y%m%d_%H%M")
-outpath = os.path.join("predictions",  "rf_predictions" + timecode + ".csv")
+outpath = os.path.join("predictions",  "svm_predictions" + timecode + ".csv")
 logger.info("{}".format(outpath))
 
 known = clean(datapath)
@@ -80,35 +79,42 @@ history = known.append(unknown, sort=False)
 
 
 train, test = train_test_split(known, test_size=0.2)
+subset = ["item_price",
+          "order_total_value/state_mean_delivery",
+          "days_to_delivery",
+          "days_to_delivery/state_mean_delivery",
+          "item_price/state_mean_delivery"]
 
-fg = FeatureGenerator()
+fg = FeatureGenerator(cols=subset)
 fg.fit(history, 'return')
 X_train, y_train = fg.transform(train, 'return')
 X_test, y_test = fg.transform(test)
 
-steps = [('scaler', StandardScaler()),
-         ('rf', RandomForestClassifier())]
+steps = [('scaler', MinMaxScaler()),
+         ('svm', SVC())]
 pipeline = Pipeline(steps)
 
+kernels = ["linear", "rbf", "sigmoid"]
+shrinking = [False, True]
 paramspace = {
-    "rf__n_estimators": scope.int(hp.quniform("rf__n_estimators",
-                                              10, 200, 1)),
-    "rf__max_features": hp.uniform("rf__max_features", 0.2, 1),
-    "rf__max_depth": scope.int(hp.quniform("rf__max_depth",
-                                           10, 1000, 1)),
-    "rf__min_samples_split": hp.uniform("rf__min_samples_split", 0.0001, 0.05),
-    "rf__min_samples_leaf": hp.uniform("rf__min_samples_leaf", 0.001, 0.05),
-    "rf__n_jobs": -1}
+    "svm__C": hp.uniform("svm__C", 0, 1),
+    "svm__kernel": hp.choice("svm__kernel", kernels),
+    "svm__shrinking": hp.choice("svm__shrinking", shrinking),
+    "svm__probability": True,
+    "svm__max_iter": 10}
 
 trials = Trials()
-best = max_auc(paramspace=paramspace, trials=trials, max_evals=10)
+best = max_auc(paramspace=paramspace, trials=trials, max_evals=1)
+
+best["svm__kernel"] = kernels[best["svm__kernel"]]
+best["svm__shrinking"] = shrinking[best["svm__shrinking"]]
 
 logger.info("{0} Optimal Parameter Space {0}".format("-" * 12))
-for param, val in best.items():
-    logger.info("{0:20s}:\t{1:.5}".format(param, val))
-
-best["rf__n_estimators"] = int(best["rf__n_estimators"])
-best["rf__max_depth"] = int(best["rf__max_depth"])
+logger.info("{0:>20}:{1:>21}{2:.5}".format("svm__C", " ", best["svm__C"]))
+logger.info("{0:>20}:{1:>11}{2:>10}".format("svm__C", " ",
+                                            best["svm__kernel"]))
+logger.info("{0:>20}:{1:>11}{2:>10}".format("svm__shrinking", " ",
+                                            str(best["svm__shrinking"])))
 
 # Predictions:
 print("Generate Features")
@@ -130,15 +136,3 @@ train_score = roc_auc_score(y_true=y,
                             y_score=y_score[:, 1])
 predictions.to_csv(outpath, header=["return"])
 logger.info("Approximate score: {0:.3}".format(train_score))
-
-
-forest = pipeline.named_steps["rf"]
-importances = forest.feature_importances_.round(3)
-indices = np.argsort(importances)[::-1]
-
-logger.info("{0} Variable Importance {0}".format("-" * 14))
-for f in range(15):
-    varname = fg.cols[indices[f]]
-    importance = importances[indices[f]]
-    msg = "{0:2s}. {1:40s}({2:.4})".format(str(f + 1), varname, importance)
-    logger.info(msg)

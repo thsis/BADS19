@@ -71,6 +71,7 @@ unknownpath = os.path.join("data", "BADS_WS1819_unknown.csv")
 
 timecode = datetime.datetime.now().strftime("%Y%m%d_%H%M")
 outpath = os.path.join("predictions",  "logit_predictions" + timecode + ".csv")
+logger.info("{}".format(outpath))
 
 known = clean(datapath)
 unknown = clean(unknownpath)
@@ -120,11 +121,17 @@ fg = FeatureGenerator()
 fg.fit(history, 'return')
 X, y = fg.transform(known, "return")
 X_pred = fg.transform(unknown)
+
 print("Calculate Predictions")
 clf = pipeline.set_params(**best)
 clf.fit(X, y)
 preds = clf.predict_proba(X_pred)
-print("Save to file.")
+y_score = clf.predict_proba(X)
 
+print("Save to file.")
 predictions = pd.DataFrame(preds[:, 1]).set_index(unknown.index)
+print("Calculate Train Score")
+train_score = roc_auc_score(y_true=y,
+                            y_score=y_score[:, 1])
 predictions.to_csv(outpath, header=["return"])
+logger.info("Approximate score: {0:.3}".format(train_score))

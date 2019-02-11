@@ -83,6 +83,10 @@ class FeatureGenerator(object):
         # Create ratios
         out = self.__get_ratios(out)
 
+        # Create special features
+        price_off = (out.item_max_price-out.item_price) / out.item_max_price
+        out["price_off"] = price_off.fillna(value=0)
+
         self.outfeatures = out
         out = out.fillna(out.mean())
         if self.cols is None:
