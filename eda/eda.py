@@ -7,10 +7,15 @@ from matplotlib import pyplot as plt
 
 
 if __name__ == "__main__":
-    traindatapath = os.path.join("data", "BADS_WS1819_known.csv")
-    known = clean(traindatapath)
+    train_data_path = os.path.join("data", "BADS_WS1819_known.csv")
+    unknown_data_path = os.path.join("data", "BADS_WS1819_unknown.csv")
+
+    known = clean(train_data_path)
+    unknown = clean(unknown_data_path)
+    history = known.append(unknown, sort=False)
     fg = FeatureGenerator()
-    _, _ = fg.fit_transform(known, "return")
+    fg.fit(history, 'return')
+    _, _ = fg.transform(known, "return")
     out = fg.outfeatures.copy()
 
     corr = out.corr()
@@ -19,7 +24,7 @@ if __name__ == "__main__":
                 cmap=plt.cm.coolwarm,
                 xticklabels=corr.columns.values,
                 yticklabels=corr.columns.values)
-    plt.suptitle("Feature Correlation Plot")
+    plt.title("Feature Correlation Plot")
     fig.savefig("eda/corrplot.png")
 
     print("Dimensions:", corr.shape)
