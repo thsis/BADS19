@@ -7,10 +7,9 @@ from preprocessing.features import FeatureGenerator
 from preprocessing.cleaning import clean
 
 from hyperopt import tpe, hp, fmin, STATUS_OK, Trials
-from hyperopt.pyll.base import scope
 
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import StandardScaler, PolynomialFeatures
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
 from sklearn.pipeline import Pipeline
@@ -20,7 +19,7 @@ from tqdm import tqdm
 # Get logger.
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-fh = logging.FileHandler("random_forest.log")
+fh = logging.FileHandler("logistic.log")
 format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 formatter = logging.Formatter(format)
 fh.setFormatter(formatter)
@@ -71,7 +70,7 @@ datapath = os.path.join("data", "BADS_WS1819_known.csv")
 unknownpath = os.path.join("data", "BADS_WS1819_unknown.csv")
 
 timecode = datetime.datetime.now().strftime("%Y%m%d_%H%M")
-outpath = os.path.join("predictions",  "rf_predictions" + timecode + ".csv")
+outpath = os.path.join("predictions",  "logit_predictions" + timecode + ".csv")
 
 known = clean(datapath)
 unknown = clean(unknownpath)
@@ -84,34 +83,36 @@ subset = ["item_price",
           "days_to_delivery",
           "days_to_delivery/state_mean_delivery",
           "item_price/state_mean_delivery"]
-subset = None
+
 fg = FeatureGenerator(cols=subset)
 fg.fit(history, 'return')
 X_train, y_train = fg.transform(train, 'return')
 X_test, y_test = fg.transform(test)
 
 steps = [('scaler', StandardScaler()),
-         ('rf', RandomForestClassifier())]
+         ('poly', PolynomialFeatures()),
+         ('logit', LogisticRegression())]
 pipeline = Pipeline(steps)
 
+penalties = ["l1", "l2"]
 paramspace = {
-    "rf__n_estimators": scope.int(hp.quniform("rf__n_estimators",
-                                              10, 200, 1)),
-    "rf__max_features": hp.uniform("rf__max_features", 0.2, 1),
-    "rf__max_depth": scope.int(hp.quniform("rf__max_depth",
-                                           10, 1000, 1)),
-    "rf__min_samples_leaf": hp.uniform("rf__min_samples_leaf", 0.001, 0.05),
-    "rf__n_jobs": -1}
+    "logit__penalty": hp.choice("logit__penalty", penalties),
+    "logit__C": hp.uniform("logit__C", 0, 1),
+    "logit__solver": 'saga',
+    "logit__n_jobs": -1,
+    "logit__fit_intercept": False,
+    "logit__max_iter": 3000,
+    "poly__include_bias": True}
 
 trials = Trials()
 best = max_auc(paramspace=paramspace, trials=trials, max_evals=10)
 
+# Change hyperopt output: 0/1 to "l1", "l2"
+best["logit__penalty"] = penalties[best["logit__penalty"]]
+
 logger.info("{0} Optimal Parameter Space {0}".format("-" * 12))
 for param, val in best.items():
     logger.info("{0:20s}:\t{1:.5}".format(param, val))
-
-best["rf__n_estimators"] = int(best["rf__n_estimators"])
-best["rf__max_depth"] = int(best["rf__max_depth"])
 
 # Predictions:
 print("Generate Features")
@@ -127,15 +128,3 @@ print("Save to file.")
 
 predictions = pd.DataFrame(preds[:, 1]).set_index(unknown.index)
 predictions.to_csv(outpath, header=["return"])
-
-
-forest = pipeline.named_steps["rf"]
-importances = forest.feature_importances_.round(3)
-indices = np.argsort(importances)[::-1]
-
-logger.info("{0} Variable Importance {0}".format("-" * 14))
-for f in range(15):
-    varname = fg.cols[indices[f]]
-    importance = importances[indices[f]]
-    msg = "{0:2s}. {1:40s}({2:.4})".format(str(f + 1), varname, importance)
-    logger.info(msg)

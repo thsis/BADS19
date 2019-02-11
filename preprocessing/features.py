@@ -68,9 +68,10 @@ class FeatureGenerator(object):
     def transform(self, X, ignore_woe=True):
         # Merge fitted tables for items, orders, brands and states
         out = X.loc[:, X.columns != self.target_col]
-
-        for right in self.items, self.orders, self.brands, self.states:
-            out = self.__merge(out, right)
+        out = self.__merge(out, self.items, impute=self.items.mean())
+        out = self.__merge(out, self.orders, impute=0)
+        out = self.__merge(out, self.brands, impute=self.brands.mean())
+        out = self.__merge(out, self.states, impute=self.states.mean())
 
         woetab = (self.item_woe, self.color_woe, self.brand_woe, self.size_woe)
         if not ignore_woe:
@@ -98,11 +99,10 @@ class FeatureGenerator(object):
         out = self.transform(data)
         return out
 
-    def __merge(self, left, right):
-        impute = right.mean()
+    def __merge(self, left, right, impute=np.nan):
         merged = left.reset_index().merge(right.reset_index(), how="left")
         merged = merged.set_index("order_item_id")
-        merged = merged.fillna(impute)
+        merged = merged.fillna(value=impute)
         return merged
 
     def __fit_woe(self, DF, var):
@@ -138,6 +138,9 @@ class FeatureGenerator(object):
                      "order_total_value", "order_median_price",
                      "order_num_sizes", "order_num_colors"]
         orders.columns = ordercols
+        seqnum = orders.reset_index().groupby("user_id").order_date.rank()
+        seqnum.index = orders.index
+        orders["order_seqnum"] = seqnum
         return orders
 
     def __fit_brands(self):
@@ -172,7 +175,7 @@ class FeatureGenerator(object):
         combinations = itertools.product(nominator, denominator)
 
         for nom, denom in combinations:
-            out["{}/{}".format(nom, denom)] = out[nom] / out[denom]
+            out["{}/{}".format(nom, denom)] = out[nom] / (out[denom] + 1)
 
         # Remove features that are highly correlated with ratios
         out = out.drop(columns=self.dropcols)
@@ -192,6 +195,7 @@ if __name__ == "__main__":
               "days_to_delivery",
               "days_to_delivery/state_mean_delivery",
               "item_price/state_mean_delivery"]
+    subset = None
 
     fg = FeatureGenerator(cols=subset)
     X_known, y_known = fg.fit_transform(known, "return")
