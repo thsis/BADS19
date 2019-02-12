@@ -170,8 +170,9 @@ Parameters
               The objective function that will be optimized. This function
               should return a dictionary of the form
               `{"loss": loss, "status": hyperopt.STATUS_OK}`.
+
 Returns
 -------
 `outer` : `function`
-            This decorated function will be optimized over a provided
-            parameter space.
+           This decorated function will be optimized over a provided
+           parameter space.
