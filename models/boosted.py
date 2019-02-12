@@ -55,7 +55,7 @@ def max_auc(params):
                                                               test_score, 3)
     logger.info(info)
     # HACK: Prevent selecting a overfitting solution
-    score = test_score - (np.abs(test_score - train_score) > 0.1)
+    score = test_score - (np.abs(test_score - train_score) > 0.03)
 
     return {"loss": -score, "status": STATUS_OK}
 
