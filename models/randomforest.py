@@ -1,3 +1,16 @@
+"""
+Fit random forest.
+
+1. Create a logger.
+2. Decorate the `models.tuning.minimizer`.
+3. Read and clean the data.
+4. Define model pipeline.
+5. Define hyperparameter space.
+6. Perform hyperparameter tuning with train data.
+7. Fit pipeline with whole dataset and save predictions.
+8. Log variable importance.
+"""
+
 import os
 import logging
 import datetime
@@ -5,8 +18,8 @@ import pandas as pd
 import numpy as np
 from preprocessing.features import FeatureGenerator
 from preprocessing.cleaning import clean
-
-from hyperopt import tpe, hp, fmin, STATUS_OK, Trials
+from models.tuning import minimizer
+from hyperopt import hp, STATUS_OK, Trials
 from hyperopt.pyll.base import scope
 
 from sklearn.preprocessing import StandardScaler
@@ -14,10 +27,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
 from sklearn.pipeline import Pipeline
-from tqdm import tqdm
 
 
-# Get logger.
+# 1. Get logger.
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 fh = logging.FileHandler("random_forest.log")
@@ -28,28 +40,17 @@ logger.addHandler(fh)
 logger.info("{0} Start new run {0}".format("=" * 17))
 
 
-def minimizer(objective):
-    def outer(paramspace, trials, max_evals=100):
-        """Generate an inner objective-function and optimize it."""
-        pbar = tqdm(total=max_evals)
-
-        def inner(*args, **kwargs):
-            """Update the progress bar and call the objective function."""
-            pbar.update()
-            return objective(*args, **kwargs)
-
-        best = fmin(fn=inner,
-                    space=paramspace,
-                    algo=tpe.suggest,
-                    max_evals=max_evals,
-                    trials=trials)
-        pbar.close()
-        return best
-    return outer
-
-
+# 2. Decorate the `models.tuning.minimizer`.
 @minimizer
 def max_auc(params):
+    """Optimize model hyperparameters with respect to AUC.
+
+    Parameters
+    ----------
+    param : dictionary
+            Dictionary containing named steps of the pipeline as keys and
+            `hyperopt.hp` prior distributions as values.
+    """
     model = pipeline.set_params(**params)
     model.fit(X_train, y_train)
     y_pred_test = model.predict_proba(X_test)
@@ -67,6 +68,7 @@ def max_auc(params):
     return {"loss": -score, "status": STATUS_OK}
 
 
+# 3. Read and clean the data.
 datapath = os.path.join("data", "BADS_WS1819_known.csv")
 unknownpath = os.path.join("data", "BADS_WS1819_unknown.csv")
 
@@ -86,13 +88,15 @@ fg.fit(history, 'return')
 X_train, y_train = fg.transform(train, 'return')
 X_test, y_test = fg.transform(test)
 
+# 4. Define model pipeline.
 steps = [('scaler', StandardScaler()),
          ('rf', RandomForestClassifier())]
 pipeline = Pipeline(steps)
 
+# 5. Define hyperparameter space.
 paramspace = {
     "rf__n_estimators": scope.int(hp.quniform("rf__n_estimators",
-                                              10, 200, 1)),
+                                              100, 5000, 1)),
     "rf__max_features": hp.uniform("rf__max_features", 0.2, 1),
     "rf__max_depth": scope.int(hp.quniform("rf__max_depth",
                                            10, 1000, 1)),
@@ -100,8 +104,9 @@ paramspace = {
     "rf__min_samples_leaf": hp.uniform("rf__min_samples_leaf", 0.001, 0.05),
     "rf__n_jobs": -1}
 
+# 6. Perform hyperparameter tuning with train data.
 trials = Trials()
-best = max_auc(paramspace=paramspace, trials=trials, max_evals=10)
+best = max_auc(paramspace=paramspace, trials=trials, max_evals=100)
 
 logger.info("{0} Optimal Parameter Space {0}".format("-" * 12))
 for param, val in best.items():
@@ -110,7 +115,7 @@ for param, val in best.items():
 best["rf__n_estimators"] = int(best["rf__n_estimators"])
 best["rf__max_depth"] = int(best["rf__max_depth"])
 
-# Predictions:
+# 7. Fit pipeline with whole dataset and save predictions.
 print("Generate Features")
 fg = FeatureGenerator()
 fg.fit(history, 'return')
@@ -131,7 +136,7 @@ train_score = roc_auc_score(y_true=y,
 predictions.to_csv(outpath, header=["return"])
 logger.info("Approximate score: {0:.3}".format(train_score))
 
-
+# 8. Log variable importance.
 forest = pipeline.named_steps["rf"]
 importances = forest.feature_importances_.round(3)
 indices = np.argsort(importances)[::-1]

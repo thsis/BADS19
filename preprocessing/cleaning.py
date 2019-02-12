@@ -1,3 +1,10 @@
+"""
+Clean the dataset.
+
+Gather all functions which clean the data and compute features that do not
+require aggregation.
+"""
+
 import os
 import json
 import pandas as pd
@@ -19,7 +26,35 @@ colorconverter = {"item_color": lambda x: colors.get(x, "other")}
 
 
 def clean(datapath):
-    """Clean BADS data."""
+    """Clean BADS data.
+
+    Read the data and perform the following tasks:
+    * parse dates: `order_date`, `delivery_date`, `user_dob`, `user_reg_date`.
+    * replace non-standard coding for missing values.
+    * drop esoteric colors.
+    * impute missing values for `delivery_date` column by its mean.
+    * remove odd reported values for user dates of birth.
+    * impute missing `user_dob`: `user_reg_date - mean(user_reg_date-user_dob)`
+    * extract dummies according to `size`column:
+        + `is_item_pants`: if `size` matches exactly 4 numbers.
+        + `is_item_clothes`: if `size` is not `unsized`.
+        + `is_item_underwear`: if `size` matches up to 2 numbers.
+        + `is_letter_coded`: if `size` not `unsized` but contains characters.
+    * extract features according to `delivery_date`:
+        + `delivery_thu`: if item was delivered on a Thursday.
+        + `delivery_fri`: if item was delivered on a Friday.
+        + `days_to_delivery`: number of days between order and delivery.
+
+    Parameters
+    ----------
+    datapath : str
+               Path to dataset.
+
+    Returns
+    -------
+    data : pd.DataFrame
+           Cleaned dataset.
+    """
     # Dates
     date_columns = ["order_date", "delivery_date", "user_dob", "user_reg_date"]
 
@@ -34,9 +69,9 @@ def clean(datapath):
                        dtype=dtypes,
                        converters=colorconverter)
 
-    # Compute Median Number of Days until Delivery
+    # Compute Mean Number of Days until Delivery
     na_del = pd.isna(data.delivery_date)
-    ndd_med = (data.delivery_date - data.order_date).median()
+    ndd_med = (data.delivery_date - data.order_date).mean()
     # Impute missing values for "delivery_date" by median
     data.loc[na_del, "delivery_date"] = data.loc[na_del, "order_date"]+ndd_med
 

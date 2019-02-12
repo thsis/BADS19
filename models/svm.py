@@ -1,3 +1,15 @@
+"""
+Fit support vector machine.
+
+1. Create a logger.
+2. Decorate the `models.tuning.minimizer`.
+3. Read and clean the data.
+4. Define model pipeline.
+5. Define hyperparameter space.
+6. Perform hyperparameter tuning with train data.
+7. Fit pipeline with whole dataset and save predictions.
+"""
+
 import os
 import logging
 import datetime
@@ -5,18 +17,18 @@ import pandas as pd
 import numpy as np
 from preprocessing.features import FeatureGenerator
 from preprocessing.cleaning import clean
+from models.tuning import minimizer
 
-from hyperopt import tpe, hp, fmin, STATUS_OK, Trials
+from hyperopt import hp, STATUS_OK, Trials
 
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.svm import SVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
 from sklearn.pipeline import Pipeline
-from tqdm import tqdm
 
 
-# Get logger.
+# 1. Create a logger.
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 fh = logging.FileHandler("svm.log")
@@ -27,26 +39,7 @@ logger.addHandler(fh)
 logger.info("{0} Start new run {0}".format("=" * 17))
 
 
-def minimizer(objective):
-    def outer(paramspace, trials, max_evals=100):
-        """Generate an inner objective-function and optimize it."""
-        pbar = tqdm(total=max_evals)
-
-        def inner(*args, **kwargs):
-            """Update the progress bar and call the objective function."""
-            pbar.update()
-            return objective(*args, **kwargs)
-
-        best = fmin(fn=inner,
-                    space=paramspace,
-                    algo=tpe.suggest,
-                    max_evals=max_evals,
-                    trials=trials)
-        pbar.close()
-        return best
-    return outer
-
-
+# 2. Decorate the `models.tuning.minimizer`.
 @minimizer
 def max_auc(params):
     model = pipeline.set_params(**params)
@@ -66,6 +59,7 @@ def max_auc(params):
     return {"loss": -score, "status": STATUS_OK}
 
 
+# 3. Read and clean the data.
 datapath = os.path.join("data", "BADS_WS1819_known.csv")
 unknownpath = os.path.join("data", "BADS_WS1819_unknown.csv")
 
@@ -90,10 +84,12 @@ fg.fit(history, 'return')
 X_train, y_train = fg.transform(train, 'return')
 X_test, y_test = fg.transform(test)
 
+# 4. Define model pipeline.
 steps = [('scaler', MinMaxScaler()),
          ('svm', SVC())]
 pipeline = Pipeline(steps)
 
+# 5. Define hyperparameter space.
 kernels = ["linear", "rbf", "sigmoid"]
 shrinking = [False, True]
 paramspace = {
@@ -101,10 +97,11 @@ paramspace = {
     "svm__kernel": hp.choice("svm__kernel", kernels),
     "svm__shrinking": hp.choice("svm__shrinking", shrinking),
     "svm__probability": True,
-    "svm__max_iter": 10}
+    "svm__max_iter": 5000}
 
+# 6. Perform hyperparameter tuning with train data.
 trials = Trials()
-best = max_auc(paramspace=paramspace, trials=trials, max_evals=1)
+best = max_auc(paramspace=paramspace, trials=trials, max_evals=100)
 
 best["svm__kernel"] = kernels[best["svm__kernel"]]
 best["svm__shrinking"] = shrinking[best["svm__shrinking"]]
@@ -116,7 +113,8 @@ logger.info("{0:>20}:{1:>11}{2:>10}".format("svm__C", " ",
 logger.info("{0:>20}:{1:>11}{2:>10}".format("svm__shrinking", " ",
                                             str(best["svm__shrinking"])))
 
-# Predictions:
+
+# 7. Fit pipeline with whole dataset and save predictions.
 print("Generate Features")
 fg = FeatureGenerator()
 fg.fit(history, 'return')

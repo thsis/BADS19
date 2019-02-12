@@ -5,9 +5,67 @@ from preprocessing import cleaning
 
 
 class FeatureGenerator(object):
-    def __init__(self, cols=None, history=None):
+    """Generate Features for the different algorithms.
+
+    This class interface facilitates the fitting and transforming of different
+    datasets and gathers the numerous aggregation levels.
+
+    Parameters
+    ----------
+    cols : list
+           List of column names to be returned at most. Must be a subset of all
+           columns that are defined within the `fit` method.
+
+    Attributes
+    ----------
+    cols : list
+           Column names of the returned array.
+
+    dropcols : list
+               Column names that should be dropped, because their correlation
+               with other variables is too high.
+
+    target : pd.Series
+             Series of class values/labels.
+
+    features : pd.DataFrame
+               Original features, copy of `data`.
+
+    item_woe : pd.DataFrame
+               `item_id` and associated weight of evidence.
+
+    color_woe : pd.DataFrame
+                `item_color` and associated weight of evidence.
+
+    brand_woe : pd.DataFrame
+                `brand_id` and associated weight of evidence.
+
+    size_woe : pd.DataFrame
+               `item_size` and associated weight of evidence.
+
+    items : pd.DataFrame
+            Contains general information on items. Groupby-Keys: `item_id`.
+
+    orders : pd.DataFrame
+            Contains general information on orders. Groupby-Keys: `user_id`
+            `order_date`.
+
+    brands : pd.DataFrame
+            Contains general information on brands. Groupby-Keys: `brand_id`.
+
+    states : pd.DataFrame
+            Contains general information on states. Groupby-Keys: `user_state`.
+
+    outfeatures: pd.DataFrame
+                 DataFrame version of the returned `numpy.ndarray`.
+
+    Methods
+    -------
+
+    """
+
+    def __init__(self, cols=None):
         self.cols = cols
-        self.history = history
         self.dropcols = [
             "item_max_price", "brand_min_price", "state_min_delivery",
             "order_total_value", "order_median_price",
@@ -44,8 +102,23 @@ class FeatureGenerator(object):
             "state_min_delivery/order_num_colors"]
 
     def fit(self, data, target_col):
+        """Compute aggregated data according to different levels.
+
+        The different aggregation levels combine information on:
+        * items: group by `item_id`
+        * orders: group by `user_id` and `order_date`
+        * brands: group by `brand_id`
+        * states: group by `states`
+
+        Parameters
+        ----------
+        data : pd.DataFrame
+               Full set of information to be used. This can be the `known`
+               dataset or a concatenation of `known` and `unknown`.
+        target_col : str
+                     Name of the column that contains the labels
+        """
         self.target_col = target_col
-        self.train_idx = data.index.copy()
         self.features = data.loc[:, data.columns != self.target_col].copy()
         self.target = data.loc[:, self.target_col].copy()
 
@@ -66,6 +139,22 @@ class FeatureGenerator(object):
         return self
 
     def transform(self, X, ignore_woe=True):
+        """Add aggregated information to X and compute additional features.
+
+        Parameters
+        ----------
+        X : pd.DataFrame
+            DataFrame to be transformed.
+        ignore_woe : bool, optional
+                     Flag if Weight of Evidence columns should be ignored.
+                     Default is `True`.
+
+        Returns
+        -------
+        out, [y] : np.ndarray
+                   Note that `y` will only be returned if columns of `X`
+                   contain the target column.
+        """
         # Merge fitted tables for items, orders, brands and states
         out = X.loc[:, X.columns != self.target_col]
         out = self.__merge(out, self.items, impute=self.items.mean())
@@ -87,8 +176,8 @@ class FeatureGenerator(object):
         # Create ratios
         out = self.__get_ratios(out)
 
-        self.outfeatures = out
         out = out.fillna(out.mean())
+        self.outfeatures = out
         if self.cols is None:
             self.cols = out.columns
         out = out.loc[:, self.cols].astype(np.float64).values
@@ -98,9 +187,10 @@ class FeatureGenerator(object):
         else:
             return out
 
-    def fit_transform(self, data, target_col):
+    def fit_transform(self, data, target_col, ignore_woe=True):
+        """Fit data then transform it."""
         self.fit(data, target_col)
-        out = self.transform(data)
+        out = self.transform(data, ignore_woe)
         return out
 
     def __merge(self, left, right, impute=np.nan):

@@ -17,7 +17,7 @@
 
 Some of the engineered features are still highly correlated and need to be removed before training time.
 
-## Getting the code of this repo to runs
+## Getting the code of this repo to run
 
 The first step is to install all requirements:
 

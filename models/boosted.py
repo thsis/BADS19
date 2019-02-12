@@ -1,3 +1,15 @@
+"""
+Fit boosted trees.
+
+1. Create a logger.
+2. Decorate the `models.tuning.minimizer`.
+3. Read and clean the data.
+4. Define model pipeline.
+5. Define hyperparameter space.
+6. Perform hyperparameter tuning with train data.
+7. Fit pipeline with whole dataset and save predictions.
+"""
+
 import os
 import logging
 import datetime
@@ -5,8 +17,9 @@ import pandas as pd
 import numpy as np
 from preprocessing.features import FeatureGenerator
 from preprocessing.cleaning import clean
+from models.tuning import minimizer
 
-from hyperopt import tpe, hp, fmin, STATUS_OK, Trials
+from hyperopt import hp, STATUS_OK, Trials
 from hyperopt.pyll.base import scope
 
 from sklearn.preprocessing import StandardScaler
@@ -14,10 +27,9 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
 from sklearn.pipeline import Pipeline
-from tqdm import tqdm
 
 
-# Get logger.
+# 1. Create a logger.
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 fh = logging.FileHandler("boosted.log")
@@ -28,26 +40,7 @@ logger.addHandler(fh)
 logger.info("{0} Start new run {0}".format("=" * 17))
 
 
-def minimizer(objective):
-    def outer(paramspace, trials, max_evals=100):
-        """Generate an inner objective-function and optimize it."""
-        pbar = tqdm(total=max_evals)
-
-        def inner(*args, **kwargs):
-            """Update the progress bar and call the objective function."""
-            pbar.update()
-            return objective(*args, **kwargs)
-
-        best = fmin(fn=inner,
-                    space=paramspace,
-                    algo=tpe.suggest,
-                    max_evals=max_evals,
-                    trials=trials)
-        pbar.close()
-        return best
-    return outer
-
-
+# 2. Decorate the `models.tuning.minimizer`.
 @minimizer
 def max_auc(params):
     model = pipeline.set_params(**params)
@@ -67,6 +60,7 @@ def max_auc(params):
     return {"loss": -score, "status": STATUS_OK}
 
 
+# 3. Read and clean the data.
 datapath = os.path.join("data", "BADS_WS1819_known.csv")
 unknownpath = os.path.join("data", "BADS_WS1819_unknown.csv")
 
@@ -86,13 +80,15 @@ fg.fit(history, 'return')
 X_train, y_train = fg.transform(train, 'return')
 X_test, y_test = fg.transform(test)
 
+# 4. Define model pipeline.
 steps = [('scaler', StandardScaler()),
          ('gb', GradientBoostingClassifier())]
 pipeline = Pipeline(steps)
 
+# 5. Define hyperparameter space.
 paramspace = {
     "gb__n_estimators": scope.int(hp.quniform("gb__n_estimators",
-                                              10, 200, 1)),
+                                              10, 5000, 1)),
     "gb__max_features": hp.uniform("gb__max_features", 0.2, 1),
     "gb__max_depth": scope.int(hp.quniform("gb__max_depth",
                                            10, 1000, 1)),
@@ -100,15 +96,16 @@ paramspace = {
     "gb__learning_rate": hp.uniform("gb__learning_rate", 0.01, 0.3),
     "gb__subsample": hp.uniform("gb__subsample", 0.3, 1.0)}
 
+# 6. Perform hyperparameter tuning with train data.
 trials = Trials()
-best = max_auc(paramspace=paramspace, trials=trials, max_evals=1)
+best = max_auc(paramspace=paramspace, trials=trials, max_evals=100)
 logger.info("{0} Optimal Parameter Space {0}".format("-" * 12))
 for param, val in best.items():
     logger.info("{0:20s}:\t{1:.5}".format(param, val))
 
 best["gb__n_estimators"] = int(best["gb__n_estimators"])
 
-# Predictions:
+# 7. Fit pipeline with whole dataset and save predictions.
 print("Generate Features")
 fg = FeatureGenerator()
 fg.fit(history, 'return')
