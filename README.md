@@ -165,10 +165,10 @@ This function is intended to be used as a decorator.
 
 Parameters
 ----------
-`objective`
-            The objective function that will be optimized. This function
-            should return a dictionary of the form
-            `{"loss": loss, "status": hyperopt.STATUS_OK}`.
+`objective` : `function`
+              The objective function that will be optimized. This function
+              should return a dictionary of the form
+              `{"loss": loss, "status": hyperopt.STATUS_OK}`.
 Returns
 -------
 `outer` : `function`
