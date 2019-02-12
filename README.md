@@ -165,6 +165,7 @@ This function is intended to be used as a decorator.
 
 Parameters
 ----------
+
 `objective` : `function`
               The objective function that will be optimized. This function
               should return a dictionary of the form
