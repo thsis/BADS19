@@ -14,6 +14,7 @@ Fit random forest.
 import os
 import logging
 import datetime
+import rfpimp
 import pandas as pd
 import numpy as np
 from preprocessing.features import FeatureGenerator
@@ -96,10 +97,10 @@ pipeline = Pipeline(steps)
 # 5. Define hyperparameter space.
 paramspace = {
     "rf__n_estimators": scope.int(hp.quniform("rf__n_estimators",
-                                              100, 5000, 1)),
-    "rf__max_features": hp.uniform("rf__max_features", 0.2, 1),
+                                              1000, 5000, 1)),
+    "rf__max_features": hp.uniform("rf__max_features", 0.2, 0.5),
     "rf__max_depth": scope.int(hp.quniform("rf__max_depth",
-                                           10, 1000, 1)),
+                                           1, 100, 1)),
     "rf__min_samples_split": hp.uniform("rf__min_samples_split", 0.0001, 0.05),
     "rf__min_samples_leaf": hp.uniform("rf__min_samples_leaf", 0.001, 0.05),
     "rf__n_jobs": -1}
@@ -142,7 +143,7 @@ importances = forest.feature_importances_.round(3)
 indices = np.argsort(importances)[::-1]
 
 logger.info("{0} Variable Importance {0}".format("-" * 14))
-for f in range(15):
+for f in range(20):
     varname = fg.cols[indices[f]]
     importance = importances[indices[f]]
     msg = "{0:2s}. {1:40s}({2:.4})".format(str(f + 1), varname, importance)

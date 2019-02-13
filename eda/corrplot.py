@@ -19,12 +19,13 @@ if __name__ == "__main__":
     out = fg.outfeatures.copy()
 
     corr = out.corr()
-    fig, ax = plt.subplots(figsize=(20, 20))
+    fig, ax = plt.subplots(figsize=(50, 50))
     sns.heatmap(corr, vmin=-1, vmax=1, center=0,
-                cmap=plt.cm.coolwarm,
+                cmap=plt.cm.seismic,
                 xticklabels=corr.columns.values,
                 yticklabels=corr.columns.values)
-    plt.title("Feature Correlation Plot")
+    fig.suptitle("Feature Correlation Plot", fontsize=50)
     fig.savefig("eda/corrplot.png")
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 
     print("Dimensions:", corr.shape)

@@ -66,40 +66,8 @@ class FeatureGenerator(object):
 
     def __init__(self, cols=None):
         self.cols = cols
-        self.dropcols = [
-            "item_max_price", "brand_min_price", "state_min_delivery",
-            "order_total_value", "order_median_price",
-            "item_price/order_num_sizes", "item_price/order_num_colors",
-            "item_price/order_num_items", "days_to_delivery/order_num_colors",
-            "days_to_delivery/order_num_sizes",
-            "days_to_delivery/order_num_items",
-            "user_tenure/order_num_items",
-            "user_tenure/order_num_sizes",
-            "user_tenure/order_num_colors",
-            "item_max_delivery/order_num_items",
-            "item_max_delivery/order_num_colors",
-            "item_max_delivery/order_num_sizes",
-            "item_mean_delivery/order_num_items",
-            "item_mean_delivery/order_num_colors",
-            "item_mean_delivery/order_num_sizes",
-            "item_min_delivery/order_num_items",
-            "item_min_delivery/order_num_colors",
-            "item_min_delivery/order_num_sizes",
-            "item_max_price/order_num_items",
-            "item_max_price/order_num_sizes",
-            "item_max_price/order_num_colors",
-            "order_max_price/order_num_items",
-            "order_max_price/order_num_sizes",
-            "order_max_price/order_num_colors",
-            "order_median_price/order_num_items",
-            "order_median_price/order_num_sizes",
-            "order_median_price/order_num_colors",
-            "brand_min_price/order_num_items",
-            "brand_min_price/order_num_sizes",
-            "brand_min_price/order_num_colors",
-            "state_min_delivery/order_num_items",
-            "state_min_delivery/order_num_sizes",
-            "state_min_delivery/order_num_colors"]
+        with open(os.path.join("preprocessing", "blacklist.txt"), "r") as f:
+            self.dropcols = f.read().splitlines()
 
     def fit(self, data, target_col):
         """Compute aggregated data according to different levels.
@@ -168,16 +136,22 @@ class FeatureGenerator(object):
                 out = self.__merge(out, right)
 
         out = out._get_numeric_data()
+        outnames = out.columns
 
         # Create special features
         price_off = (out.item_max_price-out.item_price) / out.item_max_price
         out["price_off"] = price_off.fillna(value=0)
 
         # Create ratios
-        out = self.__get_ratios(out)
+        out = self.__get_ratios(out, outnames)
+
+        # Create interactions
+        out = self.__get_interactions(out, outnames)
 
         out = out.fillna(out.mean())
+        out = out.drop(columns=self.dropcols)
         self.outfeatures = out
+
         if self.cols is None:
             self.cols = out.columns
         out = out.loc[:, self.cols].astype(np.float64).values
@@ -252,56 +226,50 @@ class FeatureGenerator(object):
         states.columns = statecols
         return states
 
-    def __get_ratios(self, data):
+    def __get_ratios(self, data, columns):
         # Find all columns that can be put into denominator
-        denominator = ['item_orders', 'order_num_items', 'order_num_sizes',
-                       'order_num_colors', 'state_mean_delivery']
         out = data.copy()
         is_dummy = out.dtypes == bool
-        is_denominator = out.columns.isin(denominator)
-        # Remove features due to ensuing correlation
-        protected = []
-        is_protected = out.columns.isin(protected)
-        nominator_idx = (~is_denominator) & (~is_dummy) & (~is_protected)
-        nominator = out.columns[nominator_idx]
+        cols = out.columns[~is_dummy]
+        m = len(cols) // 2
+        nominator = cols[:m]
+        denominator = cols[m:]
 
         # Cartesian product of all numerically possible columns
         combinations = itertools.product(nominator, denominator)
 
         for nom, denom in combinations:
-            out["{}/{}".format(nom, denom)] = out[nom] / (out[denom] + 1)
+            # HACK: make sure price-offs are in the nominator.
+            if denom == "price_off":
+                out["{}/{}".format(denom, nom)] = out[denom] / (out[nom] + 1)
+            else:
+                out["{}/{}".format(nom, denom)] = out[nom] / (out[denom] + 1)
 
-        # Remove features that are highly correlated with ratios
-        out = out.drop(columns=self.dropcols)
+        return out
+
+    def __get_interactions(self, data, columns):
+        m = len(columns) // 2
+        factor_a_cols = columns[:m]
+        factor_b_cols = columns[m:]
+        out = data.copy()
+        combinations = itertools.product(factor_a_cols, factor_b_cols)
+        for a, b in combinations:
+            if (out[a].dtype == bool) & (out[b].dtype == bool):
+                out["{}*{}".format(a, b)] = out[a] & out[b]
+            else:
+                out["{}*{}".format(a, b)] = out[a] * out[b]
+
         return out
 
 
 if __name__ == "__main__":
-    from matplotlib import pyplot as plt
-    import seaborn as sns
     traindatapath = os.path.join("data", "BADS_WS1819_known.csv")
     preddatapath = os.path.join("data", "BADS_WS1819_unknown.csv")
     known = cleaning.clean(traindatapath)
     unknown = cleaning.clean(preddatapath)
 
-    subset = ["item_price",
-              "order_total_value/state_mean_delivery",
-              "days_to_delivery",
-              "days_to_delivery/state_mean_delivery",
-              "item_price/state_mean_delivery"]
-    subset = None
-
-    fg = FeatureGenerator(cols=subset)
+    fg = FeatureGenerator()
     X_known, y_known = fg.fit_transform(known, "return")
-
-    out = fg.outfeatures.copy()
-    corr = out.corr()
-    fig, ax = plt.subplots(figsize=(20, 20))
-    sns.heatmap(corr, vmin=-1, vmax=1, center=0,
-                cmap=plt.cm.coolwarm,
-                xticklabels=corr.columns.values,
-                yticklabels=corr.columns.values)
-    ax.set_title("Feature Correlation Plot")
 
     X_unknown = fg.transform(unknown)
     assert X_known.shape[1] == X_unknown.shape[1]

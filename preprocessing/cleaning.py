@@ -99,6 +99,8 @@ def clean(datapath):
     # Time related features
     data["days_to_delivery"] = (data.delivery_date-data.order_date).dt.days
     data["user_tenure"] = (data.order_date - data.user_reg_date).dt.days
+    # Constrain user_tenure to be non-negative.
+    data.loc[data.user_tenure < 0, "user_tenure"] = 0
     data["delivery_thu"] = data.delivery_date.dt.dayofweek == 4
     data["delivery_fri"] = data.delivery_date.dt.dayofweek == 5
 
