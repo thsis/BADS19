@@ -81,7 +81,7 @@ subset = ["item_price",
 
 fg = FeatureGenerator(cols=subset)
 fg.fit(history, 'return')
-X_train, y_train = fg.transform(train, 'return')
+X_train, y_train = fg.transform(train)
 X_test, y_test = fg.transform(test)
 
 # 4. Define model pipeline.

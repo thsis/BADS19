@@ -14,7 +14,6 @@ Fit random forest.
 import os
 import logging
 import datetime
-import rfpimp
 import pandas as pd
 import numpy as np
 from preprocessing.features import FeatureGenerator
@@ -86,8 +85,8 @@ train, test = train_test_split(known, test_size=0.2)
 
 fg = FeatureGenerator()
 fg.fit(history, 'return')
-X_train, y_train = fg.transform(train, 'return')
-X_test, y_test = fg.transform(test)
+X_train, y_train = fg.transform(train, ignore_woe=False)
+X_test, y_test = fg.transform(test, ignore_woe=False)
 
 # 4. Define model pipeline.
 steps = [('scaler', StandardScaler()),
@@ -97,7 +96,7 @@ pipeline = Pipeline(steps)
 # 5. Define hyperparameter space.
 paramspace = {
     "rf__n_estimators": scope.int(hp.quniform("rf__n_estimators",
-                                              1000, 5000, 1)),
+                                              10, 50, 1)),
     "rf__max_features": hp.uniform("rf__max_features", 0.2, 0.5),
     "rf__max_depth": scope.int(hp.quniform("rf__max_depth",
                                            1, 100, 1)),
@@ -107,7 +106,7 @@ paramspace = {
 
 # 6. Perform hyperparameter tuning with train data.
 trials = Trials()
-best = max_auc(paramspace=paramspace, trials=trials, max_evals=100)
+best = max_auc(paramspace=paramspace, trials=trials, max_evals=10)
 
 logger.info("{0} Optimal Parameter Space {0}".format("-" * 12))
 for param, val in best.items():
@@ -120,8 +119,8 @@ best["rf__max_depth"] = int(best["rf__max_depth"])
 print("Generate Features")
 fg = FeatureGenerator()
 fg.fit(history, 'return')
-X, y = fg.transform(known, "return")
-X_pred = fg.transform(unknown)
+X, y = fg.transform(known, ignore_woe=False)
+X_pred = fg.transform(unknown, ignore_woe=False)
 
 print("Calculate Predictions")
 clf = pipeline.set_params(**best)
@@ -143,7 +142,7 @@ importances = forest.feature_importances_.round(3)
 indices = np.argsort(importances)[::-1]
 
 logger.info("{0} Variable Importance {0}".format("-" * 14))
-for f in range(20):
+for f in range(len(importances)):
     varname = fg.cols[indices[f]]
     importance = importances[indices[f]]
     msg = "{0:2s}. {1:40s}({2:.4})".format(str(f + 1), varname, importance)

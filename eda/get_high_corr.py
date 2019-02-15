@@ -13,7 +13,7 @@ if __name__ == "__main__":
     history = known.append(unknown, sort=False)
     fg = FeatureGenerator()
     fg.fit(history, 'return')
-    _, _ = fg.transform(known, "return")
+    _, _ = fg.transform(known, ignore_woe=False)
     out = fg.outfeatures.copy()
 
     corr = out.corr()
@@ -34,3 +34,5 @@ if __name__ == "__main__":
         print("Update blacklist.txt")
         with open(os.path.join("preprocessing", "blacklist.txt"), "w") as f:
             f.writelines("\n".join(problematic), )
+
+table.sort_values("correlation", ascending=False)[::2]

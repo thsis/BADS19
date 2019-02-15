@@ -1,5 +1,5 @@
 """
-Fit boosted trees.
+Fit artificial neural network.
 
 1. Create a logger.
 2. Decorate the `models.tuning.minimizer`.
@@ -20,10 +20,10 @@ from preprocessing.cleaning import clean
 from models.tuning import minimizer
 
 from hyperopt import hp, STATUS_OK, Trials
-from hyperopt.pyll.base import scope
+from hyperopt.pyll import scope
 
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
 from sklearn.pipeline import Pipeline
@@ -32,7 +32,7 @@ from sklearn.pipeline import Pipeline
 # 1. Create a logger.
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-fh = logging.FileHandler("boosted.log")
+fh = logging.FileHandler("ann.log")
 format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 formatter = logging.Formatter(format)
 fh.setFormatter(formatter)
@@ -65,7 +65,7 @@ datapath = os.path.join("data", "BADS_WS1819_known.csv")
 unknownpath = os.path.join("data", "BADS_WS1819_unknown.csv")
 
 timecode = datetime.datetime.now().strftime("%Y%m%d_%H%M")
-outpath = os.path.join("predictions",  "boost_predictions" + timecode + ".csv")
+outpath = os.path.join("predictions",  "ann_predictions" + timecode + ".csv")
 logger.info("{}".format(outpath))
 
 known = clean(datapath)
@@ -81,35 +81,46 @@ X_train, y_train = fg.transform(train)
 X_test, y_test = fg.transform(test)
 
 # 4. Define model pipeline.
-steps = [('scaler', StandardScaler()),
-         ('gb', GradientBoostingClassifier())]
+steps = [('scaler', MinMaxScaler()),
+         ('ann', MLPClassifier())]
 pipeline = Pipeline(steps)
 
 # 5. Define hyperparameter space.
+architecture = [(100,), (1000,), (500,), (750,), (100, 100, 100), (100, 100)]
+activations = ["identity", "logistic", "tanh", "relu"]
+solvers = ["adam", "sgd"]
+
 paramspace = {
-    "gb__n_estimators": scope.int(hp.quniform("gb__n_estimators",
-                                              10, 5000, 1)),
-    "gb__max_features": hp.uniform("gb__max_features", 0.2, 1),
-    "gb__max_depth": scope.int(hp.quniform("gb__max_depth",
-                                           10, 1000, 1)),
-    "gb__min_samples_leaf": hp.uniform("gb__min_samples_leaf", 0.001, 0.05),
-    "gb__learning_rate": hp.uniform("gb__learning_rate", 0.01, 0.3),
-    "gb__subsample": hp.uniform("gb__subsample", 0.3, 1.0)}
+    "ann__hidden_layer_sizes": hp.choice("ann__hidden_layer_sizes",
+                                         architecture),
+    "ann__activation": hp.choice("ann__activation", activations),
+    "ann__solver": hp.choice("ann__solver", solvers),
+    "ann__alpha": hp.uniform("ann__alpha", 0.00001, 0.0005),
+    "ann__momentum": hp.uniform("ann__momentum", 0.1, 0.9),
+    "ann__early_stopping": True,
+    "ann__batch_size": scope.int(hp.quniform("ann__batch_size", 2, 1000, 1)),
+    "ann__max_iter": 10
+}
 
 # 6. Perform hyperparameter tuning with train data.
 trials = Trials()
-best = max_auc(paramspace=paramspace, trials=trials, max_evals=100)
+best = max_auc(paramspace=paramspace, trials=trials, max_evals=10)
+
+best["ann__hidden_layer_sizes"] = architecture[best["ann__hidden_layer_sizes"]]
+best["ann__activation"] = activations[best["ann__activation"]]
+best["ann__solver"] = solvers[best["ann__solver"]]
+best["ann__batch_size"] = int(best["ann__batch_size"])
+
 logger.info("{0} Optimal Parameter Space {0}".format("-" * 12))
 for param, val in best.items():
-    logger.info("{0:20s}:\t{1:.5}".format(param, val))
+    logger.info("{0:<30} {1:>30}".format(param + ":", str(val)))
 
-best["gb__n_estimators"] = int(best["gb__n_estimators"])
 
 # 7. Fit pipeline with whole dataset and save predictions.
 print("Generate Features")
 fg = FeatureGenerator()
 fg.fit(history, 'return')
-X, y = fg.transform(known)
+X, y = fg.transform(known, "return")
 X_pred = fg.transform(unknown)
 
 print("Calculate Predictions")

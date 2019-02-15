@@ -41,8 +41,8 @@ def clean(datapath):
         + `is_item_underwear`: if `size` matches up to 2 numbers.
         + `is_letter_coded`: if `size` not `unsized` but contains characters.
     * extract features according to `delivery_date`:
-        + `delivery_thu`: if item was delivered on a Thursday.
-        + `delivery_fri`: if item was delivered on a Friday.
+        + `delivery_thu`: indicator if item was delivered on a Thursday.
+        + `delivery_fri`: indicator if item was delivered on a Friday.
         + `days_to_delivery`: number of days between order and delivery.
 
     Parameters
@@ -72,7 +72,7 @@ def clean(datapath):
     # Compute Mean Number of Days until Delivery
     na_del = pd.isna(data.delivery_date)
     ndd_med = (data.delivery_date - data.order_date).mean()
-    # Impute missing values for "delivery_date" by median
+    # Impute missing values for "delivery_date" by mean
     data.loc[na_del, "delivery_date"] = data.loc[na_del, "order_date"]+ndd_med
 
     # Remove user_dob from 1900
@@ -81,10 +81,10 @@ def clean(datapath):
     # Mark missing birth-date
     data["is_dob_missing"] = data.user_dob.isna()
 
-    # Compute Mean Timedelta between user registration and day of birth
+    # Compute Median Timedelta between user registration and day of birth
     na_dob = pd.isna(data.user_dob)
-    dob_diff = (data.user_reg_date - data.user_dob).mean()
-    # Impute missing values for "user_dob" by mean of Timedelta
+    dob_diff = (data.user_reg_date - data.user_dob).median()
+    # Impute missing values for "user_dob" by median of Timedelta
     data.loc[na_dob, "user_dob"] = data.loc[na_dob, "user_reg_date"] - dob_diff
 
     # Mark pants
@@ -103,6 +103,9 @@ def clean(datapath):
     data.loc[data.user_tenure < 0, "user_tenure"] = 0
     data["delivery_thu"] = data.delivery_date.dt.dayofweek == 4
     data["delivery_fri"] = data.delivery_date.dt.dayofweek == 5
+
+    # Color related features
+    data["is_item_color_metal"] = data.item_color == "metal"
 
     return data
 

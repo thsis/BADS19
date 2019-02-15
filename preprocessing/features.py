@@ -90,14 +90,8 @@ class FeatureGenerator(object):
         self.features = data.loc[:, data.columns != self.target_col].copy()
         self.target = data.loc[:, self.target_col].copy()
 
-        self.item_woe = self.__fit_woe(data[~data[target_col].isna()],
-                                       "order_item_id")
         self.color_woe = self.__fit_woe(data[~data[target_col].isna()],
                                         "item_color")
-        self.brand_woe = self.__fit_woe(data[~data[target_col].isna()],
-                                        "brand_id")
-        self.size_woe = self.__fit_woe(data[~data[target_col].isna()],
-                                       "item_size")
 
         self.items = self.__fit_items()
         self.orders = self.__fit_orders()
@@ -130,13 +124,13 @@ class FeatureGenerator(object):
         out = self.__merge(out, self.brands, impute=self.brands.mean())
         out = self.__merge(out, self.states, impute=self.states.mean())
 
-        woetab = (self.item_woe, self.color_woe, self.brand_woe, self.size_woe)
+        woetab = (self.color_woe, )
         if not ignore_woe:
             for right in woetab:
                 out = self.__merge(out, right)
 
         out = out._get_numeric_data()
-        outnames = out.columns
+        outnames = [col for col in out.columns.tolist() if col[:3] != "woe"]
 
         # Create special features
         price_off = (out.item_max_price-out.item_price) / out.item_max_price
@@ -149,7 +143,7 @@ class FeatureGenerator(object):
         out = self.__get_interactions(out, outnames)
 
         out = out.fillna(out.mean())
-        out = out.drop(columns=self.dropcols)
+        out = out.drop(columns=self.dropcols, errors="ignore")
         self.outfeatures = out
 
         if self.cols is None:
@@ -184,7 +178,9 @@ class FeatureGenerator(object):
         total_non_events = len(DF) - total_events
 
         woe = np.log((events/total_events) / (non_events/total_non_events))
-        return woe.rename("woe_" + var)
+        woe = woe.to_frame()
+        woe.columns = ["woe_" + var]
+        return woe
 
     def __fit_items(self):
         items = self.features.groupby("item_id").agg({
@@ -238,7 +234,10 @@ class FeatureGenerator(object):
         # Cartesian product of all numerically possible columns
         combinations = itertools.product(nominator, denominator)
 
+        # Inhibit ratios with Weight of Evidence columns.
         for nom, denom in combinations:
+            if (nom[:3] == "woe") or (denom[:3] == "woe"):
+                continue
             # HACK: make sure price-offs are in the nominator.
             if denom == "price_off":
                 out["{}/{}".format(denom, nom)] = out[denom] / (out[nom] + 1)
@@ -253,7 +252,10 @@ class FeatureGenerator(object):
         factor_b_cols = columns[m:]
         out = data.copy()
         combinations = itertools.product(factor_a_cols, factor_b_cols)
+        # Inhibit interactions with Weight of Evidence columns.
         for a, b in combinations:
+            if (a[:3] == "woe") or (b[:3] == "woe"):
+                continue
             if (out[a].dtype == bool) & (out[b].dtype == bool):
                 out["{}*{}".format(a, b)] = out[a] & out[b]
             else:
@@ -269,7 +271,7 @@ if __name__ == "__main__":
     unknown = cleaning.clean(preddatapath)
 
     fg = FeatureGenerator()
-    X_known, y_known = fg.fit_transform(known, "return")
+    X_known, y_known = fg.fit_transform(known, "return", ignore_woe=False)
 
-    X_unknown = fg.transform(unknown)
+    X_unknown = fg.transform(unknown, ignore_woe=False)
     assert X_known.shape[1] == X_unknown.shape[1]
