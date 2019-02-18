@@ -148,6 +148,8 @@ class FeatureGenerator(object):
 
         if self.cols is None:
             self.cols = out.columns
+
+        out = out.dropna(axis=1)
         out = out.loc[:, self.cols].astype(np.float64).values
         # HACK:
         if self.target_col in X.columns:
