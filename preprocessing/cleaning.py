@@ -24,6 +24,17 @@ with open(colorpath) as f:
 
 colorconverter = {"item_color": lambda x: colors.get(x, "other")}
 
+# Sizes
+label = ['m', 'M', 'l', 'L', 'xl', 'XL', '43+', '37+', '36+', 'XXL', 'xxl',
+         's', 'S', 'XS', 'xs', 'XXXL', 'xxxl', '8+', '8', '6+', '6', '9+',
+         '9', '4', '4+', '2', '2+', '7', '7+', '5', '5+', '39+', '38+', '10',
+         '10+', '11', '40+', '21', '20', '42+', '41+']
+size = [38, 38, 42, 42, 46, 46, 43, 37, 36, 50, 50, 36, 36, 34, 34, 54, 54,
+        36, 36, 34, 34, 38, 38, 32, 32, 30, 30, 36, 36, 33, 33, 39, 38, 38,
+        38, 39, 40, 48, 48, 42, 41]
+
+justin = {lab: siz for lab, siz in zip(label, size)}
+
 
 def clean(datapath):
     """Clean BADS data.
@@ -106,6 +117,9 @@ def clean(datapath):
 
     # Color related features
     data["is_item_color_metal"] = data.item_color == "metal"
+
+    # "Cleaned" item size column
+    data["item_size"] = data.item_size.apply(lambda x: justin.get(x, 0))
 
     return data
 

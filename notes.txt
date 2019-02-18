@@ -8,6 +8,19 @@
     * drop esoteric colors by colorconverter.json
     * summarize seldom colors to "other" category
 
+SIZE (NOPE, NOPE, NOPE - I'm out):
++ find patterns in the numbers:
+    + find starting and breaking points of `+` occuring in the item size - these
+      form item subgroups
+    + for each subgroup cut the interval in even spaces
+
++ Numerical sizes:
+    + first subgroup: 1-14 (can contain a `+`)
+    + second subgroup: 18-33 (children shoe sizes)
+    + third subgroup: 33-58 (general apparel: different accross male/female)
+    + fourth subgroup: 76-176 (children clothing sizes)
+    + 2932 - 4032 (pants sizes: different accross male/female)
+
 ## Feature - engineering:
 
 USERS:

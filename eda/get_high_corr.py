@@ -35,4 +35,4 @@ if __name__ == "__main__":
         with open(os.path.join("preprocessing", "blacklist.txt"), "w") as f:
             f.writelines("\n".join(problematic), )
 
-table.sort_values("correlation", ascending=False)[::2]
+    print(table.sort_values("correlation", ascending=False)[::2])
