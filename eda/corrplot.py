@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 import seaborn as sns
 from preprocessing.cleaning import clean
 from preprocessing.features import FeatureGenerator
@@ -13,19 +14,37 @@ if __name__ == "__main__":
     known = clean(train_data_path)
     unknown = clean(unknown_data_path)
     history = known.append(unknown, sort=False)
-    fg = FeatureGenerator()
+
+    cols = ["days_to_delivery",
+            "days_to_delivery/brand_mean_price",
+            "days_to_delivery/order_median_price",
+            "item_price*order_num_sizes",
+            "item_price",
+            "days_to_delivery*order_seqnum",
+            "days_to_delivery*brand_max_price",
+            "order_max_price",
+            "item_price*order_num_items",
+            "days_to_delivery*order_total_value",
+            "price_off/item_price",
+            "order_max_price/brand_max_price",
+            "is_item_clothes*order_num_colors",
+            "is_item_clothes*order_median_price",
+            "order_max_price/brand_mean_price",
+            "item_price/brand_mean_price",
+            "price_off/days_to_delivery"]
+
+    fg = FeatureGenerator(cols=cols)
     fg.fit(history, 'return')
-    _, _ = fg.transform(known, "return")
-    out = fg.outfeatures.copy()
+    out, _ = fg.transform(known, "return")
+    out = pd.DataFrame(out, columns=cols)
 
     corr = out.corr()
-    fig, ax = plt.subplots(figsize=(50, 50))
+    fig, ax = plt.subplots(figsize=(14, 14))
     sns.heatmap(corr, vmin=-1, vmax=1, center=0,
                 cmap=plt.cm.seismic,
                 xticklabels=corr.columns.values,
                 yticklabels=corr.columns.values)
-    fig.suptitle("Feature Correlation Plot", fontsize=50)
+    fig.suptitle("Feature Correlation Plot", fontsize=22)
     fig.savefig("eda/corrplot.png")
-    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 
     print("Dimensions:", corr.shape)
