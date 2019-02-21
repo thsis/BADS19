@@ -44,7 +44,7 @@ def minimizer(objective):
 
 
 class GeneticAlgorithm(object):
-    def __init__(self, elitism=0.05, population_size=1000, n_jobs=-1,
+    def __init__(self, elitism=0.01, population_size=10000, n_jobs=-1,
                  crossover_strategy="arithmetic",
                  prob_mutation=0.05):
         self.ELITISM = elitism
@@ -167,16 +167,15 @@ if __name__ == "__main__":
     X_scaled = (X - X.mean(axis=0)) / X.std(axis=0)
 
     true_beta = np.array([1, -2, 3, -4])
-    noise = np.random.normal(size=100)
-    y_true = X.dot(true_beta) + noise > 0.5
+    y_true = X.dot(true_beta) > 0.5
     item_price = np.random.uniform(low=10, high=100, size=100)
 
     optimum_pred = 1 / (1 + np.exp(-X_scaled.dot(true_beta)))
 
-    ga = GeneticAlgorithm(elitism=0.2, prob_mutation=0.5,
+    ga = GeneticAlgorithm(elitism=0.02, prob_mutation=0.5,
                           crossover_strategy="point")
     ga.fit(X, y_true, item_price)
-    opt = ga._GeneticAlgorithm__get_utility(optimum_pred, 0.5)
+    opt, cut = ga._GeneticAlgorithm__get_fitness(optimum_pred)
     ga.run(iter=20)
     print("Optimum based on true beta: ", opt)
     print(ga.HISTORY)
