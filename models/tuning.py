@@ -6,7 +6,7 @@ import copy
 import numpy as np
 from hyperopt import fmin, tpe
 from tqdm import tqdm, trange
-from scipy.stats import rankdata
+from joblib import Parallel, delayed
 
 
 def minimizer(objective):
@@ -44,19 +44,21 @@ def minimizer(objective):
 
 
 class GeneticAlgorithm(object):
-    def __init__(self, elitism=0.05, population_size=1000,
+    def __init__(self, elitism=0.05, population_size=1000, n_jobs=-1,
                  crossover_strategy="arithmetic",
                  prob_mutation=0.05):
         self.ELITISM = elitism
         self.POPULATION_SIZE = population_size
         self.PROB_MUTATION = prob_mutation
         self.NUM_PARENTS = int(self.ELITISM * self.POPULATION_SIZE)
+        self.N_JOBS = n_jobs
         crossovers = {
             "arithmetic": self.__arithmetic_crossover,
             "point": self.__exchange_point_crossover,
             "heuristic": self.__heuristic_crossover}
 
         self.CROSSOVER = crossovers[crossover_strategy]
+        self.HISTORY = []
 
     def fit(self, X, y, price, fit_intercept=True, loc=0, scale=10):
         self.n, self.m = X.shape
@@ -84,42 +86,47 @@ class GeneticAlgorithm(object):
             cutoffs = np.full(self.POPULATION_SIZE, -np.inf)
 
             # Determine fitness
-            for i, beta in enumerate(tqdm(self.pool, leave=True, position=1)):
-                y_pred = self.__predict_proba(beta)
+            for i, beta in enumerate(tqdm(self.pool, leave=True, position=1,
+                                          desc="Iteration Progress")):
+                y_pred = self.__predict_proba(self.X_, beta)
                 fit, cut = self.__get_fitness(y_pred)
                 fitness[i] = fit
                 cutoffs[i] = cut
 
-            # Create new pool
+            # Save best candidate
             fitness_idx = np.argsort(-fitness)
             parents_idx = fitness_idx[:self.NUM_PARENTS]
+            self.optimal_candidate = self.pool[fitness_idx[0], :]
+            self.HISTORY.append(fitness[fitness_idx[0]])
+
+            # Create new pool
             self.pool = self.pool[parents_idx, :]
 
-        # Calculate mating chances
-        parents_fit = fitness[fitness_idx][:self.NUM_PARENTS]
-        r = rankdata(parents_fit)
-        p = r / r.sum()
+            # Crossover
+            while self.pool.shape[0] < self.POPULATION_SIZE:
+                parent_a_idx = np.random.choice(range(self.NUM_PARENTS))
+                parent_b_idx = np.random.choice(range(self.NUM_PARENTS))
 
-        # Crossover
-        while self.pool.shape[0] < self.POPULATION_SIZE:
-            parent_a_idx = np.random.choice(range(self.NUM_PARENTS), p=p)
-            parent_b_idx = np.random.choice(range(self.NUM_PARENTS), p=p)
+                candidate = self.CROSSOVER(parent_a_idx, parent_b_idx)
+                if np.random.random() < self.PROB_MUTATION:
+                    candidate = self.__mutate(candidate)
 
-            candidate = self.CROSSOVER(parent_a_idx, parent_b_idx)
-            if np.random.random() < self.PROB_MUTATION:
-                candidate = self.__mutate(candidate)
+                self.pool = np.append(self.pool, [candidate], axis=0)
 
-            self.pool = np.append(self.pool, [candidate], axis=0)
+    def transform(self, X):
+        out = self.__predict_proba(X, self.optimal_candidate)
+        return out
 
-    def __predict_proba(self, b):
-        proba = 1 / (1 + np.exp(-self.X_.dot(b)))
+    def __predict_proba(self, X, b):
+        proba = 1 / (1 + np.exp(-X.dot(b)))
         return proba
 
     def __get_fitness(self, y_prob):
-        cutoffs = np.linspace(0, 1, num=100)
-        utilities = [self.__get_utility(y_prob, c) for c in cutoffs]
-        best = np.argmax(utilities)
-        return utilities[best], cutoffs[best]
+        cut = np.linspace(0, 1, num=100)
+        u = Parallel(n_jobs=self.N_JOBS)(
+            delayed(self.__get_utility)(y_prob, c) for c in cut)
+        best = np.argmax(u)
+        return u[best], cut[best]
 
     def __get_utility(self, y_prob, cutoff):
         utility = 0
@@ -154,36 +161,23 @@ class GeneticAlgorithm(object):
         return candidate
 
 
-
-
 if __name__ == "__main__":
-    import os
-    from preprocessing.cleaning import clean
-    from preprocessing.features import FeatureGenerator
+    np.random.seed(42)
+    X = np.random.uniform(size=(100, 4))
+    X_scaled = (X - X.mean(axis=0)) / X.std(axis=0)
 
-    train_data_path = os.path.join("data", "BADS_WS1819_known.csv")
-    unknown_data_path = os.path.join("data", "BADS_WS1819_unknown.csv")
+    true_beta = np.array([1, -2, 3, -4])
+    noise = np.random.normal(size=100)
+    y_true = X.dot(true_beta) + noise > 0.5
+    item_price = np.random.uniform(low=10, high=100, size=100)
 
-    known = clean(train_data_path)
-    unknown = clean(unknown_data_path)
-    history = known.append(unknown, sort=False)
+    optimum_pred = 1 / (1 + np.exp(-X_scaled.dot(true_beta)))
 
-    cols = ["days_to_delivery",
-            "days_to_delivery/order_median_price",
-            "item_price*order_num_sizes",
-            "item_price",
-            "days_to_delivery*order_seqnum",
-            "order_max_price",
-            "days_to_delivery*order_total_value",
-            "price_off/item_price",
-            "is_item_clothes*order_num_colors",
-            "price_off/days_to_delivery"]
-
-    fg = FeatureGenerator(cols=cols)
-    fg.fit(history, 'return')
-    X, y = fg.transform(known, "return")
-    print(X.shape)
-
-    ga = GeneticAlgorithm(population_size=100)
-    ga.fit(X, y, known.item_price.values)
-    ga.run()
+    ga = GeneticAlgorithm(elitism=0.2, prob_mutation=0.5,
+                          crossover_strategy="point")
+    ga.fit(X, y_true, item_price)
+    opt = ga._GeneticAlgorithm__get_utility(optimum_pred, 0.5)
+    ga.run(iter=20)
+    print("Optimum based on true beta: ", opt)
+    print(ga.HISTORY)
+    print(ga.optimal_candidate)
