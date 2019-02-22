@@ -64,16 +64,18 @@ class GeneticAlgorithm(object):
                         "oob_fitness": []}
 
     def fit(self, X, y, price, fit_intercept=True, loc=0, scale=1):
+        self.fit_intercept = fit_intercept
         self.n, self.m = X.shape
         self.X = X
         self.X_means = self.X.mean(axis=0)
         self.X_stds = self.X.std()
         self.X_ = (self.X - self.X_means) / self.X_stds
 
-        if fit_intercept:
+        if self.fit_intercept:
             self.m += 1
             # Add column of ones
-            self.X_ = np.append(self.X_, np.ones(self.n).reshape((-1, 1)),
+            self.X_ = np.append(np.ones(self.n).reshape((-1, 1)),
+                                self.X_,
                                 axis=1)
 
         self.price = price
@@ -82,48 +84,40 @@ class GeneticAlgorithm(object):
         self.pool = np.random.normal(loc=loc, scale=scale,
                                      size=(self.POPULATION_SIZE, self.m))
 
-    def run(self, iter=10, subsample=None):
+    def run(self, iter=10, subsample=None, bootstrap=False, reset_prob=1):
         if subsample is None:
-            sample_size = self.n
+            self.sample_size = self.n
+            self.BOOTSTRAP = False
+            self.oob_size = 1
         else:
-            sample_size = int(subsample * self.n)
-        for _ in trange(iter, desc='Generation', leave=True, position=0):
+            assert 0 < subsample < 1
+            self.sample_size = int(subsample * self.n)
+            self.BOOTSTRAP = bootstrap
+            self.oob_size = self.n - self.sample_size
+        for i in trange(iter, desc='Generation', leave=True, position=0):
             # Initialize
             self.fitness = np.full(self.POPULATION_SIZE, -np.inf)
             self.cutoffs = np.full(self.POPULATION_SIZE, -np.inf)
             # Draw random subsample to prevent overfitting
-            sample_idx = np.random.choice(range(self.n), size=sample_size,
-                                          replace=False)
-            oob_idx = [i for i in range(self.n) if i not in sample_idx]
-
-            sample = self.X_[sample_idx, :]
-            sample_y = self.y_true[sample_idx]
-            sample_price = self.price[sample_idx]
-
-            oob_sample = self.X_[oob_idx]
-            oob_y = self.y_true[oob_idx]
-            oob_price = self.price[oob_idx]
+            if i == 0:
+                samples = self.__get_sample()
+                sample, sample_y, sample_p, oob, oob_y, oob_p = samples
+            if np.random.random() < reset_prob:
+                samples = self.__get_sample()
+                sample, sample_y, sample_p, oob, oob_y, oob_p = samples
 
             # Determine fitness
             for i, beta in enumerate(tqdm(self.pool, leave=True, position=1,
                                           desc="Iteration Progress")):
                 y_pred = self.__predict_proba(sample, beta)
-                fit, cut = self.get_fitness(y_pred, sample_y, sample_price)
+                fit, cut = self.get_fitness(y_pred, sample_y, sample_p)
                 self.fitness[i] = fit
                 self.cutoffs[i] = cut
 
             # Save best candidate
             fitness_idx = np.argsort(-self.fitness)
             parents_idx = fitness_idx[:self.NUM_PARENTS]
-            self.optimal_candidate = self.pool[fitness_idx[0], :]
-            oob_prob = self.__predict_proba(oob_sample, self.optimal_candidate)
-            self.oob_fitness, _ = self.get_fitness(oob_prob, oob_y, oob_price)
-            # Rescale fitness to compare with OOB-fitness
-            self.HISTORY["best_fitness"].append(
-                (1/subsample) * self.fitness[fitness_idx[0]])
-            self.HISTORY["best_candidate"].append(self.pool[fitness_idx[0], :])
-            self.HISTORY["mean_pop_fitness"].append(self.fitness.mean())
-            self.HISTORY["oob_fitness"].append(self.oob_fitness)
+            self.__update_history(fitness_idx, parents_idx, oob, oob_y, oob_p)
 
             # Create new pool
             self.pool = self.pool[parents_idx, :]
@@ -145,9 +139,28 @@ class GeneticAlgorithm(object):
         return self.optimal_candidate
 
     def transform(self, X):
+        n, m = X.shape
         X_ = (X - self.X_means) / self.X_stds
+        if self.fit_intercept:
+            X_ = np.append(np.ones(n), X_, axis=1)
         out = self.__predict_proba(X_, self.optimal_candidate)
         return out
+
+    def __get_sample(self):
+        sample_idx = np.random.choice(range(self.n),
+                                      size=self.sample_size,
+                                      replace=self.BOOTSTRAP)
+        oob_idx = [i for i in range(self.n) if i not in sample_idx]
+
+        sample = self.X_[sample_idx, :]
+        sample_y = self.y_true[sample_idx]
+        sample_price = self.price[sample_idx]
+
+        oob_sample = self.X_[oob_idx]
+        oob_y = self.y_true[oob_idx]
+        oob_price = self.price[oob_idx]
+
+        return sample, sample_y, sample_price, oob_sample, oob_y, oob_price
 
     def __predict_proba(self, X, b):
         proba = 1 / (1 + np.exp(-X.dot(b)))
@@ -172,6 +185,16 @@ class GeneticAlgorithm(object):
             elif not y_p and y_t:
                 utility -= 2.5 * (3 + 0.1*p)
         return utility
+
+    def __update_history(self, fitness_idx, parents_idx, oob, y, p):
+        self.optimal_candidate = self.pool[fitness_idx[0], :]
+        prob = self.__predict_proba(oob, self.optimal_candidate)
+        self.oob_fitness, _ = self.get_fitness(prob, y, p)
+        # Rescale fitness to compare with OOB-fitness
+        self.HISTORY["best_fitness"].append(self.fitness[fitness_idx[0]] / self.sample_size)
+        self.HISTORY["best_candidate"].append(self.pool[fitness_idx[0], :])
+        self.HISTORY["mean_pop_fitness"].append(self.fitness.mean() / self.sample_size)
+        self.HISTORY["oob_fitness"].append(self.oob_fitness / self.oob_size)
 
     def __arithmetic_crossover(self, idx_a, idx_b):
         lam = np.random.random()
@@ -209,7 +232,7 @@ if __name__ == "__main__":
 
     optimum_pred = 1 / (1 + np.exp(-X_scaled.dot(true_beta)))
 
-    ga = GeneticAlgorithm(elitism=0.1, prob_mutation=0.3,
+    ga = GeneticAlgorithm(elitism=0.2, prob_mutation=0.3,
                           crossover_strategy="point")
     ga.fit(X, y_true, item_price)
 
@@ -218,7 +241,7 @@ if __name__ == "__main__":
                               item_price)
     print("Optimum based on true beta: ", opt)
     print("Best solution:")
-    res = ga.run(iter=30, subsample=0.2)
+    res = ga.run(iter=30, subsample=0.5, bootstrap=False, reset_prob=0.33)
     print(res)
 
     print("\n| Best Fitness | Mean Fitness | OOB Fitness")
