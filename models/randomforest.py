@@ -32,7 +32,7 @@ from sklearn.pipeline import Pipeline
 # 1. Get logger.
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-fh = logging.FileHandler("random_forest.log")
+fh = logging.FileHandler(os.path.join("logs", "random_forest.log"))
 format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 formatter = logging.Formatter(format)
 fh.setFormatter(formatter)

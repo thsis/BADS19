@@ -1,11 +1,26 @@
 \documentclass{article}
 
+\usepackage{hyperref}
+\usepackage{apacite}
+\usepackage{booktabs}
+\usepackage{graphicx}
+
 \begin{document}
+
+\title{Business Analytics and Data Science \\
+       \large Term paper}
+\author{Thomas Siskos, 580726}
+
+\maketitle
+
 \section{Introduction}
 \input{introduction.tex}
 
 \section{Exploratory Data Analysis}
 \input{eda.tex}
+
+\section{Data Preparation}
+\input{preparation.tex}
 
 \section{Model Tuning and Selection}
 \input{tuning.tex}
@@ -18,4 +33,7 @@
 
 \section{Conclusion}
 \input{conclusion.tex}
+
+\bibliographystyle{apacite}
+\bibliography{references}
 \end{document}

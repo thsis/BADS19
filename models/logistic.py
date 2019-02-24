@@ -31,7 +31,7 @@ from sklearn.pipeline import Pipeline
 # 1. Create a logger.
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-fh = logging.FileHandler("logistic.log")
+fh = logging.FileHandler(os.path.join("logs", "logistic.log"))
 format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 formatter = logging.Formatter(format)
 fh.setFormatter(formatter)

@@ -22,8 +22,6 @@ dtypes = {"item_id": object, "brand_id": object, "user_id": object}
 with open(colorpath) as f:
     colors = json.load(f)
 
-colorconverter = {"item_color": lambda x: colors.get(x, "other")}
-
 # Sizes
 label = ['m', 'M', 'l', 'L', 'xl', 'XL', '43+', '37+', '36+', 'XXL', 'xxl',
          's', 'S', 'XS', 'xs', 'XXXL', 'xxxl', '8+', '8', '6+', '6', '9+',
@@ -77,8 +75,9 @@ def clean(datapath):
     data = pd.read_csv(datapath, parse_dates=date_columns,
                        index_col=["order_item_id"],
                        na_values=na_values,
-                       dtype=dtypes,
-                       converters=colorconverter)
+                       dtype=dtypes)
+
+    data["color"] = data.item_color.apply(lambda x: colors.get(x, "other"))
 
     # Compute Mean Number of Days until Delivery
     na_del = pd.isna(data.delivery_date)
@@ -129,3 +128,7 @@ if __name__ == "__main__":
     cleaned = clean(datapath)
     print(cleaned.describe(include="all"))
     print(cleaned.info())
+
+    data_filthy = pd.read_csv(datapath,
+                              index_col=["order_item_id"],
+                              dtype=dtypes)

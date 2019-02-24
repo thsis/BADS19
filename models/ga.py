@@ -1,3 +1,15 @@
+"""
+Minimize costs directly using a Linear Classifier and a Genetic Algorithm.
+
+1. Create a logger.
+2. Decorate the `models.tuning.minimizer`.
+3. Read and clean the data.
+4. Define model pipeline.
+5. Define hyperparameter space.
+6. Perform hyperparameter tuning with train data.
+7. Fit pipeline with whole dataset and save predictions.
+"""
+
 import os
 import datetime
 from models.tuning import GeneticAlgorithm
@@ -5,6 +17,17 @@ from preprocessing.cleaning import clean
 from preprocessing.features import FeatureGenerator
 
 from sklearn.model_selection import train_test_split
+
+# 1. Create a logger.
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+fh = logging.FileHandler(os.path.join("logs", "ga.log"))
+format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+formatter = logging.Formatter(format)
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+logger.info("{0} Start new run {0}".format("=" * 17))
+
 
 datapath = os.path.join("data", "BADS_WS1819_known.csv")
 unknownpath = os.path.join("data", "BADS_WS1819_unknown.csv")

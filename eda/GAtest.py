@@ -13,20 +13,32 @@ logger.addHandler(fh)
 logger.info("{0} Start new run {0}".format("=" * 17))
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--elitism", type=float, default=0.02)
-parser.add_argument("--population-size", type=int, default=100)
-parser.add_argument("--jobs", type=int, default=-1)
-parser.add_argument("--crossover-strategy", type=str, default="arithmetic")
-parser.add_argument("--prob-mutation", type=float, default=0.5)
+parser.add_argument("--elitism", type=float, default=0.02,
+                    help="percentage of population kept in next iteration")
+parser.add_argument("--population-size", type=int, default=100,
+                    help="total number of solutions in pool")
+parser.add_argument("--jobs", type=int, default=-1,
+                    help="number of processors used")
+parser.add_argument("--crossover-strategy", type=str, default="arithmetic",
+                    help="in {'arithmetic', 'point', 'heuristic'}")
+parser.add_argument("--prob-mutation", type=float, default=0.5,
+                    help="probability of mutating a solution")
 
-parser.add_argument("--ignore-intercept", action="store_true", default=False)
-parser.add_argument("--init-loc", type=float, default=0.0)
-parser.add_argument("--init-scale", type=float, default=1.0)
+parser.add_argument("--ignore-intercept", action="store_true", default=False,
+                    help="if set, intercept will be omitted")
+parser.add_argument("--init-loc", type=float, default=0.0,
+                    help="location parameter during initialization")
+parser.add_argument("--init-scale", type=float, default=1.0,
+                    help="scale parameter during initialization")
 
-parser.add_argument("--iter", type=int, default=20)
-parser.add_argument("--subsample", type=float, default=0.5)
-parser.add_argument("--bootstrap", action="store_true", default=False)
-parser.add_argument("--reset-prob", type=float, default=0.25)
+parser.add_argument("--iter", type=int, default=20,
+                    help="maximum number of iterations")
+parser.add_argument("--subsample", type=float, default=0.5,
+                    help="size of subsample")
+parser.add_argument("--bootstrap", action="store_true", default=False,
+                    help="if set, sample with replacement")
+parser.add_argument("--reset-prob", type=float, default=0.25,
+                    help="probability of redrawing the subsample")
 
 args = parser.parse_args()
 print(args.ignore_intercept)
