@@ -1,0 +1,37 @@
+2019-02-11 19:12:33,132 - __main__ - INFO - ================= Start new run =================
+2019-02-11 19:12:42,060 - __main__ - INFO -               svm__C:          0.28608
+2019-02-11 19:12:42,061 - __main__ - INFO -               svm__C:              linear
+2019-02-11 19:12:42,061 - __main__ - INFO -       svm__shrinking:                   1
+2019-02-11 19:13:45,713 - __main__ - INFO -       svm__shrinking:                   1
+2019-02-11 19:15:19,796 - __main__ - INFO -               svm__C:          0.28607733185479844
+2019-02-11 19:15:19,797 - __main__ - INFO -               svm__C:              linear
+2019-02-11 19:15:19,800 - __main__ - INFO -       svm__shrinking:                   1
+2019-02-11 19:16:04,678 - __main__ - INFO -               svm__C:          0.28607733185479844
+2019-02-11 19:16:04,681 - __main__ - INFO -               svm__C:              linear
+2019-02-11 19:16:04,682 - __main__ - INFO -       svm__shrinking:                  1
+2019-02-11 19:16:39,896 - __main__ - INFO -               svm__C:          0.28607733185479844
+2019-02-11 19:16:39,897 - __main__ - INFO -               svm__C:              linear
+2019-02-11 19:16:39,897 - __main__ - INFO -       svm__shrinking:                  1
+2019-02-11 19:17:07,171 - __main__ - INFO -               svm__C:          0.28608
+2019-02-11 19:17:07,172 - __main__ - INFO -               svm__C:              linear
+2019-02-11 19:17:07,173 - __main__ - INFO -       svm__shrinking:                  1
+2019-02-11 19:17:30,419 - __main__ - INFO -               svm__C:             0.28608
+2019-02-11 19:17:30,423 - __main__ - INFO -               svm__C:              linear
+2019-02-11 19:17:30,424 - __main__ - INFO -       svm__shrinking:                  1
+2019-02-11 19:27:38,750 - __main__ - INFO - ================= Start new run =================
+2019-02-11 19:27:38,751 - __main__ - INFO - Location: predictions/svm_predictions20190211_1927.csv
+2019-02-11 19:27:46,999 - __main__ - INFO - Train AUC: 0.596	Test AUC: 0.591
+2019-02-11 19:27:47,001 - __main__ - INFO - ------------ Optimal Parameter Space ------------
+2019-02-11 19:27:47,001 - __main__ - INFO -               svm__C:                     0.75037
+2019-02-11 19:27:47,001 - __main__ - INFO -               svm__C:                  rbf
+2019-02-11 19:27:47,002 - __main__ - INFO -       svm__shrinking:                False
+2019-02-12 12:15:02,990 - models.svm - INFO - ================= Start new run =================
+2019-02-12 12:15:02,991 - models.svm - INFO - predictions/svm_predictions20190212_1215.csv
+2019-02-12 12:15:07,744 - models.svm - INFO - Train AUC: 0.458	Test AUC: 0.454
+2019-02-12 12:15:07,745 - models.svm - INFO - ------------ Optimal Parameter Space ------------
+2019-02-12 12:15:07,745 - models.svm - INFO -               svm__C:                     0.36277
+2019-02-12 12:15:07,745 - models.svm - INFO -               svm__C:              sigmoid
+2019-02-12 12:15:07,745 - models.svm - INFO -       svm__shrinking:                False
+2019-02-12 12:15:15,092 - models.svm - INFO - Approximate score: 0.502
+2019-02-15 09:46:17,425 - __main__ - INFO - ================= Start new run =================
+2019-02-15 09:46:17,427 - __main__ - INFO - predictions/ann_predictions20190215_0946.csv

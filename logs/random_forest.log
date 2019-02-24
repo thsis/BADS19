@@ -1,0 +1,1012 @@
+2019-02-11 09:57:00,470 - __main__ - INFO - ================= Start new run =================
+2019-02-11 09:58:43,499 - __main__ - INFO - ================= Start new run =================
+2019-02-11 09:59:17,158 - __main__ - INFO - Train AUC: 0.628	Test AUC: 0.625
+2019-02-11 10:00:17,089 - __main__ - INFO - Train AUC: 0.629	Test AUC: 0.626
+2019-02-11 10:00:32,681 - __main__ - INFO - Train AUC: 0.641	Test AUC: 0.632
+2019-02-11 10:00:37,584 - __main__ - INFO - Train AUC: 0.629	Test AUC: 0.627
+2019-02-11 10:01:31,520 - __main__ - INFO - Train AUC: 0.631	Test AUC: 0.628
+2019-02-11 10:02:17,348 - __main__ - INFO - Train AUC: 0.627	Test AUC: 0.625
+2019-02-11 10:02:43,625 - __main__ - INFO - Train AUC: 0.630	Test AUC: 0.627
+2019-02-11 10:02:58,028 - __main__ - INFO - Train AUC: 0.630	Test AUC: 0.627
+2019-02-11 10:03:20,405 - __main__ - INFO - Train AUC: 0.631	Test AUC: 0.628
+2019-02-11 10:03:30,443 - __main__ - INFO - Train AUC: 0.631	Test AUC: 0.628
+2019-02-11 10:03:30,445 - __main__ - INFO - ------------ Optimal Parameter Space ------------
+2019-02-11 10:03:30,445 - __main__ - INFO - rf__max_depth       :	584.0
+2019-02-11 10:03:30,445 - __main__ - INFO - rf__min_samples_leaf:	0.0062366
+2019-02-11 10:03:30,445 - __main__ - INFO - rf__max_features    :	0.90884
+2019-02-11 10:03:30,446 - __main__ - INFO - rf__n_estimators    :	1467.0
+2019-02-11 10:33:35,989 - __main__ - INFO - ================= Start new run =================
+2019-02-11 10:34:33,855 - __main__ - INFO - Train AUC: 0.633	Test AUC: 0.631
+2019-02-11 10:35:35,317 - __main__ - INFO - Train AUC: 0.641	Test AUC: 0.637
+2019-02-11 10:36:14,793 - __main__ - INFO - Train AUC: 0.637	Test AUC: 0.635
+2019-02-11 10:37:17,177 - __main__ - INFO - Train AUC: 0.654	Test AUC: 0.637
+2019-02-11 10:37:34,636 - __main__ - INFO - Train AUC: 0.633	Test AUC: 0.631
+2019-02-11 10:38:14,034 - __main__ - INFO - Train AUC: 0.633	Test AUC: 0.632
+2019-02-11 10:38:58,948 - __main__ - INFO - Train AUC: 0.635	Test AUC: 0.633
+2019-02-11 10:39:35,631 - __main__ - INFO - Train AUC: 0.636	Test AUC: 0.634
+2019-02-11 10:39:38,639 - __main__ - INFO - Train AUC: 0.634	Test AUC: 0.633
+2019-02-11 10:40:07,502 - __main__ - INFO - Train AUC: 0.632	Test AUC: 0.630
+2019-02-11 10:40:32,283 - __main__ - INFO - Train AUC: 0.640	Test AUC: 0.636
+2019-02-11 10:40:46,995 - __main__ - INFO - Train AUC: 0.636	Test AUC: 0.634
+2019-02-11 10:41:20,682 - __main__ - INFO - Train AUC: 0.632	Test AUC: 0.631
+2019-02-11 10:42:07,103 - __main__ - INFO - Train AUC: 0.640	Test AUC: 0.636
+2019-02-11 10:42:45,718 - __main__ - INFO - Train AUC: 0.634	Test AUC: 0.632
+2019-02-11 10:43:18,271 - __main__ - INFO - Train AUC: 0.633	Test AUC: 0.631
+2019-02-11 10:43:54,424 - __main__ - INFO - Train AUC: 0.640	Test AUC: 0.636
+2019-02-11 10:44:15,259 - __main__ - INFO - Train AUC: 0.635	Test AUC: 0.633
+2019-02-11 10:44:18,732 - __main__ - INFO - Train AUC: 0.639	Test AUC: 0.636
+2019-02-11 10:44:29,437 - __main__ - INFO - Train AUC: 0.636	Test AUC: 0.634
+2019-02-11 10:45:35,562 - __main__ - INFO - Train AUC: 0.654	Test AUC: 0.637
+2019-02-11 10:46:43,412 - __main__ - INFO - Train AUC: 0.662	Test AUC: 0.636
+2019-02-11 10:47:37,187 - __main__ - INFO - Train AUC: 0.649	Test AUC: 0.637
+2019-02-11 10:48:28,038 - __main__ - INFO - Train AUC: 0.644	Test AUC: 0.637
+2019-02-11 10:49:18,168 - __main__ - INFO - Train AUC: 0.642	Test AUC: 0.636
+2019-02-11 10:50:09,364 - __main__ - INFO - Train AUC: 0.638	Test AUC: 0.635
+2019-02-11 10:51:02,393 - __main__ - INFO - Train AUC: 0.642	Test AUC: 0.636
+2019-02-11 10:51:48,250 - __main__ - INFO - Train AUC: 0.637	Test AUC: 0.635
+2019-02-11 10:52:39,017 - __main__ - INFO - Train AUC: 0.645	Test AUC: 0.637
+2019-02-11 10:53:27,418 - __main__ - INFO - Train AUC: 0.638	Test AUC: 0.635
+2019-02-11 10:54:09,544 - __main__ - INFO - Train AUC: 0.635	Test AUC: 0.633
+2019-02-11 10:55:05,811 - __main__ - INFO - Train AUC: 0.645	Test AUC: 0.637
+2019-02-11 10:55:45,501 - __main__ - INFO - Train AUC: 0.634	Test AUC: 0.632
+2019-02-11 10:56:41,132 - __main__ - INFO - Train AUC: 0.639	Test AUC: 0.636
+2019-02-11 10:57:29,501 - __main__ - INFO - Train AUC: 0.667	Test AUC: 0.635
+2019-02-11 10:58:18,116 - __main__ - INFO - Train AUC: 0.642	Test AUC: 0.637
+2019-02-11 10:58:43,847 - __main__ - INFO - Train AUC: 0.636	Test AUC: 0.634
+2019-02-11 10:59:20,448 - __main__ - INFO - Train AUC: 0.648	Test AUC: 0.637
+2019-02-11 10:59:51,040 - __main__ - INFO - Train AUC: 0.635	Test AUC: 0.633
+2019-02-11 11:00:27,340 - __main__ - INFO - Train AUC: 0.640	Test AUC: 0.636
+2019-02-11 11:00:49,506 - __main__ - INFO - Train AUC: 0.634	Test AUC: 0.632
+2019-02-11 11:01:34,974 - __main__ - INFO - Train AUC: 0.636	Test AUC: 0.634
+2019-02-11 11:01:50,247 - __main__ - INFO - Train AUC: 0.638	Test AUC: 0.635
+2019-02-11 11:02:32,246 - __main__ - INFO - Train AUC: 0.637	Test AUC: 0.634
+2019-02-11 11:03:07,023 - __main__ - INFO - Train AUC: 0.641	Test AUC: 0.637
+2019-02-11 11:03:32,998 - __main__ - INFO - Train AUC: 0.648	Test AUC: 0.637
+2019-02-11 11:03:40,048 - __main__ - INFO - Train AUC: 0.636	Test AUC: 0.634
+2019-02-11 11:03:57,818 - __main__ - INFO - Train AUC: 0.632	Test AUC: 0.631
+2019-02-11 11:04:23,760 - __main__ - INFO - Train AUC: 0.641	Test AUC: 0.636
+2019-02-11 11:04:53,960 - __main__ - INFO - Train AUC: 0.633	Test AUC: 0.631
+2019-02-11 11:05:04,375 - __main__ - INFO - Train AUC: 0.642	Test AUC: 0.637
+2019-02-11 11:05:37,374 - __main__ - INFO - Train AUC: 0.635	Test AUC: 0.633
+2019-02-11 11:06:02,621 - __main__ - INFO - Train AUC: 0.638	Test AUC: 0.635
+2019-02-11 11:06:40,791 - __main__ - INFO - Train AUC: 0.636	Test AUC: 0.634
+2019-02-11 11:06:58,305 - __main__ - INFO - Train AUC: 0.635	Test AUC: 0.633
+2019-02-11 11:07:26,138 - __main__ - INFO - Train AUC: 0.640	Test AUC: 0.636
+2019-02-11 11:07:47,578 - __main__ - INFO - Train AUC: 0.639	Test AUC: 0.635
+2019-02-11 11:08:00,984 - __main__ - INFO - Train AUC: 0.647	Test AUC: 0.637
+2019-02-11 11:08:07,066 - __main__ - INFO - Train AUC: 0.655	Test AUC: 0.637
+2019-02-11 11:08:17,842 - __main__ - INFO - Train AUC: 0.640	Test AUC: 0.636
+2019-02-11 11:08:41,665 - __main__ - INFO - Train AUC: 0.633	Test AUC: 0.631
+2019-02-11 11:08:54,521 - __main__ - INFO - Train AUC: 0.644	Test AUC: 0.637
+2019-02-11 11:09:34,665 - __main__ - INFO - Train AUC: 0.638	Test AUC: 0.635
+2019-02-11 11:09:36,861 - __main__ - INFO - Train AUC: 0.636	Test AUC: 0.634
+2019-02-11 11:09:41,927 - __main__ - INFO - Train AUC: 0.636	Test AUC: 0.634
+2019-02-11 11:10:10,031 - __main__ - INFO - Train AUC: 0.652	Test AUC: 0.637
+2019-02-11 11:10:29,093 - __main__ - INFO - Train AUC: 0.647	Test AUC: 0.637
+2019-02-11 11:11:00,711 - __main__ - INFO - Train AUC: 0.646	Test AUC: 0.637
+2019-02-11 11:11:45,163 - __main__ - INFO - Train AUC: 0.641	Test AUC: 0.636
+2019-02-11 11:12:10,092 - __main__ - INFO - Train AUC: 0.643	Test AUC: 0.637
+2019-02-11 11:12:56,746 - __main__ - INFO - Train AUC: 0.639	Test AUC: 0.636
+2019-02-11 11:13:31,660 - __main__ - INFO - Train AUC: 0.646	Test AUC: 0.637
+2019-02-11 11:14:17,249 - __main__ - INFO - Train AUC: 0.641	Test AUC: 0.637
+2019-02-11 11:14:46,216 - __main__ - INFO - Train AUC: 0.665	Test AUC: 0.635
+2019-02-11 11:15:21,155 - __main__ - INFO - Train AUC: 0.639	Test AUC: 0.636
+2019-02-11 11:15:46,402 - __main__ - INFO - Train AUC: 0.645	Test AUC: 0.637
+2019-02-11 11:16:39,617 - __main__ - INFO - Train AUC: 0.646	Test AUC: 0.637
+2019-02-11 11:17:36,208 - __main__ - INFO - Train AUC: 0.638	Test AUC: 0.635
+2019-02-11 11:18:17,860 - __main__ - INFO - Train AUC: 0.668	Test AUC: 0.635
+2019-02-11 11:19:15,926 - __main__ - INFO - Train AUC: 0.637	Test AUC: 0.635
+2019-02-11 11:20:15,880 - __main__ - INFO - Train AUC: 0.646	Test AUC: 0.637
+2019-02-11 11:21:16,496 - __main__ - INFO - Train AUC: 0.638	Test AUC: 0.635
+2019-02-11 11:22:03,664 - __main__ - INFO - Train AUC: 0.640	Test AUC: 0.636
+2019-02-11 11:23:06,179 - __main__ - INFO - Train AUC: 0.643	Test AUC: 0.637
+2019-02-11 11:24:07,433 - __main__ - INFO - Train AUC: 0.636	Test AUC: 0.634
+2019-02-11 11:25:03,554 - __main__ - INFO - Train AUC: 0.634	Test AUC: 0.632
+2019-02-11 11:25:55,722 - __main__ - INFO - Train AUC: 0.635	Test AUC: 0.633
+2019-02-11 11:26:45,236 - __main__ - INFO - Train AUC: 0.636	Test AUC: 0.634
+2019-02-11 11:27:35,229 - __main__ - INFO - Train AUC: 0.642	Test AUC: 0.637
+2019-02-11 11:28:36,808 - __main__ - INFO - Train AUC: 0.653	Test AUC: 0.637
+2019-02-11 11:29:09,763 - __main__ - INFO - Train AUC: 0.642	Test AUC: 0.637
+2019-02-11 11:30:02,191 - __main__ - INFO - Train AUC: 0.639	Test AUC: 0.636
+2019-02-11 11:30:44,063 - __main__ - INFO - Train AUC: 0.633	Test AUC: 0.631
+2019-02-11 11:31:05,330 - __main__ - INFO - Train AUC: 0.643	Test AUC: 0.637
+2019-02-11 11:32:09,134 - __main__ - INFO - Train AUC: 0.644	Test AUC: 0.637
+2019-02-11 11:32:45,959 - __main__ - INFO - Train AUC: 0.638	Test AUC: 0.635
+2019-02-11 11:33:41,872 - __main__ - INFO - Train AUC: 0.633	Test AUC: 0.632
+2019-02-11 11:34:31,581 - __main__ - INFO - Train AUC: 0.637	Test AUC: 0.635
+2019-02-11 11:35:18,314 - __main__ - INFO - Train AUC: 0.632	Test AUC: 0.630
+2019-02-11 11:36:10,146 - __main__ - INFO - Train AUC: 0.635	Test AUC: 0.633
+2019-02-11 11:36:10,147 - __main__ - INFO - ------------ Optimal Parameter Space ------------
+2019-02-11 11:36:10,148 - __main__ - INFO - rf__n_estimators    :	2584.0
+2019-02-11 11:36:10,148 - __main__ - INFO - rf__max_features    :	0.67869
+2019-02-11 11:36:10,148 - __main__ - INFO - rf__max_depth       :	386.0
+2019-02-11 11:36:10,148 - __main__ - INFO - rf__min_samples_leaf:	0.0044063
+2019-02-11 11:38:48,034 - __main__ - INFO - -------------- Variable Importance --------------
+2019-02-11 11:38:48,034 - __main__ - INFO - 1 . item_price                              (0.166)
+2019-02-11 11:38:48,034 - __main__ - INFO - 2 . order_median_price/state_mean_delivery  (0.137)
+2019-02-11 11:38:48,035 - __main__ - INFO - 3 . days_to_delivery/state_mean_delivery    (0.128)
+2019-02-11 11:38:48,035 - __main__ - INFO - 4 . days_to_delivery                        (0.102)
+2019-02-11 11:38:48,035 - __main__ - INFO - 5 . item_price/state_mean_delivery          (0.092)
+2019-02-11 11:38:48,035 - __main__ - INFO - 6 . item_mean_delivery/state_mean_delivery  (0.032)
+2019-02-11 11:38:48,036 - __main__ - INFO - 7 . item_mean_delivery                      (0.029)
+2019-02-11 11:38:48,036 - __main__ - INFO - 8 . order_median_price/item_orders          (0.026)
+2019-02-11 11:38:48,036 - __main__ - INFO - 9 . brand_mean_price/order_num_items        (0.025)
+2019-02-11 11:38:48,036 - __main__ - INFO - 10. brand_mean_price/state_mean_delivery    (0.018)
+2019-02-11 11:38:48,036 - __main__ - INFO - 11. brand_mean_price                        (0.015)
+2019-02-11 11:38:48,037 - __main__ - INFO - 12. days_to_delivery/item_orders            (0.012)
+2019-02-11 11:38:48,037 - __main__ - INFO - 13. item_mean_delivery/item_orders          (0.011)
+2019-02-11 11:38:48,037 - __main__ - INFO - 14. brand_min_price/state_mean_delivery     (0.01)
+2019-02-11 11:38:48,037 - __main__ - INFO - 15. brand_max_price/order_num_items         (0.01)
+2019-02-11 20:10:04,288 - __main__ - INFO - ================= Start new run =================
+2019-02-11 20:10:04,288 - __main__ - INFO - predictions/rf_predictions20190211_2010.csv
+2019-02-11 20:12:40,233 - __main__ - INFO - ================= Start new run =================
+2019-02-11 20:12:40,233 - __main__ - INFO - predictions/rf_predictions20190211_2012.csv
+2019-02-11 20:17:49,322 - __main__ - INFO - ================= Start new run =================
+2019-02-11 20:17:49,322 - __main__ - INFO - predictions/rf_predictions20190211_2017.csv
+2019-02-11 20:18:20,413 - __main__ - INFO - Train AUC: 0.654	Test AUC: 0.653
+2019-02-11 20:19:12,057 - __main__ - INFO - Train AUC: 0.660	Test AUC: 0.660
+2019-02-11 20:20:17,253 - __main__ - INFO - Train AUC: 0.643	Test AUC: 0.644
+2019-02-11 20:20:38,666 - __main__ - INFO - Train AUC: 0.654	Test AUC: 0.654
+2019-02-11 20:21:03,754 - __main__ - INFO - Train AUC: 0.650	Test AUC: 0.649
+2019-02-11 20:22:23,530 - __main__ - INFO - Train AUC: 0.647	Test AUC: 0.648
+2019-02-11 20:25:39,949 - __main__ - INFO - Train AUC: 0.651	Test AUC: 0.651
+2019-02-11 20:25:56,338 - __main__ - INFO - Train AUC: 0.653	Test AUC: 0.653
+2019-02-11 20:27:02,001 - __main__ - INFO - Train AUC: 0.655	Test AUC: 0.656
+2019-02-11 20:28:44,873 - __main__ - INFO - Train AUC: 0.649	Test AUC: 0.650
+2019-02-11 20:28:44,874 - __main__ - INFO - ------------ Optimal Parameter Space ------------
+2019-02-11 20:28:44,874 - __main__ - INFO - rf__n_estimators    :	1575.0
+2019-02-11 20:28:44,874 - __main__ - INFO - rf__min_samples_leaf:	0.012488
+2019-02-11 20:28:44,875 - __main__ - INFO - rf__max_depth       :	239.0
+2019-02-11 20:28:44,875 - __main__ - INFO - rf__max_features    :	0.49665
+2019-02-11 20:28:44,875 - __main__ - INFO - rf__min_samples_split:	0.041274
+2019-02-11 20:30:13,958 - __main__ - INFO - Approximate score: 0.66
+2019-02-11 20:30:15,084 - __main__ - INFO - -------------- Variable Importance --------------
+2019-02-11 20:30:15,084 - __main__ - INFO - 1 . item_price                              (0.181)
+2019-02-11 20:30:15,084 - __main__ - INFO - 2 . days_to_delivery/state_mean_delivery    (0.14)
+2019-02-11 20:30:15,084 - __main__ - INFO - 3 . item_price/state_mean_delivery          (0.13)
+2019-02-11 20:30:15,084 - __main__ - INFO - 4 . days_to_delivery                        (0.129)
+2019-02-11 20:30:15,085 - __main__ - INFO - 5 . state_max_delivery/order_num_sizes      (0.102)
+2019-02-11 20:30:15,085 - __main__ - INFO - 6 . order_num_sizes                         (0.096)
+2019-02-11 20:30:15,085 - __main__ - INFO - 7 . brand_max_price/order_num_sizes         (0.025)
+2019-02-11 20:30:15,085 - __main__ - INFO - 8 . item_mean_delivery                      (0.021)
+2019-02-11 20:30:15,085 - __main__ - INFO - 9 . item_mean_delivery/state_mean_delivery  (0.021)
+2019-02-11 20:30:15,085 - __main__ - INFO - 10. order_total_value/order_num_sizes       (0.017)
+2019-02-11 20:30:15,085 - __main__ - INFO - 11. brand_mean_price/order_num_items        (0.015)
+2019-02-11 20:30:15,085 - __main__ - INFO - 12. brand_mean_price/order_num_sizes        (0.014)
+2019-02-11 20:30:15,085 - __main__ - INFO - 13. brand_mean_price/state_mean_delivery    (0.012)
+2019-02-11 20:30:15,085 - __main__ - INFO - 14. brand_mean_price                        (0.011)
+2019-02-11 20:30:15,085 - __main__ - INFO - 15. brand_max_price/order_num_items         (0.007)
+2019-02-12 12:47:55,704 - __main__ - INFO - ================= Start new run =================
+2019-02-12 12:47:55,704 - __main__ - INFO - predictions/rf_predictions20190212_1247.csv
+2019-02-12 12:48:49,791 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.693
+2019-02-12 12:50:42,131 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.689
+2019-02-12 12:51:58,373 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.693
+2019-02-12 12:53:13,899 - __main__ - INFO - Train AUC: 0.687	Test AUC: 0.685
+2019-02-12 12:53:40,378 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.689
+2019-02-12 12:56:02,379 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.689
+2019-02-12 12:58:27,744 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.697
+2019-02-12 12:59:18,331 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.695
+2019-02-12 13:01:02,045 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.690
+2019-02-12 13:02:43,432 - __main__ - INFO - Train AUC: 0.686	Test AUC: 0.685
+2019-02-12 13:04:36,746 - __main__ - INFO - Train AUC: 0.698	Test AUC: 0.694
+2019-02-12 13:05:33,542 - __main__ - INFO - Train AUC: 0.704	Test AUC: 0.699
+2019-02-12 13:06:11,297 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.693
+2019-02-12 13:08:09,785 - __main__ - INFO - Train AUC: 0.704	Test AUC: 0.699
+2019-02-12 13:08:22,518 - __main__ - INFO - Train AUC: 0.698	Test AUC: 0.693
+2019-02-12 13:08:44,951 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.691
+2019-02-12 13:10:36,137 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.690
+2019-02-12 13:11:06,342 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.693
+2019-02-12 13:13:55,038 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.692
+2019-02-12 13:14:47,801 - __main__ - INFO - Train AUC: 0.687	Test AUC: 0.685
+2019-02-12 13:15:54,935 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.696
+2019-02-12 13:17:25,896 - __main__ - INFO - Train AUC: 0.705	Test AUC: 0.699
+2019-02-12 13:19:15,250 - __main__ - INFO - Train AUC: 0.729	Test AUC: 0.706
+2019-02-12 13:22:26,452 - __main__ - INFO - Train AUC: 0.742	Test AUC: 0.708
+2019-02-12 13:25:31,694 - __main__ - INFO - Train AUC: 0.744	Test AUC: 0.708
+2019-02-12 13:28:54,549 - __main__ - INFO - Train AUC: 0.722	Test AUC: 0.705
+2019-02-12 13:30:35,583 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.696
+2019-02-12 13:32:26,947 - __main__ - INFO - Train AUC: 0.711	Test AUC: 0.702
+2019-02-12 13:35:22,155 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.695
+2019-02-12 13:35:38,898 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.694
+2019-02-12 13:37:20,404 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.690
+2019-02-12 13:40:45,991 - __main__ - INFO - Train AUC: 0.711	Test AUC: 0.702
+2019-02-12 13:42:42,724 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.696
+2019-02-12 13:45:29,864 - __main__ - INFO - Train AUC: 0.711	Test AUC: 0.701
+2019-02-12 13:46:11,886 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.693
+2019-02-12 13:46:21,974 - __main__ - INFO - Train AUC: 0.709	Test AUC: 0.701
+2019-02-12 13:48:36,694 - __main__ - INFO - Train AUC: 0.739	Test AUC: 0.708
+2019-02-12 13:50:11,831 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.693
+2019-02-12 13:53:37,311 - __main__ - INFO - Train AUC: 0.701	Test AUC: 0.697
+2019-02-12 13:54:54,064 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.691
+2019-02-12 13:57:47,684 - __main__ - INFO - Train AUC: 0.708	Test AUC: 0.701
+2019-02-12 14:01:05,241 - __main__ - INFO - Train AUC: 0.703	Test AUC: 0.699
+2019-02-12 14:01:39,719 - __main__ - INFO - Train AUC: 0.688	Test AUC: 0.687
+2019-02-12 14:05:13,740 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.698
+2019-02-12 14:06:29,107 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.694
+2019-02-12 14:07:17,701 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.693
+2019-02-12 14:08:19,153 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.693
+2019-02-12 14:08:55,635 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.689
+2019-02-12 14:11:18,913 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.698
+2019-02-12 14:11:34,725 - __main__ - INFO - Train AUC: 0.704	Test AUC: 0.698
+2019-02-12 14:14:28,391 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.692
+2019-02-12 14:17:21,629 - __main__ - INFO - Train AUC: 0.714	Test AUC: 0.703
+2019-02-12 14:18:11,261 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.698
+2019-02-12 14:21:02,272 - __main__ - INFO - Train AUC: 0.698	Test AUC: 0.695
+2019-02-12 14:23:14,694 - __main__ - INFO - Train AUC: 0.705	Test AUC: 0.700
+2019-02-12 14:23:41,452 - __main__ - INFO - Train AUC: 0.686	Test AUC: 0.683
+2019-02-12 14:25:14,768 - __main__ - INFO - Train AUC: 0.722	Test AUC: 0.705
+2019-02-12 14:28:50,350 - __main__ - INFO - Train AUC: 0.721	Test AUC: 0.704
+2019-02-12 14:28:59,628 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.691
+2019-02-12 14:30:33,001 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.696
+2019-02-12 14:33:23,104 - __main__ - INFO - Train AUC: 0.708	Test AUC: 0.701
+2019-02-12 14:33:49,926 - __main__ - INFO - Train AUC: 0.698	Test AUC: 0.695
+2019-02-12 14:35:04,840 - __main__ - INFO - Train AUC: 0.711	Test AUC: 0.702
+2019-02-12 14:35:37,975 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.687
+2019-02-12 14:35:44,013 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.693
+2019-02-12 14:37:54,640 - __main__ - INFO - Train AUC: 0.734	Test AUC: 0.707
+2019-02-12 14:39:46,098 - __main__ - INFO - Train AUC: 0.719	Test AUC: 0.704
+2019-02-12 14:40:56,674 - __main__ - INFO - Train AUC: 0.704	Test AUC: 0.699
+2019-02-12 14:43:16,242 - __main__ - INFO - Train AUC: 0.732	Test AUC: 0.707
+2019-02-12 14:43:48,242 - __main__ - INFO - Train AUC: 0.707	Test AUC: 0.700
+2019-02-12 14:47:22,227 - __main__ - INFO - Train AUC: 0.714	Test AUC: 0.703
+2019-02-12 14:50:57,796 - __main__ - INFO - Train AUC: 0.725	Test AUC: 0.705
+2019-02-12 14:52:33,843 - __main__ - INFO - Train AUC: 0.711	Test AUC: 0.702
+2019-02-12 14:55:02,112 - __main__ - INFO - Train AUC: 0.706	Test AUC: 0.700
+2019-02-12 14:58:17,261 - __main__ - INFO - Train AUC: 0.745	Test AUC: 0.709
+2019-02-12 15:01:27,140 - __main__ - INFO - Train AUC: 0.722	Test AUC: 0.705
+2019-02-12 15:04:35,736 - __main__ - INFO - Train AUC: 0.704	Test AUC: 0.699
+2019-02-12 15:07:00,185 - __main__ - INFO - Train AUC: 0.709	Test AUC: 0.701
+2019-02-12 15:08:43,564 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.694
+2019-02-12 15:10:15,245 - __main__ - INFO - Train AUC: 0.688	Test AUC: 0.688
+2019-02-12 15:11:18,412 - __main__ - INFO - Train AUC: 0.701	Test AUC: 0.697
+2019-02-12 15:12:03,332 - __main__ - INFO - Train AUC: 0.705	Test AUC: 0.699
+2019-02-12 15:12:50,035 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.690
+2019-02-12 15:15:01,043 - __main__ - INFO - Train AUC: 0.718	Test AUC: 0.704
+2019-02-12 15:17:39,422 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.694
+2019-02-12 15:20:07,198 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.696
+2019-02-12 15:23:23,446 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.698
+2019-02-12 15:24:11,664 - __main__ - INFO - Train AUC: 0.698	Test AUC: 0.695
+2019-02-12 15:25:08,397 - __main__ - INFO - Train AUC: 0.710	Test AUC: 0.701
+2019-02-12 15:27:43,878 - __main__ - INFO - Train AUC: 0.709	Test AUC: 0.701
+2019-02-12 15:30:25,749 - __main__ - INFO - Train AUC: 0.732	Test AUC: 0.707
+2019-02-12 15:34:55,957 - __main__ - INFO - Train AUC: 0.705	Test AUC: 0.700
+2019-02-12 15:35:19,066 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.691
+2019-02-12 15:37:45,998 - __main__ - INFO - Train AUC: 0.718	Test AUC: 0.704
+2019-02-12 15:38:50,547 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.690
+2019-02-12 15:39:15,144 - __main__ - INFO - Train AUC: 0.716	Test AUC: 0.703
+2019-02-12 15:39:38,502 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.692
+2019-02-12 15:41:51,649 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.690
+2019-02-12 15:43:07,690 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.696
+2019-02-12 15:44:24,650 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.691
+2019-02-12 15:44:24,651 - __main__ - INFO - ------------ Optimal Parameter Space ------------
+2019-02-12 15:44:24,652 - __main__ - INFO - rf__max_depth       :	215.0
+2019-02-12 15:44:24,652 - __main__ - INFO - rf__min_samples_split:	0.0058298
+2019-02-12 15:44:24,652 - __main__ - INFO - rf__n_estimators    :	1970.0
+2019-02-12 15:44:24,652 - __main__ - INFO - rf__max_features    :	0.93692
+2019-02-12 15:44:24,653 - __main__ - INFO - rf__min_samples_leaf:	0.0010465
+2019-02-12 15:48:48,436 - __main__ - INFO - Approximate score: 0.738
+2019-02-12 15:48:49,977 - __main__ - INFO - -------------- Variable Importance --------------
+2019-02-12 15:48:49,977 - __main__ - INFO - 1 . days_to_delivery                        (0.414)
+2019-02-12 15:48:49,977 - __main__ - INFO - 2 . item_price/state_mean_delivery          (0.099)
+2019-02-12 15:48:49,978 - __main__ - INFO - 3 . item_price                              (0.072)
+2019-02-12 15:48:49,978 - __main__ - INFO - 4 . state_max_delivery/order_num_sizes      (0.069)
+2019-02-12 15:48:49,978 - __main__ - INFO - 5 . days_to_delivery/state_mean_delivery    (0.049)
+2019-02-12 15:48:49,978 - __main__ - INFO - 6 . order_num_sizes                         (0.033)
+2019-02-12 15:48:49,979 - __main__ - INFO - 7 . brand_mean_price/state_mean_delivery    (0.016)
+2019-02-12 15:48:49,979 - __main__ - INFO - 8 . item_mean_delivery                      (0.011)
+2019-02-12 15:48:49,979 - __main__ - INFO - 9 . item_mean_delivery/state_mean_delivery  (0.011)
+2019-02-12 15:48:49,979 - __main__ - INFO - 10. order_total_value/state_mean_delivery   (0.01)
+2019-02-12 15:48:49,980 - __main__ - INFO - 11. order_median_price/state_mean_delivery  (0.009)
+2019-02-12 15:48:49,980 - __main__ - INFO - 12. item_max_price/state_mean_delivery      (0.009)
+2019-02-12 15:48:49,980 - __main__ - INFO - 13. state_max_delivery/order_num_items      (0.009)
+2019-02-12 15:48:49,980 - __main__ - INFO - 14. brand_max_price/state_mean_delivery     (0.008)
+2019-02-12 15:48:49,981 - __main__ - INFO - 15. brand_min_price/state_mean_delivery     (0.008)
+2019-02-12 17:58:09,873 - __main__ - INFO - ================= Start new run =================
+2019-02-12 17:58:09,873 - __main__ - INFO - predictions/rf_predictions20190212_1758.csv
+2019-02-12 17:58:50,810 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.687
+2019-02-12 18:00:12,122 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.686
+2019-02-12 18:01:13,824 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.686
+2019-02-12 18:03:35,021 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.690
+2019-02-12 18:04:23,574 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.692
+2019-02-12 18:05:13,026 - __main__ - INFO - Train AUC: 0.688	Test AUC: 0.687
+2019-02-12 18:06:33,886 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.688
+2019-02-12 18:08:38,288 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.686
+2019-02-12 18:11:20,422 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.688
+2019-02-12 18:13:02,507 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.692
+2019-02-12 18:15:21,968 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.688
+2019-02-12 18:15:53,224 - __main__ - INFO - Train AUC: 0.709	Test AUC: 0.699
+2019-02-12 18:16:33,151 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.693
+2019-02-12 18:17:18,470 - __main__ - INFO - Train AUC: 0.701	Test AUC: 0.695
+2019-02-12 18:19:19,329 - __main__ - INFO - Train AUC: 0.707	Test AUC: 0.698
+2019-02-12 18:19:43,856 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.687
+2019-02-12 18:21:12,129 - __main__ - INFO - Train AUC: 0.704	Test AUC: 0.697
+2019-02-12 18:21:46,130 - __main__ - INFO - Train AUC: 0.706	Test AUC: 0.697
+2019-02-12 18:24:12,600 - __main__ - INFO - Train AUC: 0.744	Test AUC: 0.707
+2019-02-12 18:25:52,330 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.689
+2019-02-12 18:27:10,884 - __main__ - INFO - Train AUC: 0.703	Test AUC: 0.695
+2019-02-12 18:28:58,472 - __main__ - INFO - Train AUC: 0.707	Test AUC: 0.697
+2019-02-12 18:30:27,652 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.693
+2019-02-12 18:30:31,922 - __main__ - INFO - Train AUC: 0.703	Test AUC: 0.697
+2019-02-12 18:31:27,831 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.693
+2019-02-12 18:31:33,739 - __main__ - INFO - Train AUC: 0.711	Test AUC: 0.700
+2019-02-12 18:32:37,115 - __main__ - INFO - Train AUC: 0.712	Test AUC: 0.700
+2019-02-12 18:33:38,090 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.691
+2019-02-12 18:35:12,572 - __main__ - INFO - Train AUC: 0.701	Test AUC: 0.694
+2019-02-12 18:38:09,085 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.691
+2019-02-12 18:39:40,349 - __main__ - INFO - Train AUC: 0.714	Test AUC: 0.701
+2019-02-12 18:41:30,236 - __main__ - INFO - Train AUC: 0.706	Test AUC: 0.698
+2019-02-12 18:42:28,417 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.691
+2019-02-12 18:43:05,789 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.693
+2019-02-12 18:44:54,293 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.689
+2019-02-12 18:51:38,783 - __main__ - INFO - Train AUC: 0.750	Test AUC: 0.707
+2019-02-12 18:56:03,063 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.691
+2019-02-12 19:00:26,165 - __main__ - INFO - Train AUC: 0.703	Test AUC: 0.695
+2019-02-12 19:05:36,837 - __main__ - INFO - Train AUC: 0.706	Test AUC: 0.697
+2019-02-12 19:08:09,673 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.688
+2019-02-12 19:11:55,073 - __main__ - INFO - Train AUC: 0.721	Test AUC: 0.702
+2019-02-12 19:14:18,803 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.686
+2019-02-12 19:18:06,474 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.691
+2019-02-12 19:23:05,126 - __main__ - INFO - Train AUC: 0.709	Test AUC: 0.698
+2019-02-12 19:25:55,473 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.689
+2019-02-12 19:29:16,675 - __main__ - INFO - Train AUC: 0.713	Test AUC: 0.700
+2019-02-12 19:30:51,136 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.692
+2019-02-12 19:36:33,145 - __main__ - INFO - Train AUC: 0.729	Test AUC: 0.705
+2019-02-12 19:36:51,635 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.694
+2019-02-12 19:40:03,522 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.695
+2019-02-12 19:43:16,710 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.689
+2019-02-12 19:46:21,252 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.688
+2019-02-12 19:49:47,763 - __main__ - INFO - Train AUC: 0.705	Test AUC: 0.696
+2019-02-12 19:52:30,932 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.686
+2019-02-12 19:53:24,877 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.695
+2019-02-12 19:54:06,659 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.694
+2019-02-12 19:56:26,337 - __main__ - INFO - Train AUC: 0.698	Test AUC: 0.693
+2019-02-12 19:58:06,424 - __main__ - INFO - Train AUC: 0.701	Test AUC: 0.694
+2019-02-12 19:59:52,756 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.690
+2019-02-12 20:02:16,154 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.691
+2019-02-12 20:02:38,470 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.691
+2019-02-12 20:04:33,310 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.687
+2019-02-12 20:05:37,072 - __main__ - INFO - Train AUC: 0.705	Test AUC: 0.697
+2019-02-12 20:06:39,525 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.688
+2019-02-12 20:07:04,688 - __main__ - INFO - Train AUC: 0.705	Test AUC: 0.696
+2019-02-12 20:12:28,180 - __main__ - INFO - Train AUC: 0.727	Test AUC: 0.704
+2019-02-12 20:16:53,591 - __main__ - INFO - Train AUC: 0.712	Test AUC: 0.700
+2019-02-12 20:22:01,138 - __main__ - INFO - Train AUC: 0.757	Test AUC: 0.708
+2019-02-12 20:25:49,791 - __main__ - INFO - Train AUC: 0.717	Test AUC: 0.702
+2019-02-12 20:30:14,452 - __main__ - INFO - Train AUC: 0.733	Test AUC: 0.705
+2019-02-12 20:33:25,908 - __main__ - INFO - Train AUC: 0.708	Test AUC: 0.698
+2019-02-12 20:35:28,769 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.695
+2019-02-12 20:37:53,819 - __main__ - INFO - Train AUC: 0.706	Test AUC: 0.697
+2019-02-12 20:42:42,237 - __main__ - INFO - Train AUC: 0.717	Test AUC: 0.702
+2019-02-12 20:46:52,966 - __main__ - INFO - Train AUC: 0.711	Test AUC: 0.699
+2019-02-12 20:50:15,918 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.693
+2019-02-12 20:52:22,433 - __main__ - INFO - Train AUC: 0.698	Test AUC: 0.692
+2019-02-12 20:53:40,056 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.691
+2019-02-12 20:54:52,498 - __main__ - INFO - Train AUC: 0.715	Test AUC: 0.701
+2019-02-12 20:57:44,982 - __main__ - INFO - Train AUC: 0.707	Test AUC: 0.698
+2019-02-12 21:00:14,458 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.687
+2019-02-12 21:07:46,293 - __main__ - INFO - Train AUC: 0.744	Test AUC: 0.707
+2019-02-12 21:09:15,220 - __main__ - INFO - Train AUC: 0.713	Test AUC: 0.700
+2019-02-12 21:10:43,622 - __main__ - INFO - Train AUC: 0.703	Test AUC: 0.696
+2019-02-12 21:11:29,830 - __main__ - INFO - Train AUC: 0.710	Test AUC: 0.699
+2019-02-12 21:13:13,984 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.691
+2019-02-12 21:14:49,611 - __main__ - INFO - Train AUC: 0.706	Test AUC: 0.698
+2019-02-12 21:17:40,046 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.695
+2019-02-12 21:19:34,295 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.693
+2019-02-12 21:22:58,862 - __main__ - INFO - Train AUC: 0.750	Test AUC: 0.708
+2019-02-12 21:25:46,710 - __main__ - INFO - Train AUC: 0.727	Test AUC: 0.704
+2019-02-12 21:27:42,805 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.687
+2019-02-12 21:30:02,470 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.689
+2019-02-12 21:32:43,687 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.692
+2019-02-12 21:35:57,443 - __main__ - INFO - Train AUC: 0.713	Test AUC: 0.700
+2019-02-12 21:40:46,817 - __main__ - INFO - Train AUC: 0.706	Test AUC: 0.697
+2019-02-12 21:43:58,344 - __main__ - INFO - Train AUC: 0.709	Test AUC: 0.699
+2019-02-12 21:48:31,034 - __main__ - INFO - Train AUC: 0.706	Test AUC: 0.697
+2019-02-12 21:49:45,239 - __main__ - INFO - Train AUC: 0.698	Test AUC: 0.693
+2019-02-12 21:51:29,734 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.686
+2019-02-12 21:51:29,736 - __main__ - INFO - ------------ Optimal Parameter Space ------------
+2019-02-12 21:51:29,736 - __main__ - INFO - rf__n_estimators    :	2838.0
+2019-02-12 21:51:29,737 - __main__ - INFO - rf__min_samples_leaf:	0.0011707
+2019-02-12 21:51:29,737 - __main__ - INFO - rf__max_features    :	0.92591
+2019-02-12 21:51:29,737 - __main__ - INFO - rf__max_depth       :	756.0
+2019-02-12 21:51:29,737 - __main__ - INFO - rf__min_samples_split:	0.0037187
+2019-02-12 21:58:31,999 - __main__ - INFO - Approximate score: 0.748
+2019-02-12 21:58:34,125 - __main__ - INFO - -------------- Variable Importance --------------
+2019-02-12 21:58:34,125 - __main__ - INFO - 1 . days_to_delivery                        (0.381)
+2019-02-12 21:58:34,126 - __main__ - INFO - 2 . item_price/state_mean_delivery          (0.09)
+2019-02-12 21:58:34,126 - __main__ - INFO - 3 . item_price                              (0.067)
+2019-02-12 21:58:34,126 - __main__ - INFO - 4 . order_max_price                         (0.05)
+2019-02-12 21:58:34,126 - __main__ - INFO - 5 . days_to_delivery/state_mean_delivery    (0.049)
+2019-02-12 21:58:34,127 - __main__ - INFO - 6 . order_max_price/state_mean_delivery     (0.048)
+2019-02-12 21:58:34,127 - __main__ - INFO - 7 . brand_mean_price/state_mean_delivery    (0.015)
+2019-02-12 21:58:34,127 - __main__ - INFO - 8 . order_median_price/state_mean_delivery  (0.013)
+2019-02-12 21:58:34,127 - __main__ - INFO - 9 . days_to_delivery/item_orders            (0.012)
+2019-02-12 21:58:34,127 - __main__ - INFO - 10. item_mean_delivery/item_orders          (0.011)
+2019-02-12 21:58:34,128 - __main__ - INFO - 11. item_mean_delivery/state_mean_delivery  (0.011)
+2019-02-12 21:58:34,128 - __main__ - INFO - 12. item_mean_delivery                      (0.01)
+2019-02-12 21:58:34,128 - __main__ - INFO - 13. state_max_delivery/order_num_sizes      (0.01)
+2019-02-12 21:58:34,128 - __main__ - INFO - 14. brand_max_price/state_mean_delivery     (0.009)
+2019-02-12 21:58:34,129 - __main__ - INFO - 15. order_total_value/order_num_items       (0.008)
+2019-02-12 22:16:53,931 - __main__ - INFO - ================= Start new run =================
+2019-02-12 22:16:53,931 - __main__ - INFO - predictions/rf_predictions20190212_2216.csv
+2019-02-12 22:17:59,488 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.691
+2019-02-12 22:18:27,902 - __main__ - INFO - Train AUC: 0.682	Test AUC: 0.684
+2019-02-12 22:18:40,145 - __main__ - INFO - Train AUC: 0.684	Test AUC: 0.687
+2019-02-12 22:19:30,931 - __main__ - INFO - Train AUC: 0.687	Test AUC: 0.688
+2019-02-12 22:19:34,026 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.691
+2019-02-12 22:20:07,219 - __main__ - INFO - Train AUC: 0.679	Test AUC: 0.684
+2019-02-12 22:20:13,492 - __main__ - INFO - Train AUC: 0.676	Test AUC: 0.681
+2019-02-12 22:21:11,768 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.691
+2019-02-12 22:21:35,862 - __main__ - INFO - Train AUC: 0.686	Test AUC: 0.687
+2019-02-12 22:21:57,222 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.691
+2019-02-12 22:22:17,213 - __main__ - INFO - Train AUC: 0.682	Test AUC: 0.684
+2019-02-12 22:22:41,309 - __main__ - INFO - Train AUC: 0.686	Test AUC: 0.688
+2019-02-12 22:23:21,357 - __main__ - INFO - Train AUC: 0.679	Test AUC: 0.684
+2019-02-12 22:23:41,934 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.691
+2019-02-12 22:24:11,651 - __main__ - INFO - Train AUC: 0.688	Test AUC: 0.688
+2019-02-12 22:24:31,121 - __main__ - INFO - Train AUC: 0.683	Test AUC: 0.685
+2019-02-12 22:25:03,108 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.691
+2019-02-12 22:25:41,874 - __main__ - INFO - Train AUC: 0.681	Test AUC: 0.685
+2019-02-12 22:25:47,582 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.690
+2019-02-12 22:25:57,212 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.690
+2019-02-12 22:26:36,715 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.691
+2019-02-12 22:27:17,945 - __main__ - INFO - Train AUC: 0.703	Test AUC: 0.695
+2019-02-12 22:27:57,986 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.694
+2019-02-12 22:28:43,137 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.693
+2019-02-12 22:29:39,000 - __main__ - INFO - Train AUC: 0.706	Test AUC: 0.695
+2019-02-12 22:30:29,603 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.693
+2019-02-12 22:31:05,513 - __main__ - INFO - Train AUC: 0.711	Test AUC: 0.695
+2019-02-12 22:31:22,304 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.689
+2019-02-12 22:31:59,113 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.693
+2019-02-12 22:32:30,018 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.694
+2019-02-12 22:33:03,027 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.689
+2019-02-12 22:33:25,073 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.694
+2019-02-12 22:33:56,892 - __main__ - INFO - Train AUC: 0.703	Test AUC: 0.694
+2019-02-12 22:34:29,666 - __main__ - INFO - Train AUC: 0.682	Test AUC: 0.684
+2019-02-12 22:34:54,477 - __main__ - INFO - Train AUC: 0.683	Test AUC: 0.686
+2019-02-12 22:35:07,815 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.692
+2019-02-12 22:35:54,859 - __main__ - INFO - Train AUC: 0.718	Test AUC: 0.696
+2019-02-12 22:36:26,794 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.694
+2019-02-12 22:36:42,570 - __main__ - INFO - Train AUC: 0.687	Test AUC: 0.688
+2019-02-12 22:37:29,366 - __main__ - INFO - Train AUC: 0.684	Test AUC: 0.687
+2019-02-12 22:37:56,824 - __main__ - INFO - Train AUC: 0.678	Test AUC: 0.683
+2019-02-12 22:38:29,092 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.691
+2019-02-12 22:38:31,059 - __main__ - INFO - Train AUC: 0.687	Test AUC: 0.689
+2019-02-12 22:38:42,245 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.691
+2019-02-12 22:39:03,661 - __main__ - INFO - Train AUC: 0.682	Test AUC: 0.684
+2019-02-12 22:39:42,825 - __main__ - INFO - Train AUC: 0.698	Test AUC: 0.693
+2019-02-12 22:40:16,628 - __main__ - INFO - Train AUC: 0.682	Test AUC: 0.684
+2019-02-12 22:40:33,677 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.690
+2019-02-12 22:41:02,206 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.690
+2019-02-12 22:41:38,663 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.691
+2019-02-12 22:42:10,095 - __main__ - INFO - Train AUC: 0.686	Test AUC: 0.688
+2019-02-12 22:42:48,962 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.690
+2019-02-12 22:42:54,100 - __main__ - INFO - Train AUC: 0.682	Test AUC: 0.685
+2019-02-12 22:43:37,437 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.693
+2019-02-12 22:44:06,584 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.693
+2019-02-12 22:45:04,143 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.692
+2019-02-12 22:45:29,372 - __main__ - INFO - Train AUC: 0.688	Test AUC: 0.689
+2019-02-12 22:45:39,043 - __main__ - INFO - Train AUC: 0.686	Test AUC: 0.687
+2019-02-12 22:46:15,964 - __main__ - INFO - Train AUC: 0.679	Test AUC: 0.683
+2019-02-12 22:46:40,366 - __main__ - INFO - Train AUC: 0.685	Test AUC: 0.687
+2019-02-12 22:47:03,506 - __main__ - INFO - Train AUC: 0.701	Test AUC: 0.694
+2019-02-12 22:47:49,405 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.691
+2019-02-12 22:48:29,238 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.690
+2019-02-12 22:48:39,837 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.690
+2019-02-12 22:48:58,926 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.692
+2019-02-12 22:49:52,068 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.694
+2019-02-12 22:50:48,263 - __main__ - INFO - Train AUC: 0.709	Test AUC: 0.695
+2019-02-12 22:51:39,473 - __main__ - INFO - Train AUC: 0.706	Test AUC: 0.695
+2019-02-12 22:52:22,364 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.693
+2019-02-12 22:52:47,924 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.694
+2019-02-12 22:52:52,775 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.694
+2019-02-12 22:53:29,527 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.692
+2019-02-12 22:54:12,425 - __main__ - INFO - Train AUC: 0.698	Test AUC: 0.694
+2019-02-12 22:54:57,774 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.693
+2019-02-12 22:55:28,442 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.692
+2019-02-12 22:56:21,356 - __main__ - INFO - Train AUC: 0.711	Test AUC: 0.695
+2019-02-12 22:56:45,526 - __main__ - INFO - Train AUC: 0.688	Test AUC: 0.689
+2019-02-12 22:57:20,628 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.693
+2019-02-12 22:58:11,408 - __main__ - INFO - Train AUC: 0.732	Test AUC: 0.696
+2019-02-12 22:58:20,952 - __main__ - INFO - Train AUC: 0.728	Test AUC: 0.696
+2019-02-12 22:58:35,742 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.694
+2019-02-12 22:59:21,332 - __main__ - INFO - Train AUC: 0.681	Test AUC: 0.684
+2019-02-12 22:59:33,225 - __main__ - INFO - Train AUC: 0.686	Test AUC: 0.688
+2019-02-12 22:59:37,233 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.690
+2019-02-12 23:00:14,777 - __main__ - INFO - Train AUC: 0.685	Test AUC: 0.688
+2019-02-12 23:00:22,805 - __main__ - INFO - Train AUC: 0.675	Test AUC: 0.680
+2019-02-12 23:00:30,841 - __main__ - INFO - Train AUC: 0.707	Test AUC: 0.695
+2019-02-12 23:01:03,097 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.694
+2019-02-12 23:01:17,948 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.690
+2019-02-12 23:01:19,346 - __main__ - INFO - Train AUC: 0.688	Test AUC: 0.689
+2019-02-12 23:01:34,793 - __main__ - INFO - Train AUC: 0.684	Test AUC: 0.687
+2019-02-12 23:01:55,692 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.693
+2019-02-12 23:02:20,948 - __main__ - INFO - Train AUC: 0.680	Test AUC: 0.684
+2019-02-12 23:03:14,994 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.690
+2019-02-12 23:03:22,113 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.694
+2019-02-12 23:03:42,013 - __main__ - INFO - Train AUC: 0.681	Test AUC: 0.685
+2019-02-12 23:04:20,661 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.693
+2019-02-12 23:04:51,250 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.690
+2019-02-12 23:05:18,123 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.692
+2019-02-12 23:06:00,244 - __main__ - INFO - Train AUC: 0.683	Test AUC: 0.686
+2019-02-12 23:06:00,245 - __main__ - INFO - ------------ Optimal Parameter Space ------------
+2019-02-12 23:06:00,245 - __main__ - INFO - rf__max_depth       :	458.0
+2019-02-12 23:06:00,245 - __main__ - INFO - rf__min_samples_split:	0.0022804
+2019-02-12 23:06:00,245 - __main__ - INFO - rf__n_estimators    :	4525.0
+2019-02-12 23:06:00,245 - __main__ - INFO - rf__max_features    :	0.40484
+2019-02-12 23:06:00,245 - __main__ - INFO - rf__min_samples_leaf:	0.0010358
+2019-02-12 23:11:08,390 - __main__ - INFO - Approximate score: 0.757
+2019-02-12 23:11:09,343 - __main__ - INFO - -------------- Variable Importance --------------
+2019-02-12 23:11:09,343 - __main__ - INFO - 1 . days_to_delivery                        (0.215)
+2019-02-12 23:11:09,344 - __main__ - INFO - 2 . days_to_delivery/state_mean_delivery    (0.142)
+2019-02-12 23:11:09,344 - __main__ - INFO - 3 . item_price/state_mean_delivery          (0.069)
+2019-02-12 23:11:09,344 - __main__ - INFO - 4 . item_price                              (0.059)
+2019-02-12 23:11:09,344 - __main__ - INFO - 5 . order_median_price/state_mean_delivery  (0.059)
+2019-02-12 23:11:09,344 - __main__ - INFO - 6 . days_to_delivery/item_orders            (0.053)
+2019-02-12 23:11:09,344 - __main__ - INFO - 7 . order_median_price/item_orders          (0.028)
+2019-02-12 23:11:09,344 - __main__ - INFO - 8 . state_max_delivery/order_num_items      (0.016)
+2019-02-12 23:11:09,344 - __main__ - INFO - 9 . item_price/item_orders                  (0.015)
+2019-02-12 23:11:09,344 - __main__ - INFO - 10. brand_mean_price/state_mean_delivery    (0.013)
+2019-02-12 23:11:09,344 - __main__ - INFO - 11. item_min_delivery/state_mean_delivery   (0.013)
+2019-02-12 23:11:09,344 - __main__ - INFO - 12. item_min_delivery                       (0.012)
+2019-02-12 23:11:09,344 - __main__ - INFO - 13. order_max_price/state_mean_delivery     (0.011)
+2019-02-12 23:11:09,345 - __main__ - INFO - 14. order_total_value/state_mean_delivery   (0.011)
+2019-02-12 23:11:09,345 - __main__ - INFO - 15. item_max_price/state_mean_delivery      (0.011)
+2019-02-21 10:00:32,384 - __main__ - INFO - ================= Start new run =================
+2019-02-21 10:00:32,384 - __main__ - INFO - predictions/rf_predictions20190221_1000.csv
+2019-02-21 10:01:28,190 - __main__ - INFO - ================= Start new run =================
+2019-02-21 10:01:28,191 - __main__ - INFO - predictions/rf_predictions20190221_1001.csv
+2019-02-21 10:02:06,923 - __main__ - INFO - Train AUC: 0.683	Test AUC: 0.684
+2019-02-21 10:02:10,447 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.689
+2019-02-21 10:02:13,821 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.694
+2019-02-21 10:02:17,114 - __main__ - INFO - Train AUC: 0.684	Test AUC: 0.684
+2019-02-21 10:02:19,936 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.697
+2019-02-21 10:02:23,039 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.695
+2019-02-21 10:02:26,356 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.689
+2019-02-21 10:02:29,780 - __main__ - INFO - Train AUC: 0.683	Test AUC: 0.682
+2019-02-21 10:02:32,330 - __main__ - INFO - Train AUC: 0.688	Test AUC: 0.688
+2019-02-21 10:02:34,515 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.689
+2019-02-21 10:02:34,516 - __main__ - INFO - ------------ Optimal Parameter Space ------------
+2019-02-21 10:02:34,517 - __main__ - INFO - rf__min_samples_split:	0.03286
+2019-02-21 10:02:34,517 - __main__ - INFO - rf__n_estimators    :	13.0
+2019-02-21 10:02:34,517 - __main__ - INFO - rf__max_features    :	0.47258
+2019-02-21 10:02:34,517 - __main__ - INFO - rf__min_samples_leaf:	0.013858
+2019-02-21 10:02:34,518 - __main__ - INFO - rf__max_depth       :	54.0
+2019-02-21 10:03:14,167 - __main__ - INFO - Approximate score: 0.699
+2019-02-21 10:03:14,285 - __main__ - INFO - -------------- Variable Importance --------------
+2019-02-21 10:03:14,285 - __main__ - INFO - 1 . days_to_delivery                        (0.32)
+2019-02-21 10:03:14,286 - __main__ - INFO - 2 . item_price*order_num_items              (0.191)
+2019-02-21 10:03:14,286 - __main__ - INFO - 3 . days_to_delivery/order_median_price     (0.075)
+2019-02-21 10:03:14,286 - __main__ - INFO - 4 . days_to_delivery*brand_max_price        (0.06)
+2019-02-21 10:03:14,286 - __main__ - INFO - 5 . item_price*order_num_sizes              (0.054)
+2019-02-21 10:03:14,287 - __main__ - INFO - 6 . days_to_delivery*order_seqnum           (0.049)
+2019-02-21 10:03:14,287 - __main__ - INFO - 7 . item_price                              (0.044)
+2019-02-21 10:03:14,287 - __main__ - INFO - 8 . days_to_delivery/brand_mean_price       (0.044)
+2019-02-21 10:03:14,287 - __main__ - INFO - 9 . days_to_delivery*order_total_value      (0.032)
+2019-02-21 10:03:14,288 - __main__ - INFO - 10. order_num_sizes                         (0.018)
+2019-02-21 10:03:14,288 - __main__ - INFO - 11. is_item_clothes*order_median_price      (0.014)
+2019-02-21 10:03:14,288 - __main__ - INFO - 12. is_item_clothes*order_num_colors        (0.01)
+2019-02-21 10:03:14,288 - __main__ - INFO - 13. brand_mean_price                        (0.008)
+2019-02-21 10:03:14,288 - __main__ - INFO - 14. item_max_delivery/order_num_sizes       (0.008)
+2019-02-21 10:03:14,289 - __main__ - INFO - 15. item_mean_delivery                      (0.006)
+2019-02-21 10:03:14,289 - __main__ - INFO - 16. item_mean_delivery/brand_min_price      (0.005)
+2019-02-21 10:03:14,289 - __main__ - INFO - 17. item_price/order_median_price           (0.003)
+2019-02-21 10:03:14,289 - __main__ - INFO - 18. order_total_value/order_num_colors      (0.003)
+2019-02-21 10:03:14,289 - __main__ - INFO - 19. item_min_delivery*order_num_sizes       (0.003)
+2019-02-21 10:03:14,290 - __main__ - INFO - 20. item_max_price                          (0.003)
+2019-02-21 10:03:14,290 - __main__ - INFO - 21. price_off/item_max_delivery             (0.002)
+2019-02-21 10:03:14,290 - __main__ - INFO - 22. item_price/brand_mean_price             (0.002)
+2019-02-21 10:03:14,290 - __main__ - INFO - 23. item_price/brand_max_price              (0.002)
+2019-02-21 10:03:14,291 - __main__ - INFO - 24. is_letter_coded*brand_min_price         (0.002)
+2019-02-21 10:03:14,291 - __main__ - INFO - 25. item_size*brand_min_price               (0.002)
+2019-02-21 10:03:14,291 - __main__ - INFO - 26. item_mean_delivery/order_median_price   (0.002)
+2019-02-21 10:03:14,291 - __main__ - INFO - 27. order_max_price                         (0.002)
+2019-02-21 10:03:14,291 - __main__ - INFO - 28. item_mean_delivery*brand_max_price      (0.002)
+2019-02-21 10:03:14,292 - __main__ - INFO - 29. item_size*order_num_items               (0.002)
+2019-02-21 10:03:14,292 - __main__ - INFO - 30. item_mean_delivery*order_num_sizes      (0.002)
+2019-02-21 10:03:14,292 - __main__ - INFO - 31. item_orders/order_median_price          (0.002)
+2019-02-21 10:03:14,292 - __main__ - INFO - 32. item_max_delivery*order_num_sizes       (0.002)
+2019-02-21 10:03:14,292 - __main__ - INFO - 33. item_price*order_seqnum                 (0.001)
+2019-02-21 10:03:14,293 - __main__ - INFO - 34. item_size*brand_max_price               (0.001)
+2019-02-21 10:03:14,293 - __main__ - INFO - 35. days_to_delivery*item_orders            (0.001)
+2019-02-21 10:03:14,293 - __main__ - INFO - 36. item_orders/brand_max_price             (0.001)
+2019-02-21 10:03:14,293 - __main__ - INFO - 37. price_off/item_orders                   (0.001)
+2019-02-21 10:03:14,294 - __main__ - INFO - 38. days_to_delivery/brand_min_price        (0.001)
+2019-02-21 10:03:14,294 - __main__ - INFO - 39. user_tenure*brand_max_price             (0.001)
+2019-02-21 10:03:14,294 - __main__ - INFO - 40. order_num_items/order_median_price      (0.001)
+2019-02-21 10:03:14,294 - __main__ - INFO - 41. user_tenure*order_num_sizes             (0.001)
+2019-02-21 10:03:14,294 - __main__ - INFO - 42. order_num_items/order_num_colors        (0.001)
+2019-02-21 10:03:14,295 - __main__ - INFO - 43. order_num_items/brand_mean_price        (0.001)
+2019-02-21 10:03:14,295 - __main__ - INFO - 44. user_tenure*brand_mean_price            (0.001)
+2019-02-21 10:03:14,295 - __main__ - INFO - 45. user_tenure*brand_min_price             (0.001)
+2019-02-21 10:03:14,295 - __main__ - INFO - 46. item_max_delivery*item_max_price        (0.001)
+2019-02-21 10:03:14,296 - __main__ - INFO - 47. item_max_delivery*brand_max_price       (0.001)
+2019-02-21 10:03:14,296 - __main__ - INFO - 48. item_mean_delivery*item_orders          (0.001)
+2019-02-21 10:03:14,296 - __main__ - INFO - 49. item_mean_delivery*order_total_value    (0.001)
+2019-02-21 10:03:14,296 - __main__ - INFO - 50. item_mean_delivery*order_median_price   (0.001)
+2019-02-21 10:03:14,296 - __main__ - INFO - 51. brand_min_price                         (0.001)
+2019-02-21 10:03:14,297 - __main__ - INFO - 52. price_off/item_price                    (0.0)
+2019-02-21 10:03:14,297 - __main__ - INFO - 53. item_min_delivery/order_median_price    (0.0)
+2019-02-21 10:03:14,297 - __main__ - INFO - 54. item_min_delivery/brand_min_price       (0.0)
+2019-02-21 10:03:14,297 - __main__ - INFO - 55. is_item_color_metal                     (0.0)
+2019-02-21 10:03:14,297 - __main__ - INFO - 56. delivery_fri                            (0.0)
+2019-02-21 10:03:14,298 - __main__ - INFO - 57. item_orders/brand_min_price             (0.0)
+2019-02-21 10:03:14,298 - __main__ - INFO - 58. delivery_thu                            (0.0)
+2019-02-21 10:03:14,298 - __main__ - INFO - 59. item_max_price/order_median_price       (0.0)
+2019-02-21 10:03:14,298 - __main__ - INFO - 60. user_tenure                             (0.0)
+2019-02-21 10:03:14,299 - __main__ - INFO - 61. item_max_price/order_seqnum             (0.0)
+2019-02-21 10:03:14,299 - __main__ - INFO - 62. item_max_price/brand_mean_price         (0.0)
+2019-02-21 10:03:14,299 - __main__ - INFO - 63. item_max_price/brand_max_price          (0.0)
+2019-02-21 10:03:14,299 - __main__ - INFO - 64. price_off/item_max_price                (0.0)
+2019-02-21 10:03:14,299 - __main__ - INFO - 65. is_item_clothes                         (0.0)
+2019-02-21 10:03:14,300 - __main__ - INFO - 66. is_item_underwear                       (0.0)
+2019-02-21 10:03:14,300 - __main__ - INFO - 67. is_item_pants                           (0.0)
+2019-02-21 10:03:14,300 - __main__ - INFO - 68. is_dob_missing                          (0.0)
+2019-02-21 10:03:14,300 - __main__ - INFO - 69. order_num_items                         (0.0)
+2019-02-21 10:03:14,300 - __main__ - INFO - 70. order_total_value                       (0.0)
+2019-02-21 10:03:14,301 - __main__ - INFO - 71. order_max_price/order_median_price      (0.0)
+2019-02-21 10:03:14,301 - __main__ - INFO - 72. item_max_delivery/brand_max_price       (0.0)
+2019-02-21 10:03:14,301 - __main__ - INFO - 73. item_price/brand_min_price              (0.0)
+2019-02-21 10:03:14,301 - __main__ - INFO - 74. price_off/item_size                     (0.0)
+2019-02-21 10:03:14,301 - __main__ - INFO - 75. item_size/brand_min_price               (0.0)
+2019-02-21 10:03:14,302 - __main__ - INFO - 76. item_size/order_median_price            (0.0)
+2019-02-21 10:03:14,302 - __main__ - INFO - 77. price_off                               (0.0)
+2019-02-21 10:03:14,302 - __main__ - INFO - 78. price_off/days_to_delivery              (0.0)
+2019-02-21 10:03:14,302 - __main__ - INFO - 79. woe_item_color                          (0.0)
+2019-02-21 10:03:14,303 - __main__ - INFO - 80. state_max_delivery                      (0.0)
+2019-02-21 10:03:14,303 - __main__ - INFO - 81. state_mean_delivery                     (0.0)
+2019-02-21 10:03:14,303 - __main__ - INFO - 82. state_min_delivery                      (0.0)
+2019-02-21 10:03:14,303 - __main__ - INFO - 83. brand_max_price                         (0.0)
+2019-02-21 10:03:14,303 - __main__ - INFO - 84. user_tenure/order_median_price          (0.0)
+2019-02-21 10:03:14,304 - __main__ - INFO - 85. user_tenure/order_seqnum                (0.0)
+2019-02-21 10:03:14,304 - __main__ - INFO - 86. user_tenure/brand_min_price             (0.0)
+2019-02-21 10:03:14,304 - __main__ - INFO - 87. user_tenure/brand_mean_price            (0.0)
+2019-02-21 10:03:14,304 - __main__ - INFO - 88. price_off/user_tenure                   (0.0)
+2019-02-21 10:03:14,304 - __main__ - INFO - 89. order_seqnum                            (0.0)
+2019-02-21 10:03:14,305 - __main__ - INFO - 90. item_max_delivery/order_seqnum          (0.0)
+2019-02-21 10:03:14,305 - __main__ - INFO - 91. item_max_delivery/brand_min_price       (0.0)
+2019-02-21 10:03:14,305 - __main__ - INFO - 92. order_num_items/brand_max_price         (0.0)
+2019-02-21 10:03:14,305 - __main__ - INFO - 93. item_min_delivery*state_min_delivery    (0.0)
+2019-02-21 10:03:14,306 - __main__ - INFO - 94. order_max_price/order_seqnum            (0.0)
+2019-02-21 10:03:14,306 - __main__ - INFO - 95. delivery_thu*order_num_items            (0.0)
+2019-02-21 10:03:14,306 - __main__ - INFO - 96. delivery_thu*brand_min_price            (0.0)
+2019-02-21 10:03:14,306 - __main__ - INFO - 97. delivery_thu*state_min_delivery         (0.0)
+2019-02-21 10:03:14,306 - __main__ - INFO - 98. delivery_fri*item_orders                (0.0)
+2019-02-21 10:03:14,307 - __main__ - INFO - 99. delivery_fri*order_total_value          (0.0)
+2019-02-21 10:03:14,307 - __main__ - INFO - 100. delivery_fri*order_median_price         (0.0)
+2019-02-21 10:03:14,307 - __main__ - INFO - 101. delivery_fri*order_seqnum               (0.0)
+2019-02-21 10:03:14,307 - __main__ - INFO - 102. delivery_fri*brand_min_price            (0.0)
+2019-02-21 10:03:14,307 - __main__ - INFO - 103. delivery_fri*brand_max_price            (0.0)
+2019-02-21 10:03:14,308 - __main__ - INFO - 104. delivery_fri*state_min_delivery         (0.0)
+2019-02-21 10:03:14,308 - __main__ - INFO - 105. is_item_color_metal*item_orders         (0.0)
+2019-02-21 10:03:14,308 - __main__ - INFO - 106. is_item_color_metal*order_max_price     (0.0)
+2019-02-21 10:03:14,308 - __main__ - INFO - 107. is_item_color_metal*order_total_value   (0.0)
+2019-02-21 10:03:14,309 - __main__ - INFO - 108. is_item_color_metal*order_seqnum        (0.0)
+2019-02-21 10:03:14,309 - __main__ - INFO - 109. is_item_color_metal*brand_min_price     (0.0)
+2019-02-21 10:03:14,309 - __main__ - INFO - 110. item_max_delivery*item_orders           (0.0)
+2019-02-21 10:03:14,309 - __main__ - INFO - 111. item_max_delivery*order_max_price       (0.0)
+2019-02-21 10:03:14,309 - __main__ - INFO - 112. item_max_delivery*order_total_value     (0.0)
+2019-02-21 10:03:14,310 - __main__ - INFO - 113. item_max_delivery*order_median_price    (0.0)
+2019-02-21 10:03:14,310 - __main__ - INFO - 114. item_max_delivery*order_seqnum          (0.0)
+2019-02-21 10:03:14,310 - __main__ - INFO - 115. item_max_delivery*brand_min_price       (0.0)
+2019-02-21 10:03:14,310 - __main__ - INFO - 116. item_max_delivery*brand_mean_price      (0.0)
+2019-02-21 10:03:14,310 - __main__ - INFO - 117. item_mean_delivery*order_num_colors     (0.0)
+2019-02-21 10:03:14,311 - __main__ - INFO - 118. item_mean_delivery*order_seqnum         (0.0)
+2019-02-21 10:03:14,311 - __main__ - INFO - 119. item_mean_delivery*state_min_delivery   (0.0)
+2019-02-21 10:03:14,311 - __main__ - INFO - 120. item_min_delivery*item_orders           (0.0)
+2019-02-21 10:03:14,311 - __main__ - INFO - 121. item_min_delivery*order_total_value     (0.0)
+2019-02-21 10:03:14,312 - __main__ - INFO - 122. item_min_delivery*order_seqnum          (0.0)
+2019-02-21 10:03:14,312 - __main__ - INFO - 123. item_min_delivery*brand_min_price       (0.0)
+2019-02-21 10:03:14,312 - __main__ - INFO - 124. item_min_delivery*brand_mean_price      (0.0)
+2019-02-21 10:03:14,312 - __main__ - INFO - 125. delivery_thu*order_seqnum               (0.0)
+2019-02-21 10:03:14,312 - __main__ - INFO - 126. delivery_thu*item_orders                (0.0)
+2019-02-21 10:03:14,313 - __main__ - INFO - 127. order_max_price/brand_mean_price        (0.0)
+2019-02-21 10:03:14,313 - __main__ - INFO - 128. user_tenure*state_min_delivery          (0.0)
+2019-02-21 10:03:14,313 - __main__ - INFO - 129. order_max_price/brand_max_price         (0.0)
+2019-02-21 10:03:14,313 - __main__ - INFO - 130. order_total_value/brand_min_price       (0.0)
+2019-02-21 10:03:14,313 - __main__ - INFO - 131. order_total_value/brand_mean_price      (0.0)
+2019-02-21 10:03:14,314 - __main__ - INFO - 132. order_total_value/brand_max_price       (0.0)
+2019-02-21 10:03:14,314 - __main__ - INFO - 133. price_off/order_total_value             (0.0)
+2019-02-21 10:03:14,314 - __main__ - INFO - 134. item_size*item_max_price                (0.0)
+2019-02-21 10:03:14,314 - __main__ - INFO - 135. item_size*order_median_price            (0.0)
+2019-02-21 10:03:14,314 - __main__ - INFO - 136. item_size*order_num_sizes               (0.0)
+2019-02-21 10:03:14,315 - __main__ - INFO - 137. item_min_delivery*brand_max_price       (0.0)
+2019-02-21 10:03:14,315 - __main__ - INFO - 138. item_price*item_orders                  (0.0)
+2019-02-21 10:03:14,315 - __main__ - INFO - 139. item_price*state_min_delivery           (0.0)
+2019-02-21 10:03:14,315 - __main__ - INFO - 140. is_dob_missing*item_orders              (0.0)
+2019-02-21 10:03:14,316 - __main__ - INFO - 141. is_dob_missing*order_num_items          (0.0)
+2019-02-21 10:03:14,316 - __main__ - INFO - 142. is_dob_missing*order_seqnum             (0.0)
+2019-02-21 10:03:14,316 - __main__ - INFO - 143. is_dob_missing*brand_min_price          (0.0)
+2019-02-21 10:03:14,316 - __main__ - INFO - 144. is_dob_missing*brand_max_price          (0.0)
+2019-02-21 10:03:14,316 - __main__ - INFO - 145. is_dob_missing*state_min_delivery       (0.0)
+2019-02-21 10:03:14,317 - __main__ - INFO - 146. is_item_pants*item_orders               (0.0)
+2019-02-21 10:03:14,317 - __main__ - INFO - 147. is_item_pants*order_seqnum              (0.0)
+2019-02-21 10:03:14,317 - __main__ - INFO - 148. is_item_pants*state_min_delivery        (0.0)
+2019-02-21 10:03:14,317 - __main__ - INFO - 149. is_item_underwear*item_orders           (0.0)
+2019-02-21 10:03:14,317 - __main__ - INFO - 150. is_item_underwear*order_num_items       (0.0)
+2019-02-21 10:03:14,318 - __main__ - INFO - 151. is_item_underwear*order_seqnum          (0.0)
+2019-02-21 10:03:14,318 - __main__ - INFO - 152. is_item_underwear*brand_min_price       (0.0)
+2019-02-21 10:03:14,318 - __main__ - INFO - 153. is_item_underwear*state_min_delivery    (0.0)
+2019-02-21 10:03:14,318 - __main__ - INFO - 154. days_to_delivery*brand_min_price        (0.0)
+2019-02-21 10:03:14,319 - __main__ - INFO - 155. days_to_delivery*state_min_delivery     (0.0)
+2019-02-21 10:03:14,319 - __main__ - INFO - 156. user_tenure*item_orders                 (0.0)
+2019-02-21 10:03:14,319 - __main__ - INFO - 157. user_tenure*order_total_value           (0.0)
+2019-02-21 10:03:14,319 - __main__ - INFO - 158. item_size                               (0.0)
+2019-02-21 10:03:45,648 - __main__ - INFO - ================= Start new run =================
+2019-02-21 10:03:45,649 - __main__ - INFO - predictions/rf_predictions20190221_1003.csv
+2019-02-21 10:04:27,003 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.686
+2019-02-21 10:10:19,573 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.692
+2019-02-21 10:11:27,391 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.688
+2019-02-21 10:17:20,528 - __main__ - INFO - Train AUC: 0.701	Test AUC: 0.694
+2019-02-21 10:19:08,779 - __main__ - INFO - Train AUC: 0.709	Test AUC: 0.696
+2019-02-21 10:21:24,446 - __main__ - INFO - Train AUC: 0.686	Test AUC: 0.683
+2019-02-21 10:31:34,703 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.689
+2019-02-21 10:46:12,696 - __main__ - INFO - Train AUC: 0.704	Test AUC: 0.696
+2019-02-21 10:48:28,586 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.690
+2019-02-21 19:27:18,671 - __main__ - INFO - ================= Start new run =================
+2019-02-21 19:27:18,671 - __main__ - INFO - predictions/rf_predictions20190221_1927.csv
+2019-02-21 19:28:49,019 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.688
+2019-02-21 19:36:06,382 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.691
+2019-02-21 19:47:01,432 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.696
+2019-02-21 19:51:39,864 - __main__ - INFO - Train AUC: 0.698	Test AUC: 0.695
+2019-02-21 19:58:48,686 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.694
+2019-02-21 20:05:24,677 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.691
+2019-02-21 20:11:47,079 - __main__ - INFO - Train AUC: 0.687	Test AUC: 0.687
+2019-02-21 20:18:13,137 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.691
+2019-02-21 20:27:37,341 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.694
+2019-02-21 20:28:15,200 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.691
+2019-02-21 20:36:00,669 - __main__ - INFO - Train AUC: 0.701	Test AUC: 0.697
+2019-02-21 20:36:52,237 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.692
+2019-02-21 20:39:46,838 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.690
+2019-02-21 20:42:29,551 - __main__ - INFO - Train AUC: 0.687	Test AUC: 0.687
+2019-02-21 20:46:14,138 - __main__ - INFO - Train AUC: 0.686	Test AUC: 0.687
+2019-02-21 20:50:22,624 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.695
+2019-02-21 20:53:50,608 - __main__ - INFO - Train AUC: 0.703	Test AUC: 0.698
+2019-02-21 21:04:23,683 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.693
+2019-02-21 21:13:07,457 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.692
+2019-02-21 21:14:39,733 - __main__ - INFO - Train AUC: 0.707	Test AUC: 0.700
+2019-02-21 21:16:43,130 - __main__ - INFO - Train AUC: 0.717	Test AUC: 0.703
+2019-02-21 21:18:38,655 - __main__ - INFO - Train AUC: 0.718	Test AUC: 0.703
+2019-02-21 21:20:25,628 - __main__ - INFO - Train AUC: 0.715	Test AUC: 0.703
+2019-02-21 21:20:42,394 - __main__ - INFO - Train AUC: 0.717	Test AUC: 0.703
+2019-02-21 21:20:53,700 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.697
+2019-02-21 21:21:03,887 - __main__ - INFO - Train AUC: 0.719	Test AUC: 0.704
+2019-02-21 21:24:33,808 - __main__ - INFO - Train AUC: 0.703	Test AUC: 0.697
+2019-02-21 21:26:29,263 - __main__ - INFO - Train AUC: 0.708	Test AUC: 0.700
+2019-02-21 21:30:06,751 - __main__ - INFO - Train AUC: 0.688	Test AUC: 0.687
+2019-02-21 21:31:13,516 - __main__ - INFO - Train AUC: 0.698	Test AUC: 0.694
+2019-02-21 21:31:34,102 - __main__ - INFO - Train AUC: 0.726	Test AUC: 0.706
+2019-02-21 21:32:01,342 - __main__ - INFO - Train AUC: 0.707	Test AUC: 0.700
+2019-02-21 21:38:24,088 - __main__ - INFO - Train AUC: 0.726	Test AUC: 0.706
+2019-02-21 21:45:06,302 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.696
+2019-02-21 21:57:25,538 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.697
+2019-02-21 22:02:34,169 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.696
+2019-02-21 22:07:40,842 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.694
+2019-02-21 22:13:14,137 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.693
+2019-02-21 22:15:15,762 - __main__ - INFO - Train AUC: 0.688	Test AUC: 0.688
+2019-02-21 22:20:47,008 - __main__ - INFO - Train AUC: 0.709	Test AUC: 0.701
+2019-02-21 22:29:37,329 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.697
+2019-02-21 22:33:08,097 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.690
+2019-02-21 22:38:41,636 - __main__ - INFO - Train AUC: 0.698	Test AUC: 0.695
+2019-02-21 22:40:15,289 - __main__ - INFO - Train AUC: 0.705	Test AUC: 0.699
+2019-02-21 22:52:10,086 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.693
+2019-02-21 22:55:49,474 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.698
+2019-02-21 23:04:32,958 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.694
+2019-02-21 23:08:26,556 - __main__ - INFO - Train AUC: 0.711	Test AUC: 0.701
+2019-02-21 23:15:32,470 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.692
+2019-02-21 23:16:17,498 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.696
+2019-02-21 23:22:36,066 - __main__ - INFO - Train AUC: 0.707	Test AUC: 0.700
+2019-02-21 23:27:31,558 - __main__ - INFO - Train AUC: 0.717	Test AUC: 0.704
+2019-02-21 23:29:56,504 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.690
+2019-02-21 23:38:59,433 - __main__ - INFO - Train AUC: 0.710	Test AUC: 0.701
+2019-02-21 23:40:20,287 - __main__ - INFO - Train AUC: 0.693	Test AUC: 0.692
+2019-02-21 23:49:38,729 - __main__ - INFO - Train AUC: 0.704	Test AUC: 0.699
+2019-02-21 23:54:07,437 - __main__ - INFO - Train AUC: 0.686	Test AUC: 0.686
+2019-02-22 00:03:41,655 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.694
+2019-02-22 00:04:21,455 - __main__ - INFO - Train AUC: 0.701	Test AUC: 0.696
+2019-02-22 00:06:08,698 - __main__ - INFO - Train AUC: 0.687	Test AUC: 0.687
+2019-02-22 00:10:23,811 - __main__ - INFO - Train AUC: 0.718	Test AUC: 0.704
+2019-02-22 00:17:10,743 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.690
+2019-02-22 00:19:18,866 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.693
+2019-02-22 00:24:10,648 - __main__ - INFO - Train AUC: 0.714	Test AUC: 0.703
+2019-02-22 00:30:44,458 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.695
+2019-02-22 00:32:37,339 - __main__ - INFO - Train AUC: 0.721	Test AUC: 0.705
+2019-02-22 00:34:07,006 - __main__ - INFO - Train AUC: 0.707	Test AUC: 0.699
+2019-02-22 00:39:12,207 - __main__ - INFO - Train AUC: 0.731	Test AUC: 0.707
+2019-02-22 00:43:18,887 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.697
+2019-02-22 00:53:19,403 - __main__ - INFO - Train AUC: 0.739	Test AUC: 0.709
+2019-02-22 00:57:28,373 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.695
+2019-02-22 01:02:29,628 - __main__ - INFO - Train AUC: 0.711	Test AUC: 0.701
+2019-02-22 01:09:05,258 - __main__ - INFO - Train AUC: 0.714	Test AUC: 0.702
+2019-02-22 01:13:54,358 - __main__ - INFO - Train AUC: 0.706	Test AUC: 0.699
+2019-02-22 01:17:29,114 - __main__ - INFO - Train AUC: 0.705	Test AUC: 0.698
+2019-02-22 01:21:51,345 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.694
+2019-02-22 01:28:33,694 - __main__ - INFO - Train AUC: 0.701	Test AUC: 0.697
+2019-02-22 01:34:31,913 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.697
+2019-02-22 01:38:51,915 - __main__ - INFO - Train AUC: 0.736	Test AUC: 0.708
+2019-02-22 01:43:17,296 - __main__ - INFO - Train AUC: 0.742	Test AUC: 0.709
+2019-02-22 01:46:37,729 - __main__ - INFO - Train AUC: 0.706	Test AUC: 0.700
+2019-02-22 01:49:49,048 - __main__ - INFO - Train AUC: 0.719	Test AUC: 0.704
+2019-02-22 01:53:22,113 - __main__ - INFO - Train AUC: 0.707	Test AUC: 0.699
+2019-02-22 01:58:06,411 - __main__ - INFO - Train AUC: 0.730	Test AUC: 0.706
+2019-02-22 02:02:43,687 - __main__ - INFO - Train AUC: 0.713	Test AUC: 0.702
+2019-02-22 02:07:32,297 - __main__ - INFO - Train AUC: 0.719	Test AUC: 0.704
+2019-02-22 02:09:14,523 - __main__ - INFO - Train AUC: 0.683	Test AUC: 0.683
+2019-02-22 02:09:59,339 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.693
+2019-02-22 02:13:57,300 - __main__ - INFO - Train AUC: 0.704	Test AUC: 0.698
+2019-02-22 02:16:28,201 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.695
+2019-02-22 02:19:23,181 - __main__ - INFO - Train AUC: 0.708	Test AUC: 0.700
+2019-02-22 02:24:04,210 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.694
+2019-02-22 02:25:25,841 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.688
+2019-02-22 02:30:27,488 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.692
+2019-02-22 02:31:56,554 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.689
+2019-02-22 02:35:43,618 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.693
+2019-02-22 02:36:07,082 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.691
+2019-02-22 02:41:20,132 - __main__ - INFO - Train AUC: 0.704	Test AUC: 0.699
+2019-02-22 02:43:40,968 - __main__ - INFO - Train AUC: 0.702	Test AUC: 0.697
+2019-02-22 02:45:08,423 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.695
+2019-02-22 02:45:08,425 - __main__ - INFO - ------------ Optimal Parameter Space ------------
+2019-02-22 02:45:08,425 - __main__ - INFO - rf__min_samples_leaf:	0.0025156
+2019-02-22 02:45:08,425 - __main__ - INFO - rf__max_features    :	0.3493
+2019-02-22 02:45:08,426 - __main__ - INFO - rf__max_depth       :	649.0
+2019-02-22 02:45:08,426 - __main__ - INFO - rf__min_samples_split:	0.0012461
+2019-02-22 02:45:08,426 - __main__ - INFO - rf__n_estimators    :	3869.0
+2019-02-22 02:51:11,867 - __main__ - INFO - Approximate score: 0.731
+2019-02-22 02:51:14,838 - __main__ - INFO - -------------- Variable Importance --------------
+2019-02-22 02:51:14,839 - __main__ - INFO - 1 . days_to_delivery                        (0.22)
+2019-02-22 02:51:14,839 - __main__ - INFO - 2 . days_to_delivery/order_median_price     (0.071)
+2019-02-22 02:51:14,839 - __main__ - INFO - 3 . days_to_delivery*item_orders            (0.07)
+2019-02-22 02:51:14,839 - __main__ - INFO - 4 . item_price*order_num_items              (0.061)
+2019-02-22 02:51:14,840 - __main__ - INFO - 5 . is_item_clothes*order_median_price      (0.06)
+2019-02-22 02:51:14,840 - __main__ - INFO - 6 . days_to_delivery/brand_mean_price       (0.055)
+2019-02-22 02:51:14,840 - __main__ - INFO - 7 . item_price                              (0.052)
+2019-02-22 02:51:14,840 - __main__ - INFO - 8 . days_to_delivery*order_total_value      (0.035)
+2019-02-22 02:51:14,841 - __main__ - INFO - 9 . days_to_delivery*order_seqnum           (0.025)
+2019-02-22 02:51:14,841 - __main__ - INFO - 10. item_price*order_num_sizes              (0.025)
+2019-02-22 02:51:14,841 - __main__ - INFO - 11. item_min_delivery/order_median_price    (0.024)
+2019-02-22 02:51:14,841 - __main__ - INFO - 12. days_to_delivery*brand_max_price        (0.024)
+2019-02-22 02:51:14,841 - __main__ - INFO - 13. item_mean_delivery/order_median_price   (0.016)
+2019-02-22 02:51:14,842 - __main__ - INFO - 14. order_num_items/order_median_price      (0.011)
+2019-02-22 02:51:14,842 - __main__ - INFO - 15. brand_mean_price                        (0.009)
+2019-02-22 02:51:14,842 - __main__ - INFO - 16. item_price/brand_mean_price             (0.009)
+2019-02-22 02:51:14,842 - __main__ - INFO - 17. item_price/brand_max_price              (0.006)
+2019-02-22 02:51:14,843 - __main__ - INFO - 18. is_item_clothes*order_num_colors        (0.006)
+2019-02-22 02:51:14,843 - __main__ - INFO - 19. item_orders/order_median_price          (0.006)
+2019-02-22 02:51:14,843 - __main__ - INFO - 20. days_to_delivery/brand_min_price        (0.005)
+2019-02-22 02:51:14,843 - __main__ - INFO - 21. item_price/order_median_price           (0.005)
+2019-02-22 02:51:14,843 - __main__ - INFO - 22. item_min_delivery/brand_min_price       (0.005)
+2019-02-22 02:51:14,844 - __main__ - INFO - 23. item_max_price/order_median_price       (0.004)
+2019-02-22 02:51:14,844 - __main__ - INFO - 24. item_max_delivery*order_median_price    (0.004)
+2019-02-22 02:51:14,844 - __main__ - INFO - 25. item_min_delivery*brand_mean_price      (0.004)
+2019-02-22 02:51:14,844 - __main__ - INFO - 26. order_total_value/brand_mean_price      (0.004)
+2019-02-22 02:51:14,845 - __main__ - INFO - 27. item_min_delivery*item_orders           (0.004)
+2019-02-22 02:51:14,845 - __main__ - INFO - 28. item_mean_delivery*order_median_price   (0.004)
+2019-02-22 02:51:14,845 - __main__ - INFO - 29. item_max_price                          (0.004)
+2019-02-22 02:51:14,845 - __main__ - INFO - 30. item_price*item_orders                  (0.004)
+2019-02-22 02:51:14,846 - __main__ - INFO - 31. item_min_delivery*brand_max_price       (0.004)
+2019-02-22 02:51:14,846 - __main__ - INFO - 32. order_max_price/brand_max_price         (0.004)
+2019-02-22 02:51:14,846 - __main__ - INFO - 33. item_size/order_median_price            (0.003)
+2019-02-22 02:51:14,846 - __main__ - INFO - 34. item_mean_delivery*brand_max_price      (0.003)
+2019-02-22 02:51:14,846 - __main__ - INFO - 35. item_size*brand_min_price               (0.003)
+2019-02-22 02:51:14,847 - __main__ - INFO - 36. order_max_price/brand_mean_price        (0.003)
+2019-02-22 02:51:14,847 - __main__ - INFO - 37. is_letter_coded*brand_min_price         (0.003)
+2019-02-22 02:51:14,847 - __main__ - INFO - 38. item_max_delivery*brand_mean_price      (0.003)
+2019-02-22 02:51:14,847 - __main__ - INFO - 39. order_max_price/order_median_price      (0.003)
+2019-02-22 02:51:14,848 - __main__ - INFO - 40. item_max_delivery/brand_max_price       (0.003)
+2019-02-22 02:51:14,848 - __main__ - INFO - 41. order_num_items/order_num_colors        (0.003)
+2019-02-22 02:51:14,848 - __main__ - INFO - 42. item_min_delivery*order_total_value     (0.003)
+2019-02-22 02:51:14,848 - __main__ - INFO - 43. brand_max_price                         (0.003)
+2019-02-22 02:51:14,849 - __main__ - INFO - 44. item_max_price/brand_max_price          (0.003)
+2019-02-22 02:51:14,849 - __main__ - INFO - 45. item_max_price/brand_mean_price         (0.003)
+2019-02-22 02:51:14,849 - __main__ - INFO - 46. order_num_sizes                         (0.003)
+2019-02-22 02:51:14,849 - __main__ - INFO - 47. order_total_value                       (0.003)
+2019-02-22 02:51:14,849 - __main__ - INFO - 48. item_price*order_seqnum                 (0.003)
+2019-02-22 02:51:14,850 - __main__ - INFO - 49. item_max_delivery*item_max_price        (0.003)
+2019-02-22 02:51:14,850 - __main__ - INFO - 50. item_size*order_median_price            (0.003)
+2019-02-22 02:51:14,850 - __main__ - INFO - 51. item_size*brand_max_price               (0.002)
+2019-02-22 02:51:14,850 - __main__ - INFO - 52. item_max_delivery/order_num_sizes       (0.002)
+2019-02-22 02:51:14,851 - __main__ - INFO - 53. item_size*order_num_sizes               (0.002)
+2019-02-22 02:51:14,851 - __main__ - INFO - 54. item_max_delivery/brand_min_price       (0.002)
+2019-02-22 02:51:14,851 - __main__ - INFO - 55. item_size*item_max_price                (0.002)
+2019-02-22 02:51:14,851 - __main__ - INFO - 56. item_max_delivery/order_seqnum          (0.002)
+2019-02-22 02:51:14,851 - __main__ - INFO - 57. order_total_value/brand_max_price       (0.002)
+2019-02-22 02:51:14,852 - __main__ - INFO - 58. order_total_value/brand_min_price       (0.002)
+2019-02-22 02:51:14,852 - __main__ - INFO - 59. order_total_value/order_num_colors      (0.002)
+2019-02-22 02:51:14,852 - __main__ - INFO - 60. order_num_items/brand_max_price         (0.002)
+2019-02-22 02:51:14,852 - __main__ - INFO - 61. order_num_items/brand_mean_price        (0.002)
+2019-02-22 02:51:14,853 - __main__ - INFO - 62. item_min_delivery*order_num_sizes       (0.002)
+2019-02-22 02:51:14,853 - __main__ - INFO - 63. item_min_delivery*order_seqnum          (0.002)
+2019-02-22 02:51:14,853 - __main__ - INFO - 64. item_orders/brand_max_price             (0.002)
+2019-02-22 02:51:14,853 - __main__ - INFO - 65. item_mean_delivery/brand_min_price      (0.002)
+2019-02-22 02:51:14,853 - __main__ - INFO - 66. price_off/days_to_delivery              (0.002)
+2019-02-22 02:51:14,854 - __main__ - INFO - 67. item_max_delivery*order_total_value     (0.002)
+2019-02-22 02:51:14,854 - __main__ - INFO - 68. user_tenure*order_total_value           (0.002)
+2019-02-22 02:51:14,854 - __main__ - INFO - 69. item_max_delivery*order_seqnum          (0.002)
+2019-02-22 02:51:14,854 - __main__ - INFO - 70. delivery_thu*order_seqnum               (0.002)
+2019-02-22 02:51:14,855 - __main__ - INFO - 71. delivery_thu*order_num_items            (0.002)
+2019-02-22 02:51:14,855 - __main__ - INFO - 72. user_tenure*brand_max_price             (0.002)
+2019-02-22 02:51:14,855 - __main__ - INFO - 73. user_tenure*brand_mean_price            (0.002)
+2019-02-22 02:51:14,855 - __main__ - INFO - 74. user_tenure*brand_min_price             (0.002)
+2019-02-22 02:51:14,856 - __main__ - INFO - 75. user_tenure*order_num_sizes             (0.002)
+2019-02-22 02:51:14,856 - __main__ - INFO - 76. item_mean_delivery*order_num_colors     (0.002)
+2019-02-22 02:51:14,856 - __main__ - INFO - 77. user_tenure*item_orders                 (0.002)
+2019-02-22 02:51:14,856 - __main__ - INFO - 78. item_size/brand_min_price               (0.002)
+2019-02-22 02:51:14,856 - __main__ - INFO - 79. item_max_delivery*order_num_sizes       (0.002)
+2019-02-22 02:51:14,857 - __main__ - INFO - 80. days_to_delivery*brand_min_price        (0.002)
+2019-02-22 02:51:14,857 - __main__ - INFO - 81. item_max_delivery*brand_min_price       (0.002)
+2019-02-22 02:51:14,857 - __main__ - INFO - 82. item_max_delivery*brand_max_price       (0.002)
+2019-02-22 02:51:14,857 - __main__ - INFO - 83. item_mean_delivery*item_orders          (0.002)
+2019-02-22 02:51:14,858 - __main__ - INFO - 84. item_mean_delivery*order_total_value    (0.002)
+2019-02-22 02:51:14,858 - __main__ - INFO - 85. item_price/brand_min_price              (0.002)
+2019-02-22 02:51:14,858 - __main__ - INFO - 86. item_mean_delivery*order_num_sizes      (0.002)
+2019-02-22 02:51:14,858 - __main__ - INFO - 87. item_max_delivery*order_max_price       (0.002)
+2019-02-22 02:51:14,858 - __main__ - INFO - 88. order_max_price                         (0.002)
+2019-02-22 02:51:14,859 - __main__ - INFO - 89. item_mean_delivery                      (0.002)
+2019-02-22 02:51:14,859 - __main__ - INFO - 90. delivery_thu                            (0.002)
+2019-02-22 02:51:14,859 - __main__ - INFO - 91. item_max_delivery*item_orders           (0.002)
+2019-02-22 02:51:14,859 - __main__ - INFO - 92. brand_min_price                         (0.002)
+2019-02-22 02:51:14,860 - __main__ - INFO - 93. state_mean_delivery                     (0.001)
+2019-02-22 02:51:14,860 - __main__ - INFO - 94. price_off/item_max_delivery             (0.001)
+2019-02-22 02:51:14,860 - __main__ - INFO - 95. order_seqnum                            (0.001)
+2019-02-22 02:51:14,860 - __main__ - INFO - 96. user_tenure                             (0.001)
+2019-02-22 02:51:14,861 - __main__ - INFO - 97. is_item_clothes                         (0.001)
+2019-02-22 02:51:14,861 - __main__ - INFO - 98. state_max_delivery                      (0.001)
+2019-02-22 02:51:14,861 - __main__ - INFO - 99. woe_item_color                          (0.001)
+2019-02-22 02:51:14,861 - __main__ - INFO - 100. price_off                               (0.001)
+2019-02-22 02:51:14,862 - __main__ - INFO - 101. price_off/item_size                     (0.001)
+2019-02-22 02:51:14,862 - __main__ - INFO - 102. price_off/user_tenure                   (0.001)
+2019-02-22 02:51:14,862 - __main__ - INFO - 103. user_tenure/brand_mean_price            (0.001)
+2019-02-22 02:51:14,862 - __main__ - INFO - 104. user_tenure/brand_min_price             (0.001)
+2019-02-22 02:51:14,862 - __main__ - INFO - 105. user_tenure/order_seqnum                (0.001)
+2019-02-22 02:51:14,863 - __main__ - INFO - 106. user_tenure/order_median_price          (0.001)
+2019-02-22 02:51:14,863 - __main__ - INFO - 107. price_off/item_price                    (0.001)
+2019-02-22 02:51:14,863 - __main__ - INFO - 108. item_size                               (0.001)
+2019-02-22 02:51:14,863 - __main__ - INFO - 109. item_orders/brand_min_price             (0.001)
+2019-02-22 02:51:14,864 - __main__ - INFO - 110. item_size*order_num_items               (0.001)
+2019-02-22 02:51:14,864 - __main__ - INFO - 111. item_mean_delivery*order_seqnum         (0.001)
+2019-02-22 02:51:14,864 - __main__ - INFO - 112. price_off/item_orders                   (0.001)
+2019-02-22 02:51:14,864 - __main__ - INFO - 113. item_min_delivery*brand_min_price       (0.001)
+2019-02-22 02:51:14,865 - __main__ - INFO - 114. delivery_fri*order_median_price         (0.001)
+2019-02-22 02:51:14,865 - __main__ - INFO - 115. price_off/order_total_value             (0.001)
+2019-02-22 02:51:14,865 - __main__ - INFO - 116. order_max_price/order_seqnum            (0.001)
+2019-02-22 02:51:14,865 - __main__ - INFO - 117. price_off/item_max_price                (0.001)
+2019-02-22 02:51:14,865 - __main__ - INFO - 118. item_max_price/order_seqnum             (0.001)
+2019-02-22 02:51:14,866 - __main__ - INFO - 119. is_item_color_metal*order_max_price     (0.0)
+2019-02-22 02:51:14,866 - __main__ - INFO - 120. delivery_fri*order_seqnum               (0.0)
+2019-02-22 02:51:14,866 - __main__ - INFO - 121. delivery_fri*brand_min_price            (0.0)
+2019-02-22 02:51:14,866 - __main__ - INFO - 122. delivery_fri*brand_max_price            (0.0)
+2019-02-22 02:51:14,867 - __main__ - INFO - 123. delivery_fri*state_min_delivery         (0.0)
+2019-02-22 02:51:14,867 - __main__ - INFO - 124. is_item_color_metal*item_orders         (0.0)
+2019-02-22 02:51:14,867 - __main__ - INFO - 125. order_num_items                         (0.0)
+2019-02-22 02:51:14,867 - __main__ - INFO - 126. is_item_color_metal*order_seqnum        (0.0)
+2019-02-22 02:51:14,867 - __main__ - INFO - 127. is_item_color_metal*order_total_value   (0.0)
+2019-02-22 02:51:14,868 - __main__ - INFO - 128. is_item_color_metal                     (0.0)
+2019-02-22 02:51:14,868 - __main__ - INFO - 129. delivery_fri                            (0.0)
+2019-02-22 02:51:14,868 - __main__ - INFO - 130. state_min_delivery                      (0.0)
+2019-02-22 02:51:14,868 - __main__ - INFO - 131. is_item_color_metal*brand_min_price     (0.0)
+2019-02-22 02:51:14,869 - __main__ - INFO - 132. item_mean_delivery*state_min_delivery   (0.0)
+2019-02-22 02:51:14,869 - __main__ - INFO - 133. is_item_underwear                       (0.0)
+2019-02-22 02:51:14,869 - __main__ - INFO - 134. is_item_pants                           (0.0)
+2019-02-22 02:51:14,869 - __main__ - INFO - 135. is_dob_missing                          (0.0)
+2019-02-22 02:51:14,869 - __main__ - INFO - 136. delivery_fri*order_total_value          (0.0)
+2019-02-22 02:51:14,870 - __main__ - INFO - 137. delivery_thu*brand_min_price            (0.0)
+2019-02-22 02:51:14,870 - __main__ - INFO - 138. delivery_fri*item_orders                (0.0)
+2019-02-22 02:51:14,870 - __main__ - INFO - 139. is_item_pants*order_seqnum              (0.0)
+2019-02-22 02:51:14,870 - __main__ - INFO - 140. item_price*state_min_delivery           (0.0)
+2019-02-22 02:51:14,871 - __main__ - INFO - 141. is_dob_missing*item_orders              (0.0)
+2019-02-22 02:51:14,871 - __main__ - INFO - 142. is_dob_missing*order_num_items          (0.0)
+2019-02-22 02:51:14,871 - __main__ - INFO - 143. is_dob_missing*order_seqnum             (0.0)
+2019-02-22 02:51:14,871 - __main__ - INFO - 144. is_dob_missing*brand_min_price          (0.0)
+2019-02-22 02:51:14,871 - __main__ - INFO - 145. is_dob_missing*brand_max_price          (0.0)
+2019-02-22 02:51:14,872 - __main__ - INFO - 146. is_dob_missing*state_min_delivery       (0.0)
+2019-02-22 02:51:14,872 - __main__ - INFO - 147. is_item_pants*item_orders               (0.0)
+2019-02-22 02:51:14,872 - __main__ - INFO - 148. is_item_pants*state_min_delivery        (0.0)
+2019-02-22 02:51:14,872 - __main__ - INFO - 149. delivery_thu*state_min_delivery         (0.0)
+2019-02-22 02:51:14,873 - __main__ - INFO - 150. is_item_underwear*item_orders           (0.0)
+2019-02-22 02:51:14,873 - __main__ - INFO - 151. is_item_underwear*order_num_items       (0.0)
+2019-02-22 02:51:14,873 - __main__ - INFO - 152. is_item_underwear*order_seqnum          (0.0)
+2019-02-22 02:51:14,873 - __main__ - INFO - 153. is_item_underwear*brand_min_price       (0.0)
+2019-02-22 02:51:14,874 - __main__ - INFO - 154. is_item_underwear*state_min_delivery    (0.0)
+2019-02-22 02:51:14,874 - __main__ - INFO - 155. days_to_delivery*state_min_delivery     (0.0)
+2019-02-22 02:51:14,874 - __main__ - INFO - 156. user_tenure*state_min_delivery          (0.0)
+2019-02-22 02:51:14,874 - __main__ - INFO - 157. delivery_thu*item_orders                (0.0)
+2019-02-22 02:51:14,874 - __main__ - INFO - 158. item_min_delivery*state_min_delivery    (0.0)
