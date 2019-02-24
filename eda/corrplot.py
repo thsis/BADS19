@@ -39,12 +39,11 @@ if __name__ == "__main__":
     out = pd.DataFrame(out, columns=cols)
 
     corr = out.corr()
-    fig, ax = plt.subplots(figsize=(14, 14))
+    fig, ax = plt.subplots(figsize=(10, 10))
     sns.heatmap(corr, vmin=-1, vmax=1, center=0,
                 cmap=plt.cm.seismic,
                 xticklabels=corr.columns.values,
                 yticklabels=corr.columns.values)
-    fig.suptitle("Feature Correlation Plot", fontsize=22)
     fig.savefig("eda/corrplot.png")
 
     print("Dimensions:", corr.shape)

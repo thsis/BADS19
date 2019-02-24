@@ -105,7 +105,6 @@ order_max_price/state_max_delivery
 order_max_price/state_mean_delivery
 order_max_price/state_min_delivery
 order_median_price
-order_num_colors
 order_num_items/order_seqnum
 order_num_items/state_max_delivery
 order_num_items/state_mean_delivery
@@ -148,7 +147,6 @@ item_min_delivery*order_max_price
 item_min_delivery*order_num_colors
 price_off/item_mean_delivery
 days_to_delivery*order_num_items
-item_orders*order_num_colors
 order_max_price/brand_min_price
 delivery_thu*order_total_value
 is_item_clothes*order_seqnum

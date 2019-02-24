@@ -96,7 +96,7 @@ pipeline = Pipeline(steps)
 # 5. Define hyperparameter space.
 paramspace = {
     "rf__n_estimators": scope.int(hp.quniform("rf__n_estimators",
-                                              10, 50, 1)),
+                                              100, 500, 1)),
     "rf__max_features": hp.uniform("rf__max_features", 0.2, 0.5),
     "rf__max_depth": scope.int(hp.quniform("rf__max_depth",
                                            1, 100, 1)),
