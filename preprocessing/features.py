@@ -1,3 +1,4 @@
+
 import os
 import itertools
 import numpy as np
@@ -149,8 +150,8 @@ class FeatureGenerator(object):
         if self.cols is None:
             self.cols = out.columns
 
-        out = out.dropna(axis=1)
-        out = out.loc[:, self.cols].astype(np.float64).values
+        out = out.loc[:, self.cols].astype(np.float64)
+        out = out.dropna(axis=1).values
         # HACK:
         if self.target_col in X.columns:
             return out, X.loc[:, self.target_col]

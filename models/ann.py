@@ -117,7 +117,7 @@ paramspace = {
     "ann__momentum": hp.uniform("ann__momentum", 0.1, 0.9),
     "ann__early_stopping": True,
     "ann__batch_size": scope.int(hp.quniform("ann__batch_size", 2, 1000, 1)),
-    "ann__max_iter": 10
+    "ann__max_iter": 1000
 }
 
 # 6. Perform hyperparameter tuning with train data.

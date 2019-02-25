@@ -96,17 +96,17 @@ pipeline = Pipeline(steps)
 # 5. Define hyperparameter space.
 paramspace = {
     "rf__n_estimators": scope.int(hp.quniform("rf__n_estimators",
-                                              100, 500, 1)),
-    "rf__max_features": hp.uniform("rf__max_features", 0.2, 0.5),
+                                              100, 25000, 1)),
+    "rf__max_features": hp.uniform("rf__max_features", 0.2, 0.7),
     "rf__max_depth": scope.int(hp.quniform("rf__max_depth",
-                                           1, 100, 1)),
+                                           1, 250, 1)),
     "rf__min_samples_split": hp.uniform("rf__min_samples_split", 0.0001, 0.05),
     "rf__min_samples_leaf": hp.uniform("rf__min_samples_leaf", 0.001, 0.05),
     "rf__n_jobs": -1}
 
 # 6. Perform hyperparameter tuning with train data.
 trials = Trials()
-best = max_auc(paramspace=paramspace, trials=trials, max_evals=10)
+best = max_auc(paramspace=paramspace, trials=trials, max_evals=100)
 
 logger.info("{0} Optimal Parameter Space {0}".format("-" * 12))
 for param, val in best.items():
