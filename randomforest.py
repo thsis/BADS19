@@ -1,5 +1,5 @@
 """
-Fit artificial neural network.
+Fit random forest.
 
 1. Create a logger.
 2. Decorate the `models.tuning.minimizer`.
@@ -8,6 +8,7 @@ Fit artificial neural network.
 5. Define hyperparameter space.
 6. Perform hyperparameter tuning with train data.
 7. Fit pipeline with whole dataset and save predictions.
+8. Log variable importance.
 """
 
 import os
@@ -18,21 +19,20 @@ import numpy as np
 from preprocessing.features import FeatureGenerator
 from preprocessing.cleaning import clean
 from models.tuning import minimizer
-
 from hyperopt import hp, STATUS_OK, Trials
-from hyperopt.pyll import scope
+from hyperopt.pyll.base import scope
 
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score
 from sklearn.pipeline import Pipeline
 
 
-# 1. Create a logger.
+# 1. Get logger.
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-fh = logging.FileHandler(os.path.join("logs", "ann.log"))
+fh = logging.FileHandler(os.path.join("logs", "random_forest.log"))
 format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 formatter = logging.Formatter(format)
 fh.setFormatter(formatter)
@@ -43,6 +43,14 @@ logger.info("{0} Start new run {0}".format("=" * 17))
 # 2. Decorate the `models.tuning.minimizer`.
 @minimizer
 def max_auc(params):
+    """Optimize model hyperparameters with respect to AUC.
+
+    Parameters
+    ----------
+    param : dictionary
+            Dictionary containing named steps of the pipeline as keys and
+            `hyperopt.hp` prior distributions as values.
+    """
     model = pipeline.set_params(**params)
     model.fit(X_train, y_train)
     y_pred_test = model.predict_proba(X_test)
@@ -65,81 +73,54 @@ datapath = os.path.join("data", "BADS_WS1819_known.csv")
 unknownpath = os.path.join("data", "BADS_WS1819_unknown.csv")
 
 timecode = datetime.datetime.now().strftime("%Y%m%d_%H%M")
-outpath = os.path.join("predictions",  "ann_predictions" + timecode + ".csv")
+outpath = os.path.join("predictions",  "rf_predictions" + timecode + ".csv")
 logger.info("{}".format(outpath))
 
 known = clean(datapath)
 unknown = clean(unknownpath)
 history = known.append(unknown, sort=False)
-cols = ["days_to_delivery",
-        "item_price*order_num_items",
-        "item_price*order_num_sizes",
-        "days_to_delivery/brand_mean_price", 
-        "days_to_delivery*order_seqnum", 
-        "days_to_delivery*brand_max_price", 
-        "days_to_delivery/order_median_price", 
-        "order_total_value", 
-        "item_price", 
-        "order_total_value/order_num_colors", 
-        "is_item_clothes*order_median_price",
-        "item_price/brand_mean_price", 
-        "order_total_value/brand_mean_price", 
-        "days_to_delivery*order_total_value", 
-        "item_mean_delivery/brand_min_price", 
-        "item_mean_delivery", 
-        "item_price/brand_max_price", 
-        "order_max_price/order_median_price", 
-        "is_letter_coded*brand_min_price"]
+
 
 train, test = train_test_split(known, test_size=0.2)
 
-fg = FeatureGenerator(cols=cols)
+fg = FeatureGenerator()
 fg.fit(history, 'return')
-X_train, y_train = fg.transform(train)
-X_test, y_test = fg.transform(test)
+X_train, y_train = fg.transform(train, ignore_woe=False)
+X_test, y_test = fg.transform(test, ignore_woe=False)
 
 # 4. Define model pipeline.
-steps = [('scaler', MinMaxScaler()),
-         ('ann', MLPClassifier())]
+steps = [('scaler', StandardScaler()),
+         ('rf', RandomForestClassifier())]
 pipeline = Pipeline(steps)
 
 # 5. Define hyperparameter space.
-architecture = [(100,), (1000,), (500,), (750,), (100, 100, 100), (100, 100), (30, 30, 30, 30)]
-activations = ["identity", "logistic", "tanh", "relu"]
-solvers = ["adam", "sgd"]
-
 paramspace = {
-    "ann__hidden_layer_sizes": hp.choice("ann__hidden_layer_sizes",
-                                         architecture),
-    "ann__activation": hp.choice("ann__activation", activations),
-    "ann__solver": hp.choice("ann__solver", solvers),
-    "ann__alpha": hp.uniform("ann__alpha", 0.00001, 0.0005),
-    "ann__momentum": hp.uniform("ann__momentum", 0.1, 0.9),
-    "ann__early_stopping": True,
-    "ann__batch_size": scope.int(hp.quniform("ann__batch_size", 2, 1000, 1)),
-    "ann__max_iter": 10
-}
+    "rf__n_estimators": scope.int(hp.quniform("rf__n_estimators",
+                                              10, 50, 1)),
+    "rf__max_features": hp.uniform("rf__max_features", 0.2, 0.5),
+    "rf__max_depth": scope.int(hp.quniform("rf__max_depth",
+                                           1, 100, 1)),
+    "rf__min_samples_split": hp.uniform("rf__min_samples_split", 0.0001, 0.05),
+    "rf__min_samples_leaf": hp.uniform("rf__min_samples_leaf", 0.001, 0.05),
+    "rf__n_jobs": -1}
 
 # 6. Perform hyperparameter tuning with train data.
 trials = Trials()
-best = max_auc(paramspace=paramspace, trials=trials, max_evals=100)
-
-best["ann__hidden_layer_sizes"] = architecture[best["ann__hidden_layer_sizes"]]
-best["ann__activation"] = activations[best["ann__activation"]]
-best["ann__solver"] = solvers[best["ann__solver"]]
-best["ann__batch_size"] = int(best["ann__batch_size"])
+best = max_auc(paramspace=paramspace, trials=trials, max_evals=10)
 
 logger.info("{0} Optimal Parameter Space {0}".format("-" * 12))
 for param, val in best.items():
-    logger.info("{0:<30} {1:>30}".format(param + ":", str(val)))
+    logger.info("{0:20s}:\t{1:.5}".format(param, val))
 
+best["rf__n_estimators"] = int(best["rf__n_estimators"])
+best["rf__max_depth"] = int(best["rf__max_depth"])
 
 # 7. Fit pipeline with whole dataset and save predictions.
 print("Generate Features")
 fg = FeatureGenerator()
 fg.fit(history, 'return')
-X, y = fg.transform(known, "return")
-X_pred = fg.transform(unknown)
+X, y = fg.transform(known, ignore_woe=False)
+X_pred = fg.transform(unknown, ignore_woe=False)
 
 print("Calculate Predictions")
 clf = pipeline.set_params(**best)
@@ -154,3 +135,15 @@ train_score = roc_auc_score(y_true=y,
                             y_score=y_score[:, 1])
 predictions.to_csv(outpath, header=["return"])
 logger.info("Approximate score: {0:.3}".format(train_score))
+
+# 8. Log variable importance.
+forest = pipeline.named_steps["rf"]
+importances = forest.feature_importances_.round(3)
+indices = np.argsort(importances)[::-1]
+
+logger.info("{0} Variable Importance {0}".format("-" * 14))
+for f in range(len(importances)):
+    varname = fg.cols[indices[f]]
+    importance = importances[indices[f]]
+    msg = "{0:2s}. {1:40s}({2:.4})".format(str(f + 1), varname, importance)
+    logger.info(msg)
