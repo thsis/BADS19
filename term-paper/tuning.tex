@@ -1,10 +1,75 @@
-\begin{table}
-\caption{Selected Results}
-\begin{tabular}{lll}
 
-                            & Train AUC & Test AUC \\ \hline
-Feed forward Neural Network & 0.711     & 0.705    \\
-Random Forest               & 0.718     & 0.704    \\
-Gradient Boosted Trees      & 0.773     & 0.712   
+
+A Random Forest is a combination of decision trees, where each tree is fitted with a random subsample from all cases as well as a randomly selected subsample of the features \cite{rf01}.
+
+As the name suggests, a K-Nearest-Neighbor Classifier computes the distance of a new sample compared to every sample of the training set and then selects the $k$ closest cases, which are used to determine the new sample's label by a majority vote \cite{knn}.
+
+Support Vector Machines try to find the hyperplane defined by
+
+\begin{equation*}
+f(x) = \beta^T x, \text{ where } |\beta^T x| = 1
+\end{equation*}
+
+that maximizes the margin between two classes in a high, possibly infinite dimensional feature space using the so called kernel trick. Maximizing the margin can be reformulated into minimizing a function $\mathcal{L}(\beta)$ subject to some constraints, such that
+
+\begin{equation*}
+\min_{\beta} = \frac{1}{2} ||\beta||^2 \quad s.t. \quad y_i (\beta^T x_i) \geq 1 \forall i
+\end{equation*}
+
+which is a Lagrangian optimization problem, whose solution provide the optimal parameters for the separating hyperplane \cite{svm}.
+
+For determining the optimal parameters for each model the Python module \texttt{hyperopt} was used. The optimization routine deploys a Tree of Parzen Estimators in order to determine the best hyperparameters. A Tree of Parzen Estimator tries to maximize the so called information gain \textit{EI}, which is defined as
+
+\begin{equation*}
+EI_{y^\star}(x) = \int\limits_{-\infty}^{y^\star} (y^\star-y)p(y|x)dy,
+\end{equation*}
+
+where $y$ is some real valued objective function $y^\star$ is some threshold of $y$ and $x$ is a set of hyperparameters. Mainly the Tree of Parzen Estimators splits the conditional distribution of the parameter vector in two parts
+
+\begin{equation*}
+p(x|y) = \begin{cases}
+    l(x) \text{ if } y<y^\star \\
+    g(x) \text{ if } y \geq y^\star.
+    \end{cases}
+\end{equation*}
+
+Where it tries to avoid the distribution $g$ leading to a value above $y^\star$ and favors the distribtuion $l$ which tends to lead to values for $y$ which are lower than $y^\star$ \cite{tpe}.
+
+Table \ref{spaces} shows the different parameters along with their prior distributions which were optimized.
+
+\begin{table}
+\centering
+\caption{Parameter Spaces}
+\label{spaces}
+\begin{tabular}{lll}
+                            & Parameters                  & Choices                                \\ \hline
+Logistic Regression         & Penalty                     & L1, L2                                 \\
+                            & $\lambda$, penalty parameter       & uniform(0, 1)                          \\
+Support Vector Machine      & Kernel                      & linear \\
+                            &                             & radial basis function\\
+                            &                             &  sigmoid \\
+                            & Shrinking                   & True / False                           \\
+                            & $\lambda$, penalty parameter                      & uniform(0, 1)                          \\
+K-Nearest Neighbors         & k                           & uniform(3, 15)                         \\
+                            & weighting                   & equal / distance                       \\
+                            & p                           & 1  / 2 / 3                             \\
+Random Forest               & number of estimators        & uniform(100, 15000)                    \\
+                            & proportion of features used & uniform(0.2, 0.5)                      \\
+                            & maximum depth               & uniform(1, 100)                        \\
+                            & minimum samples for split   & uniform(8, 400)                        \\
+                            & minimum samples per leaf    & uniform(8, 400)                        \\
+Feed Forward                & architectures               & up to 3 hidden layers                  \\
+Neural Network              & activation function         & tanh \\
+                            &                             & ReLu \\ 
+                            &                             & sigmoid \\
+                            &                             & identity       \\
+                            & solver                      & adam \\
+                            &                             & Gradient Descent     \\
+Boosted Trees               & number of estimators        & uniform(10, 1000)                      \\
+                            & maximum depth               & uniform(1, 5)                         
 \end{tabular}
 \end{table}
+
+
+
+However, mostof these methods provided unsatisfactory results, and serve merely as a baseline. The most promising algorithms were a simple Feed Forward Network, the Random Forest that was used for determining the variable importance and the Gradient Boosted Trees.

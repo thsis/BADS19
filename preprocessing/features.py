@@ -198,16 +198,19 @@ class FeatureGenerator(object):
     def __fit_orders(self):
         orders = self.features.groupby(["user_id", "order_date"]).agg({
             "item_id": "count",
-            "item_price": ["max", "sum", "median"],
+            "item_price": ["max", "sum", "median", "min"],
             "item_size": "nunique",
             "item_color": "nunique"})
         ordercols = ["order_num_items", "order_max_price",
                      "order_total_value", "order_median_price",
-                     "order_num_sizes", "order_num_colors"]
+                     "order_min_price", "order_num_sizes",
+                     "order_num_colors"]
         orders.columns = ordercols
         seqnum = orders.reset_index().groupby("user_id").order_date.rank()
         seqnum.index = orders.index
         orders["order_seqnum"] = seqnum
+        orders["order_has_gift"] = orders.order_min_price == 0
+
         return orders
 
     def __fit_brands(self):

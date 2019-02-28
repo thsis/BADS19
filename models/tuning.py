@@ -61,7 +61,20 @@ class GeneticAlgorithm(object):
         self.HISTORY = {"mean_pop_fitness": [],
                         "best_fitness": [],
                         "best_candidate": [],
+                        "best_cutoff": [],
                         "oob_fitness": []}
+        self.pool = None
+        self.X_, self.X, self.X_means, self.X_stds, self.X = [None] * 5
+        self.n, self.m = None, None
+        self.oob_cutoff = None
+        self.oob_fitness = None
+        self.fit_intercept = None
+        self.optimal_candidate = None
+        self.optimal_cutoff = None
+        self.price, self.y_true = None, None
+        self.sample_size = None
+        self.BOOTSTRAP = None
+        self.oob_size, self.fitness, self.cutoffs = None, None, None
 
     def fit(self, X, y, price, fit_intercept=True, loc=0, scale=1):
         self.fit_intercept = fit_intercept
@@ -84,7 +97,7 @@ class GeneticAlgorithm(object):
         self.pool = np.random.normal(loc=loc, scale=scale,
                                      size=(self.POPULATION_SIZE, self.m))
 
-    def run(self, iter=10, subsample=None, bootstrap=False, reset_prob=1):
+    def run(self, maxiter=10, subsample=None, bootstrap=False, reset_prob=1):
         if subsample is None:
             self.sample_size = self.n
             self.BOOTSTRAP = False
@@ -94,12 +107,12 @@ class GeneticAlgorithm(object):
             self.sample_size = int(subsample * self.n)
             self.BOOTSTRAP = bootstrap
             self.oob_size = self.n - self.sample_size
-        for i in trange(iter, desc='Generation', leave=True, position=0):
+        for j in trange(maxiter, desc='Generation', leave=True, position=0):
             # Initialize
             self.fitness = np.full(self.POPULATION_SIZE, -np.inf)
             self.cutoffs = np.full(self.POPULATION_SIZE, -np.inf)
             # Draw random subsample to prevent overfitting
-            if i == 0:
+            if j == 0:
                 samples = self.__get_sample()
                 sample, sample_y, sample_p, oob, oob_y, oob_p = samples
             if np.random.random() < reset_prob:
@@ -109,7 +122,7 @@ class GeneticAlgorithm(object):
             # Determine fitness
             for i, beta in enumerate(tqdm(self.pool, leave=True, position=1,
                                           desc="Iteration Progress")):
-                y_pred = self.__predict_proba(sample, beta)
+                y_pred = self.predict_proba(sample, beta)
                 fit, cut = self.get_fitness(y_pred, sample_y, sample_p)
                 self.fitness[i] = fit
                 self.cutoffs[i] = cut
@@ -117,7 +130,7 @@ class GeneticAlgorithm(object):
             # Save best candidate
             fitness_idx = np.argsort(-self.fitness)
             parents_idx = fitness_idx[:self.NUM_PARENTS]
-            self.__update_history(fitness_idx, parents_idx, oob, oob_y, oob_p)
+            self.__update_history(fitness_idx, oob, oob_y, oob_p)
 
             # Create new pool
             self.pool = self.pool[parents_idx, :]
@@ -136,6 +149,7 @@ class GeneticAlgorithm(object):
         # Determine Solution with best OOB-fitness
         opt_idx = np.argmax(self.HISTORY["oob_fitness"])
         self.optimal_candidate = self.HISTORY["best_candidate"][opt_idx]
+        self.optimal_cutoff = self.HISTORY["best_cutoff"][opt_idx]
         return self.optimal_candidate
 
     def transform(self, X):
@@ -143,7 +157,7 @@ class GeneticAlgorithm(object):
         X_ = (X - self.X_means) / self.X_stds
         if self.fit_intercept:
             X_ = np.append(np.ones(n), X_, axis=1)
-        out = self.__predict_proba(X_, self.optimal_candidate)
+        out = self.predict_proba(X_, self.optimal_candidate)
         return out
 
     def __get_sample(self):
@@ -162,18 +176,28 @@ class GeneticAlgorithm(object):
 
         return sample, sample_y, sample_price, oob_sample, oob_y, oob_price
 
-    def __predict_proba(self, X, b):
+    def predict_proba(self, X, b):
         proba = 1 / (1 + np.exp(-X.dot(b)))
         return proba
+
+    def predict(self, X):
+        X_ = (X - self.X_means) / self.X_stds
+        if self.fit_intercept:
+            X_ = np.append(np.ones(len(X_)).reshape((-1, 1)),
+                           X_,
+                           axis=1)
+        proba = self.predict_proba(X_, self.optimal_candidate)
+        out = proba > self.optimal_cutoff
+        return out
 
     def get_fitness(self, y_prob, y_true, price):
         cut = np.linspace(0, 1, num=100)
         u = Parallel(n_jobs=self.N_JOBS)(
-            delayed(self.__get_utility)(y_prob, y_true, price, c) for c in cut)
+            delayed(self.get_utility)(y_prob, y_true, price, c) for c in cut)
         best = np.argmax(u)
         return u[best], cut[best]
 
-    def __get_utility(self, y_prob, y_true, price, cutoff):
+    def get_utility(self, y_prob, y_true, price, cutoff):
         utility = 0
         y_pred = y_prob > cutoff
         stack = np.stack([y_pred, y_true, price], axis=1)
@@ -186,15 +210,18 @@ class GeneticAlgorithm(object):
                 utility -= 2.5 * (3 + 0.1*p)
         return utility
 
-    def __update_history(self, fitness_idx, parents_idx, oob, y, p):
+    def __update_history(self, fitness_idx, oob, y, p):
         self.optimal_candidate = self.pool[fitness_idx[0], :]
-        prob = self.__predict_proba(oob, self.optimal_candidate)
-        self.oob_fitness, _ = self.get_fitness(prob, y, p)
+        prob = self.predict_proba(oob, self.optimal_candidate)
+        self.oob_fitness, self.oob_cutoff = self.get_fitness(prob, y, p)
         # Rescale fitness to compare with OOB-fitness
-        self.HISTORY["best_fitness"].append(self.fitness[fitness_idx[0]] / self.sample_size)
+        self.HISTORY["best_fitness"].append(
+            self.fitness[fitness_idx[0]] / self.sample_size)
         self.HISTORY["best_candidate"].append(self.pool[fitness_idx[0], :])
-        self.HISTORY["mean_pop_fitness"].append(self.fitness.mean() / self.sample_size)
+        self.HISTORY["mean_pop_fitness"].append(
+            self.fitness.mean() / self.sample_size)
         self.HISTORY["oob_fitness"].append(self.oob_fitness / self.oob_size)
+        self.HISTORY["best_cutoff"].append(self.oob_cutoff)
 
     def __arithmetic_crossover(self, idx_a, idx_b):
         lam = np.random.random()
@@ -204,7 +231,7 @@ class GeneticAlgorithm(object):
     def __exchange_point_crossover(self, idx_a, idx_b):
         keep_idx_a = np.random.randint(low=0, high=self.m // 2)
         out = copy.copy(self.pool[idx_b, :])
-        out[keep_idx_a] = self.pool[idx_b, keep_idx_a]
+        out[keep_idx_a] = self.pool[idx_a, keep_idx_a]
         return out
 
     def __heuristic_crossover(self, idx_a, idx_b):
@@ -241,7 +268,7 @@ if __name__ == "__main__":
                               item_price)
     print("Optimum based on true beta: ", opt)
     print("Best solution:")
-    res = ga.run(iter=30, subsample=0.5, bootstrap=False, reset_prob=0.33)
+    res = ga.run(maxiter=30, subsample=0.5, bootstrap=False, reset_prob=0.33)
     print(res)
 
     print("\n| Best Fitness | Mean Fitness | OOB Fitness")

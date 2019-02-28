@@ -508,3 +508,85 @@
 2019-02-18 06:15:40,425 - __main__ - INFO - ann__alpha:                            0.00038329244322348556
 2019-02-18 06:15:40,425 - __main__ - INFO - ann__activation:                                         tanh
 2019-02-18 06:23:15,180 - __main__ - INFO - Approximate score: 0.709
+2019-02-25 10:22:50,751 - __main__ - INFO - ================= Start new run =================
+2019-02-25 10:22:50,752 - __main__ - INFO - predictions/ann_predictions20190225_1022.csv
+2019-02-25 10:23:22,439 - __main__ - INFO - Train AUC: 0.567	Test AUC: 0.571
+2019-02-25 10:24:10,222 - __main__ - INFO - ================= Start new run =================
+2019-02-25 10:24:10,222 - __main__ - INFO - predictions/ann_predictions20190225_1024.csv
+2019-02-25 10:24:54,337 - __main__ - INFO - Train AUC: 0.568	Test AUC: 0.571
+2019-02-25 10:25:46,213 - __main__ - INFO - Train AUC: 0.672	Test AUC: 0.677
+2019-02-25 10:26:28,985 - __main__ - INFO - Train AUC: 0.504	Test AUC: 0.507
+2019-02-25 10:26:37,460 - __main__ - INFO - Train AUC: 0.494	Test AUC: 0.498
+2019-02-25 10:27:22,801 - __main__ - INFO - Train AUC: 0.594	Test AUC: 0.597
+2019-02-25 10:27:31,156 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.696
+2019-02-25 10:28:00,754 - __main__ - INFO - Train AUC: 0.675	Test AUC: 0.680
+2019-02-25 10:28:25,961 - __main__ - INFO - Train AUC: 0.613	Test AUC: 0.615
+2019-02-25 10:28:36,980 - __main__ - INFO - Train AUC: 0.610	Test AUC: 0.613
+2019-02-25 10:29:34,826 - __main__ - INFO - Train AUC: 0.595	Test AUC: 0.597
+2019-02-25 10:29:38,456 - __main__ - INFO - Train AUC: 0.614	Test AUC: 0.617
+2019-02-25 10:31:14,384 - __main__ - INFO - Train AUC: 0.615	Test AUC: 0.616
+2019-02-25 10:31:47,341 - __main__ - INFO - Train AUC: 0.668	Test AUC: 0.672
+2019-02-25 10:32:49,794 - __main__ - INFO - Train AUC: 0.614	Test AUC: 0.617
+2019-02-25 10:33:00,482 - __main__ - INFO - Train AUC: 0.587	Test AUC: 0.587
+2019-02-25 10:33:22,613 - __main__ - INFO - Train AUC: 0.599	Test AUC: 0.603
+2019-02-25 10:33:57,280 - __main__ - INFO - Train AUC: 0.615	Test AUC: 0.618
+2019-02-25 10:34:18,521 - __main__ - INFO - Train AUC: 0.610	Test AUC: 0.612
+2019-02-25 10:34:40,904 - __main__ - INFO - Train AUC: 0.604	Test AUC: 0.607
+2019-02-25 10:35:33,466 - __main__ - INFO - Train AUC: 0.613	Test AUC: 0.615
+2019-02-25 10:35:43,603 - __main__ - INFO - Train AUC: 0.681	Test AUC: 0.688
+2019-02-25 10:35:52,996 - __main__ - INFO - Train AUC: 0.680	Test AUC: 0.687
+2019-02-25 10:36:00,117 - __main__ - INFO - Train AUC: 0.687	Test AUC: 0.692
+2019-02-25 10:38:05,831 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.700
+2019-02-25 10:39:58,269 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.698
+2019-02-25 10:41:39,118 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.695
+2019-02-25 10:41:42,454 - __main__ - INFO - Train AUC: 0.671	Test AUC: 0.675
+2019-02-25 10:41:46,921 - __main__ - INFO - Train AUC: 0.689	Test AUC: 0.693
+2019-02-25 10:42:31,582 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.701
+2019-02-25 10:42:41,024 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.702
+2019-02-25 10:42:57,420 - __main__ - INFO - Train AUC: 0.677	Test AUC: 0.683
+2019-02-25 10:43:00,098 - __main__ - INFO - Train AUC: 0.655	Test AUC: 0.659
+2019-02-25 10:43:07,475 - __main__ - INFO - Train AUC: 0.516	Test AUC: 0.518
+2019-02-25 10:43:30,928 - __main__ - INFO - Train AUC: 0.674	Test AUC: 0.678
+2019-02-25 10:43:33,327 - __main__ - INFO - Train AUC: 0.596	Test AUC: 0.597
+2019-02-25 10:43:40,520 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.699
+2019-02-25 10:43:50,440 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.700
+2019-02-25 10:44:02,000 - __main__ - INFO - Train AUC: 0.610	Test AUC: 0.613
+2019-02-25 10:44:31,593 - __main__ - INFO - Train AUC: 0.588	Test AUC: 0.591
+2019-02-25 10:44:35,492 - __main__ - INFO - Train AUC: 0.615	Test AUC: 0.618
+2019-02-25 10:44:38,487 - __main__ - INFO - Train AUC: 0.662	Test AUC: 0.666
+2019-02-25 10:44:54,629 - __main__ - INFO - Train AUC: 0.598	Test AUC: 0.602
+2019-02-25 10:45:12,061 - __main__ - INFO - Train AUC: 0.613	Test AUC: 0.616
+2019-02-25 10:45:20,710 - __main__ - INFO - Train AUC: 0.691	Test AUC: 0.698
+2019-02-25 10:45:28,622 - __main__ - INFO - Train AUC: 0.616	Test AUC: 0.618
+2019-02-25 10:47:14,887 - __main__ - INFO - Train AUC: 0.634	Test AUC: 0.635
+2019-02-25 10:47:27,898 - __main__ - INFO - Train AUC: 0.614	Test AUC: 0.616
+2019-02-25 10:47:35,351 - __main__ - INFO - Train AUC: 0.649	Test AUC: 0.653
+2019-02-25 10:47:43,538 - __main__ - INFO - Train AUC: 0.586	Test AUC: 0.589
+2019-02-25 10:47:48,820 - __main__ - INFO - Train AUC: 0.614	Test AUC: 0.617
+2019-02-25 10:48:07,992 - __main__ - INFO - Train AUC: 0.677	Test AUC: 0.681
+2019-02-25 10:48:13,204 - __main__ - INFO - Train AUC: 0.615	Test AUC: 0.617
+2019-02-25 10:48:19,684 - __main__ - INFO - Train AUC: 0.506	Test AUC: 0.501
+2019-02-25 10:48:50,719 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.696
+2019-02-25 10:49:00,895 - __main__ - INFO - Train AUC: 0.614	Test AUC: 0.617
+2019-02-25 10:49:05,054 - __main__ - INFO - Train AUC: 0.680	Test AUC: 0.685
+2019-02-25 10:49:38,102 - __main__ - INFO - Train AUC: 0.596	Test AUC: 0.599
+2019-02-25 10:49:42,383 - __main__ - INFO - Train AUC: 0.680	Test AUC: 0.685
+2019-02-25 10:49:51,336 - __main__ - INFO - Train AUC: 0.690	Test AUC: 0.695
+2019-02-25 10:50:13,004 - __main__ - INFO - Train AUC: 0.614	Test AUC: 0.616
+2019-02-25 10:50:18,929 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.699
+2019-02-25 10:50:28,780 - __main__ - INFO - Train AUC: 0.610	Test AUC: 0.611
+2019-02-25 10:50:34,180 - __main__ - INFO - Train AUC: 0.615	Test AUC: 0.618
+2019-02-25 10:50:40,278 - __main__ - INFO - Train AUC: 0.676	Test AUC: 0.681
+2019-02-25 10:50:43,726 - __main__ - INFO - Train AUC: 0.675	Test AUC: 0.681
+2019-02-25 10:50:53,603 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.700
+2019-02-25 10:51:05,981 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.701
+2019-02-25 10:51:17,722 - __main__ - INFO - Train AUC: 0.696	Test AUC: 0.701
+2019-02-25 10:51:29,053 - __main__ - INFO - Train AUC: 0.699	Test AUC: 0.702
+2019-02-25 10:51:41,158 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.699
+2019-02-25 10:51:50,971 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.700
+2019-02-25 10:52:00,330 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.700
+2019-02-25 10:52:09,277 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.697
+2019-02-25 10:52:20,714 - __main__ - INFO - Train AUC: 0.695	Test AUC: 0.700
+2019-02-25 10:52:50,936 - __main__ - INFO - Train AUC: 0.616	Test AUC: 0.617
+2019-02-25 10:53:04,792 - __main__ - INFO - Train AUC: 0.697	Test AUC: 0.700
+2019-02-25 10:53:22,736 - __main__ - INFO - Train AUC: 0.700	Test AUC: 0.703

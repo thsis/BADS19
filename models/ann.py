@@ -74,21 +74,21 @@ history = known.append(unknown, sort=False)
 cols = ["days_to_delivery",
         "item_price*order_num_items",
         "item_price*order_num_sizes",
-        "days_to_delivery/brand_mean_price", 
-        "days_to_delivery*order_seqnum", 
-        "days_to_delivery*brand_max_price", 
-        "days_to_delivery/order_median_price", 
-        "order_total_value", 
-        "item_price", 
-        "order_total_value/order_num_colors", 
+        "days_to_delivery/brand_mean_price",
+        "days_to_delivery*order_seqnum",
+        "days_to_delivery*brand_max_price",
+        "days_to_delivery/order_median_price",
+        "order_total_value",
+        "item_price",
+        "order_total_value/order_num_colors",
         "is_item_clothes*order_median_price",
-        "item_price/brand_mean_price", 
-        "order_total_value/brand_mean_price", 
-        "days_to_delivery*order_total_value", 
-        "item_mean_delivery/brand_min_price", 
-        "item_mean_delivery", 
-        "item_price/brand_max_price", 
-        "order_max_price/order_median_price", 
+        "item_price/brand_mean_price",
+        "order_total_value/brand_mean_price",
+        "days_to_delivery*order_total_value",
+        "item_mean_delivery/brand_min_price",
+        "item_mean_delivery",
+        "item_price/brand_max_price",
+        "order_max_price/order_median_price",
         "is_letter_coded*brand_min_price"]
 
 train, test = train_test_split(known, test_size=0.2)
@@ -104,7 +104,8 @@ steps = [('scaler', MinMaxScaler()),
 pipeline = Pipeline(steps)
 
 # 5. Define hyperparameter space.
-architecture = [(100,), (1000,), (500,), (750,), (100, 100, 100), (100, 100), (30, 30, 30, 30)]
+architecture = [(100,), (1000,), (500,), (750,), (100, 100, 100), (100, 100),
+                (30, 30, 30, 30)]
 activations = ["identity", "logistic", "tanh", "relu"]
 solvers = ["adam", "sgd"]
 

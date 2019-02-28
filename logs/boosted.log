@@ -2,3 +2,72 @@
 2019-02-13 19:09:48,092 - __main__ - INFO - predictions/boost_predictions20190213_1909.csv
 2019-02-13 19:12:35,483 - __main__ - INFO - ================= Start new run =================
 2019-02-13 19:12:35,483 - __main__ - INFO - predictions/boost_predictions20190213_1912.csv
+2019-02-25 11:21:52,101 - __main__ - INFO - ================= Start new run =================
+2019-02-25 11:21:52,101 - __main__ - INFO - predictions/boost_predictions20190225_1121.csv
+2019-02-25 11:23:07,371 - __main__ - INFO - ================= Start new run =================
+2019-02-25 11:23:07,371 - __main__ - INFO - predictions/boost_predictions20190225_1123.csv
+2019-02-25 11:26:47,412 - __main__ - INFO - Train AUC: 0.763	Test AUC: 0.717
+2019-02-25 11:27:48,213 - __main__ - INFO - Train AUC: 0.731	Test AUC: 0.711
+2019-02-25 11:29:52,144 - __main__ - INFO - Train AUC: 0.755	Test AUC: 0.710
+2019-02-25 11:30:23,597 - __main__ - INFO - Train AUC: 0.701	Test AUC: 0.704
+2019-02-25 11:37:15,749 - __main__ - INFO - Train AUC: 0.763	Test AUC: 0.721
+2019-02-25 11:38:44,274 - __main__ - INFO - Train AUC: 0.719	Test AUC: 0.714
+2019-02-25 11:39:04,247 - __main__ - INFO - Train AUC: 0.706	Test AUC: 0.708
+2019-02-25 11:44:32,526 - __main__ - INFO - Train AUC: 0.808	Test AUC: 0.716
+2019-02-25 11:47:57,406 - __main__ - INFO - Train AUC: 0.776	Test AUC: 0.716
+2019-02-25 11:49:59,560 - __main__ - INFO - Train AUC: 0.789	Test AUC: 0.705
+2019-02-25 11:51:33,374 - __main__ - INFO - Train AUC: 0.740	Test AUC: 0.719
+2019-02-25 11:53:12,414 - __main__ - INFO - Train AUC: 0.722	Test AUC: 0.713
+2019-02-25 11:55:55,965 - __main__ - INFO - Train AUC: 0.791	Test AUC: 0.719
+2019-02-25 11:59:46,133 - __main__ - INFO - Train AUC: 0.742	Test AUC: 0.718
+2019-02-25 12:01:22,915 - __main__ - INFO - Train AUC: 0.703	Test AUC: 0.706
+2019-02-25 12:02:15,022 - __main__ - INFO - Train AUC: 0.727	Test AUC: 0.713
+2019-02-25 12:02:38,013 - __main__ - INFO - Train AUC: 0.718	Test AUC: 0.712
+2019-02-25 12:03:24,777 - __main__ - INFO - Train AUC: 0.722	Test AUC: 0.715
+2019-02-25 12:04:14,096 - __main__ - INFO - Train AUC: 0.732	Test AUC: 0.716
+2019-02-25 12:06:04,399 - __main__ - INFO - Train AUC: 0.712	Test AUC: 0.711
+2019-02-25 12:09:59,637 - __main__ - INFO - Train AUC: 0.738	Test AUC: 0.720
+2019-02-25 12:14:05,286 - __main__ - INFO - Train AUC: 0.741	Test AUC: 0.720
+2019-02-25 12:17:46,484 - __main__ - INFO - Train AUC: 0.765	Test AUC: 0.720
+2019-02-25 12:22:37,609 - __main__ - INFO - Train AUC: 0.740	Test AUC: 0.720
+2019-02-25 12:26:21,437 - __main__ - INFO - Train AUC: 0.733	Test AUC: 0.719
+2019-02-25 12:33:42,194 - __main__ - INFO - Train AUC: 0.809	Test AUC: 0.716
+2019-02-25 12:34:08,782 - __main__ - INFO - Train AUC: 0.694	Test AUC: 0.700
+2019-02-25 12:40:19,754 - __main__ - INFO - Train AUC: 0.795	Test AUC: 0.714
+2019-02-25 12:43:56,694 - __main__ - INFO - Train AUC: 0.751	Test AUC: 0.721
+2019-02-25 12:48:04,772 - __main__ - INFO - Train AUC: 0.768	Test AUC: 0.720
+2019-02-25 12:52:25,427 - __main__ - INFO - Train AUC: 0.714	Test AUC: 0.712
+2019-02-25 12:56:34,583 - __main__ - INFO - Train AUC: 0.750	Test AUC: 0.719
+2019-02-25 12:57:24,676 - __main__ - INFO - Train AUC: 0.724	Test AUC: 0.716
+2019-02-25 13:01:03,092 - __main__ - INFO - Train AUC: 0.734	Test AUC: 0.719
+2019-02-25 13:08:53,354 - __main__ - INFO - Train AUC: 0.817	Test AUC: 0.717
+2019-02-25 13:09:00,537 - __main__ - INFO - Train AUC: 0.692	Test AUC: 0.698
+2019-02-25 13:11:55,839 - __main__ - INFO - Train AUC: 0.730	Test AUC: 0.719
+2019-02-25 13:17:37,463 - __main__ - INFO - Train AUC: 0.756	Test AUC: 0.722
+2019-02-25 13:20:18,604 - __main__ - INFO - Train AUC: 0.742	Test AUC: 0.718
+2019-02-25 13:27:04,682 - __main__ - INFO - Train AUC: 0.785	Test AUC: 0.712
+2019-02-25 13:30:21,611 - __main__ - INFO - Train AUC: 0.728	Test AUC: 0.718
+2019-02-25 13:31:20,275 - __main__ - INFO - Train AUC: 0.733	Test AUC: 0.718
+2019-02-25 13:32:18,477 - __main__ - INFO - Train AUC: 0.711	Test AUC: 0.712
+2019-02-25 13:38:11,631 - __main__ - INFO - Train AUC: 0.774	Test AUC: 0.719
+2019-02-25 13:42:22,730 - __main__ - INFO - Train AUC: 0.774	Test AUC: 0.721
+2019-02-25 13:44:21,194 - __main__ - INFO - Train AUC: 0.709	Test AUC: 0.710
+2019-02-25 13:49:03,321 - __main__ - INFO - Train AUC: 0.795	Test AUC: 0.715
+2019-02-25 13:51:52,928 - __main__ - INFO - Train AUC: 0.756	Test AUC: 0.716
+2019-02-25 13:57:25,406 - __main__ - INFO - Train AUC: 0.761	Test AUC: 0.721
+2019-02-25 13:58:32,560 - __main__ - INFO - Train AUC: 0.726	Test AUC: 0.716
+2019-02-25 13:58:59,702 - __main__ - INFO - Train AUC: 0.698	Test AUC: 0.702
+2019-02-25 13:59:38,751 - __main__ - INFO - Train AUC: 0.705	Test AUC: 0.708
+2019-02-25 14:00:22,054 - __main__ - INFO - Train AUC: 0.712	Test AUC: 0.711
+2019-02-25 14:04:02,040 - __main__ - INFO - Train AUC: 0.788	Test AUC: 0.713
+2019-02-25 14:05:31,254 - __main__ - INFO - Train AUC: 0.701	Test AUC: 0.705
+2019-02-25 14:07:40,577 - __main__ - INFO - Train AUC: 0.718	Test AUC: 0.714
+2019-02-25 14:10:19,827 - __main__ - INFO - Train AUC: 0.714	Test AUC: 0.712
+2019-02-25 14:13:03,528 - __main__ - INFO - Train AUC: 0.762	Test AUC: 0.719
+2019-02-25 14:16:50,006 - __main__ - INFO - Train AUC: 0.750	Test AUC: 0.718
+2019-02-25 14:18:06,254 - __main__ - INFO - Train AUC: 0.724	Test AUC: 0.717
+2019-02-25 14:22:02,145 - __main__ - INFO - Train AUC: 0.771	Test AUC: 0.714
+2019-02-25 14:26:09,201 - __main__ - INFO - Train AUC: 0.743	Test AUC: 0.719
+2019-02-25 14:34:26,481 - __main__ - INFO - Train AUC: 0.763	Test AUC: 0.722
+2019-02-25 14:39:15,567 - __main__ - INFO - Train AUC: 0.764	Test AUC: 0.718
+2019-02-25 14:44:39,307 - __main__ - INFO - Train AUC: 0.812	Test AUC: 0.713

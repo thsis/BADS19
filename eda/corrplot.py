@@ -33,17 +33,12 @@ if __name__ == "__main__":
             "item_price/brand_mean_price",
             "price_off/days_to_delivery"]
 
+    labels = [c.replace("_", " ") for c in cols]
+
     fg = FeatureGenerator(cols=cols)
     fg.fit(history, 'return')
     out, _ = fg.transform(known, "return")
     out = pd.DataFrame(out, columns=cols)
 
     corr = out.corr()
-    fig, ax = plt.subplots(figsize=(10, 10))
-    sns.heatmap(corr, vmin=-1, vmax=1, center=0,
-                cmap=plt.cm.seismic,
-                xticklabels=corr.columns.values,
-                yticklabels=corr.columns.values)
-    fig.savefig("eda/corrplot.png")
-
-    print("Dimensions:", corr.shape)
+    fig, ax = plt.subplots(figsize=(10, 5))

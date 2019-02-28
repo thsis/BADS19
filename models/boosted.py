@@ -88,10 +88,10 @@ pipeline = Pipeline(steps)
 # 5. Define hyperparameter space.
 paramspace = {
     "gb__n_estimators": scope.int(hp.quniform("gb__n_estimators",
-                                              10, 5000, 1)),
-    "gb__max_features": hp.uniform("gb__max_features", 0.2, 1),
+                                              10, 1000, 1)),
+    "gb__max_features": hp.uniform("gb__max_features", 0.2, 0.5),
     "gb__max_depth": scope.int(hp.quniform("gb__max_depth",
-                                           10, 1000, 1)),
+                                           1, 5, 1)),
     "gb__min_samples_leaf": hp.uniform("gb__min_samples_leaf", 0.001, 0.05),
     "gb__learning_rate": hp.uniform("gb__learning_rate", 0.01, 0.3),
     "gb__subsample": hp.uniform("gb__subsample", 0.3, 1.0)}
