@@ -96,7 +96,7 @@ LOGGER.info("True coefficient: %s", BETA)
 LOGGER.info("------------------- History -------------------")
 LOGGER.info("| Best Fitness | Mean Fitness | OOB Fitness")
 LOGGER.info("|--------------|--------------|-------------")
-for best, avg, oob in zip(GA.HISTORY["best_fitness"],
-                          GA.HISTORY["mean_pop_fitness"],
-                          GA.HISTORY["oob_fitness"]):
+for best, avg, oob in zip(GA.history["best_fitness"],
+                          GA.history["mean_pop_fitness"],
+                          GA.history["oob_fitness"]):
     LOGGER.info("| % 12.7f | % 12.7f | % 12.7f", best, avg, oob)
