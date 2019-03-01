@@ -27,9 +27,11 @@ def minimizer(objective):
                 parameter space.
     """
     def outer(paramspace, trials, max_evals=100):
+        """Call fmin and manage the progress bar."""
         pbar = tqdm(total=max_evals)
 
         def inner(*args, **kwargs):
+            """Update progress bar and call the objective function."""
             pbar.update()
             return objective(*args, **kwargs)
 
@@ -133,9 +135,7 @@ class GeneticAlgorithm(object):
         if self.fit_intercept:
             self.m += 1
             # Add column of ones
-            self.X_ = np.append(np.ones(self.n).reshape((-1, 1)),
-                                self.X_,
-                                axis=1)
+            self.X_ = np.append(np.ones((self.n, 1)), self.X_, axis=1)
 
         self.price = price
         self.y_true = y
@@ -153,6 +153,7 @@ class GeneticAlgorithm(object):
             self.sample_size = int(subsample * self.n)
             self.bootstrap = bootstrap
             self.oob_size = self.n - self.sample_size
+
         for j in trange(maxiter, desc='Generation', leave=True, position=0):
             # Initialize
             self.fitness = np.full(self.population_size, -np.inf)
@@ -256,11 +257,56 @@ class GeneticAlgorithm(object):
             cut = self.optimal_cutoff
         X_ = (X - self.means) / self.stds
         if self.fit_intercept:
-            X_ = np.append(np.ones(len(X_)).reshape((-1, 1)),
-                           X_,
-                           axis=1)
+            X_ = np.append(np.ones((len(X_), 1)), X_, axis=1)
         proba = self.predict_proba(X_, self.optimal_candidate)
         out = proba > cut
+        return out
+
+    def predict_cost(self, X=None, y_true=None, price=None, b=None, cutoff=None):
+        """Return predicted cost.
+
+        Predict cost for a given feature matrix, labels, price and cutoff
+        or calculate costs on the training set based on the optimal solution.
+
+        Parameters
+        ----------
+        X : numpy.ndarray
+            Feature matrix. If `None` (default) use the whole training data.
+        y_true : array-like
+                 Vector of true labels. If `None` (default) use the whole training data.
+        price : array-like
+                Vector of prices. If `None` (default) use the whole training data.
+        b : array-like
+            Vector of coefficients. If `None` use the optimal solution of the last iteration.
+        cutoff : float
+                 Threshold for prediction. If `None` (default) use the optimal threshold of
+                 the last iteration.
+
+        Returns
+        -------
+        out : float
+              Predicted cost.
+        """
+        if X is None:
+            X_ = self.X_
+        else:
+            X_ = (X - self.means) / self.stds
+            if self.fit_intercept:
+                X_ = np.append(np.ones((len(X_), 1)), X_, axis=1)
+        if y_true is None:
+            y_true = self.y_true
+        if price is None:
+            price = self.price
+        if b is None:
+            b = self.optimal_candidate
+        if cutoff is None:
+            cutoff = self.optimal_cutoff
+
+        y_prob = self.predict_proba(X_, b=b)
+        out = self.get_utility(y_prob=y_prob,
+                               y_true=y_true,
+                               price=price,
+                               cutoff=cutoff)
         return out
 
     def get_fitness(self, y_prob, y_true, price):

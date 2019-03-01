@@ -76,15 +76,21 @@ TEST_SCORE = GA.get_utility(
     TEST_PRED, Y_TEST, X_TEST[:, 1], GA.optimal_cutoff)
 
 # Calculate Baseline
-X_BASELINE = (X_TEST - GA.X_means) / GA.X_stds
+X_BASELINE = (X_TEST - GA.means) / GA.stds
 X_BASELINE = np.append(np.ones(len(X_BASELINE)).reshape((-1, 1)),
                        X_BASELINE, axis=1)
 BASELINE_PRED = GA.predict_proba(X_BASELINE, BETA)
 BASELINE = GA.get_utility(BASELINE_PRED, Y_TEST, X_TEST[:, 1], 0.7)
-
+# Calculate total predicted cost
+COST_BASELINE = GA.predict_cost(X_TEST, Y_TEST, X_TEST[:, 1], BETA, 0.7)
+COST_PREDICT = GA.predict_cost()
 # Print to console
-print("Test score:", TEST_SCORE / len(TEST_PRED))
 print("Baseline score:", BASELINE / len(BASELINE_PRED))
+print("Test score:", TEST_SCORE / len(TEST_PRED))
+
+print("Predicted Costs:")
+print("Baseline: % 10.2f | Prediction: % 10.2f" %
+      (COST_BASELINE, COST_PREDICT))
 
 # Log events
 LOGGER.info("------------------- Results -------------------")
@@ -92,6 +98,12 @@ LOGGER.info("Baseline score: % 6.10f", BASELINE / len(BASELINE_PRED))
 LOGGER.info("Test score: % 6.10f", TEST_SCORE / len(TEST_PRED))
 LOGGER.info("Coefficients: %s", RES)
 LOGGER.info("True coefficient: %s", BETA)
+LOGGER.info("Total Cost: %f", GA.get_utility())
+
+LOGGER.info("--------------- Predicted Costs ---------------")
+LOGGER.info("Baseline: % 10.2f | Prediction: % 10.2f",
+            COST_BASELINE, COST_PREDICT)
+
 
 LOGGER.info("------------------- History -------------------")
 LOGGER.info("| Best Fitness | Mean Fitness | OOB Fitness")

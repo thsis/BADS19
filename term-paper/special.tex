@@ -1,12 +1,38 @@
 \begin{algorithm}
 \caption{Genetic Algorithm}
+\label{GA}
 \begin{algorithmic}
-\If {$i\geq maxval$}
-    \State $i\gets 0$
-\Else
-    \If {$i+k\leq maxval$}
-        \State $i\gets i+k$
-    \EndIf
-\EndIf
+\State \texttt{history} $\gets$ []
+\For{i in 1, ..., maxiter}
+    \State \# Initialize/Reset lists
+    \State \texttt{fitness} $\gets$ \texttt{repeat(}$-\infty$ \texttt{, population\_size)}
+    \State \texttt{cutoffs} $\gets$ \texttt{repeat(} $-\infty$\texttt{, population\_size)}
+    \If{\texttt{random()} $<$ \texttt{reset\_probability}}
+        \State \texttt{X\_train}, \texttt{y\_train}, \texttt{price\_train} $\gets$ \texttt{resample()}
+    \EndIf   
+    \For{j, $\beta$ in \texttt{enumerate(population)}}
+        \State \texttt{y\_pred} $\gets$ \texttt{predict\_proba(X\_train,}$\beta$\texttt{)}
+        \State \texttt{fit, cut} $\gets$ \texttt{get\_fitness\_and\_c(y\_pred, y\_train, price\_train)}
+        \State \texttt{fitness[j]} $\gets$ \texttt{fit}
+        \State \texttt{cutoffs[j]} $\gets$ \texttt{cut}
+    \EndFor
+    \State \# Select the most fit individuals
+    \State \texttt{fit\_idx} $\gets$ \texttt{argsort(-fitness)}
+    \State \texttt{parents} $\gets$ \texttt{fit\_idx[0:num\_parents]}
+    \State \# Overwrite population
+    \State \texttt{population} $\gets$ \texttt{population[parents]}
+    \State \# Crossover
+    \While{\texttt{length(population) < num\_parents}}
+        \State \texttt{parent\_a, parent\_b} $\gets$ \texttt{sample(population, 2)}
+        \State \texttt{candidate} $\gets$ \texttt{crossover(parent\_a, parent\_b)}
+        \If{\texttt{random() < mutation\_probability}}
+            \State \texttt{candidate} $\gets$ \texttt{mutate(candidate)}
+        \EndIf
+    \EndWhile
+    \State \# Store results
+    \State \texttt{best} $\gets$ \texttt{argmax(fitness)}
+    \State \texttt{history[i]} $\gets$ \texttt{population[best]}
+\EndFor
+\State \Return \texttt{argmax(history)}
 \end{algorithmic}
 \end{algorithm}
