@@ -60,8 +60,6 @@ PARSER.add_argument("--bootstrap", action="store_true", default=False,
 PARSER.add_argument("--reset-prob", type=float, default=0.25,
                     help="probability of redrawing the subsample")
 ARGS = PARSER.parse_args()
-for arg, val in vars(ARGS).items():
-    LOGGER.info("%s: %s", arg, val)
 
 # 3. Load and clean the data
 DATAPATH = os.path.join("data", "BADS_WS1819_known.csv")
@@ -70,7 +68,6 @@ UNKNOWNPATH = os.path.join("data", "BADS_WS1819_unknown.csv")
 TIMECODE = datetime.datetime.now().strftime("%Y%m%d_%H%M")
 OUTPATH = os.path.join(
     "predictions", "genetic_predictions" + TIMECODE + ".csv")
-LOGGER.info(OUTPATH)
 
 KNOWN = clean(DATAPATH)
 UNKNOWN = clean(UNKNOWNPATH)
@@ -113,6 +110,11 @@ TEST_SCORE = GA.get_utility(TEST_PRED, Y_TEST, X_TEST[:, 1], GA.optimal_cutoff)
 BASELINE = GA.get_utility(np.zeros(len(Y_TEST)), Y_TEST, X_TEST[:, 1], 0.5)
 
 # Log events
+for arg, val in vars(ARGS).items():
+    LOGGER.info("%s: %s", arg, val)
+
+LOGGER.info(OUTPATH)
+
 LOGGER.info("------------------- Results -------------------")
 LOGGER.info("Baseline score: % -8.2f", BASELINE / len(Y_TEST) * len(UNKNOWN))
 LOGGER.info("Test score: % -12.2f", TEST_SCORE / len(TEST_PRED) * len(UNKNOWN))
