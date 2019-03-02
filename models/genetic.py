@@ -103,6 +103,8 @@ RES = GA.run(maxiter=ARGS.maxiter,
              subsample=ARGS.subsample,
              bootstrap=ARGS.bootstrap,
              reset_prob=ARGS.reset_prob)
+# Save plot
+GA.plot(os.path.join("models", "genetic_run_" + TIMECODE + ".png"))
 TEST_PRED = GA.predict(X_TEST)
 TEST_SCORE = GA.get_utility(TEST_PRED, Y_TEST, X_TEST[:, 1], GA.optimal_cutoff)
 
@@ -116,8 +118,8 @@ for arg, val in vars(ARGS).items():
 LOGGER.info(OUTPATH)
 
 LOGGER.info("------------------- Results -------------------")
-LOGGER.info("Baseline score: % -8.2f", BASELINE / len(Y_TEST) * len(UNKNOWN))
-LOGGER.info("Test score: % -12.2f", TEST_SCORE / len(TEST_PRED) * len(UNKNOWN))
+LOGGER.info("Baseline score: % 8.2f", BASELINE / len(Y_TEST) * len(UNKNOWN))
+LOGGER.info("Test score: % 12.2f", TEST_SCORE / len(TEST_PRED) * len(UNKNOWN))
 LOGGER.info("Coefficients: %s", RES.round(2))
 
 LOGGER.info("------------------- History -------------------")

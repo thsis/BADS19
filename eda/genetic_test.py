@@ -84,9 +84,11 @@ BASELINE = GA.get_utility(BASELINE_PRED, Y_TEST, X_TEST[:, 1], 0.7)
 # Calculate total predicted cost
 COST_BASELINE = GA.predict_cost(X_TEST, Y_TEST, X_TEST[:, 1], BETA, 0.7)
 COST_PREDICT = GA.predict_cost()
+
+GA.plot(os.path.join("eda", "genetic_test.png"))
 # Print to console
-print("Baseline score:", BASELINE / len(BASELINE_PRED))
-print("Test score:", TEST_SCORE / len(TEST_PRED))
+print("\nBaseline score: % 6.4f" % (BASELINE / len(BASELINE_PRED)))
+print("Test score: % 11.4f" % (TEST_SCORE / len(TEST_PRED)))
 
 print("Predicted Costs:")
 print("Baseline: % 10.2f | Prediction: % 10.2f" %

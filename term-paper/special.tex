@@ -1,4 +1,6 @@
+
 \begin{algorithm}
+\tiny
 \caption{Genetic Algorithm}
 \label{GA}
 \begin{algorithmic}
@@ -36,3 +38,18 @@
 \State \Return \texttt{argmax(history)}
 \end{algorithmic}
 \end{algorithm}
+
+Up until now only standard measures like the Area Under Curve (AUC) have been used in order to quantify and balance the particular cases of misclassification. However, in a business setting such as this differen faulty categorizations are typically associated with different types of costs. So naturally, it is desirable to operate on these directly in order to minimize them. Unfortunately, this problem is in its essence non-continuous and as such it is not possible to compute the gradients directly. This necessitates the use of non-standard optimization techniques.
+
+One such technique is to use the predictive framework of the Logistic Regression in conjunction with a Genetic Algorithm. The Genetic Algorithm tries to emulate an evolutionary process, where in the first step candidate coefficient vectors $\beta \in \mathbb{R}^d, d \in \mathbb{N}$ are randomly sampled and ranked with respect to the cost which results from their predicted probabilities $p(y=1|\beta)$ and a threshold $c$ that serves as a decision criterion, where
+
+\begin{align*}
+\hat{y} = \begin{cases}
+  1 \quad if\ p(y|\beta) > c\\
+  0 \quad else
+\end{cases}.
+\end{align*}
+
+The most successfull candidates are then allowed to propagate and be combined to form the new set of candidate values for $\beta$ in the next iteration. An outline is given in pseudocode in algorithm \ref{GA}. One problem with this approach lies in its tendency to overfit. In order to mitigate this, two minor modifications where added. First, a random sampling technique was used, where the fitness of each candidate in the population was computed only by a small fraction of the available training data. This sample will be randomly redrawn in each iteration, which means that only solutions that generalize beyond many training sets have a chance to be propagated in the long term. Additionally this speeds up the run time of the algorithm and, fortunately, leads also to a better generalization overall \cite{garst}. Secondly, for the final result of the routine, instead of using the candidate $\beta$ that had the best fitness on the training data, the candidate is used that proved to have the highest fitness, i.e. the lowest cost on its respective out-of-bag-samples.
+
+These modifications mean that it was not possible to use an out-of-the-box implementation for the Genetic Algorithm and it was necessary to write a custom built variant. In order to test the customized algorithm a simulation study was used.

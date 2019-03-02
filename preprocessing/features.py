@@ -2,6 +2,7 @@
 import os
 import itertools
 import numpy as np
+import pandas as pd
 from preprocessing import cleaning
 
 
@@ -121,9 +122,24 @@ class FeatureGenerator(object):
         # Merge fitted tables for items, orders, brands and states
         out = X.loc[:, X.columns != self.target_col]
         out = self.__merge(out, self.items, impute=self.items.mean())
-        out = self.__merge(out, self.orders, impute=0)
+        out = self.__merge(out, self.orders, impute={
+            "order_num_items": 1,
+            "order_total_value": self.orders.order_total_value.mean(),
+            "order_median_price": self.orders.order_median_price.mean(),
+            "order_min_price": self.orders.order_min_price.mean(),
+            "order_max_price": self.orders.order_max_price.mean(),
+            "order_num_sizes": 1,
+            "order_num_colors": 1,
+            "order_seqnum": 1})
         out = self.__merge(out, self.brands, impute=self.brands.mean())
         out = self.__merge(out, self.states, impute=self.states.mean())
+
+        # Fix broken columns after merge
+        out["order_has_gift"] = (out.order_min_price == 0).astype(float)
+        out.loc[out.order_seqnum == 0, "order_seqnum"] += 1
+        out.loc[out.item_orders.isnull()] = 1
+        out.loc[out.order_num_sizes.isnull()] = 1
+        self.debug = out.copy()
 
         woetab = (self.color_woe, )
         if not ignore_woe:
@@ -143,15 +159,19 @@ class FeatureGenerator(object):
         # Create interactions
         out = self.__get_interactions(out, outnames)
 
+        # Add dummies
+        dummies = pd.get_dummies(X[["user_title", "user_state", "item_size"]])
+        out = pd.concat([out, dummies], axis=1)
+
         out = out.fillna(out.mean())
         out = out.drop(columns=self.dropcols, errors="ignore")
         self.outfeatures = out
 
         if self.cols is None:
-            self.cols = out.columns
+            self.cols = out.columns.tolist()
 
         out = out.loc[:, self.cols].astype(np.float64)
-        out = out.dropna(axis=1).values
+
         # HACK:
         if self.target_col in X.columns:
             return out, X.loc[:, self.target_col]
@@ -203,13 +223,11 @@ class FeatureGenerator(object):
             "item_color": "nunique"})
         ordercols = ["order_num_items", "order_max_price",
                      "order_total_value", "order_median_price",
-                     "order_min_price", "order_num_sizes",
-                     "order_num_colors"]
+                     "order_min_price", "order_num_sizes", "order_num_colors"]
         orders.columns = ordercols
         seqnum = orders.reset_index().groupby("user_id").order_date.rank()
         seqnum.index = orders.index
         orders["order_seqnum"] = seqnum
-        orders["order_has_gift"] = orders.order_min_price == 0
 
         return orders
 
@@ -244,6 +262,8 @@ class FeatureGenerator(object):
         for nom, denom in combinations:
             if (nom[:3] == "woe") or (denom[:3] == "woe"):
                 continue
+            if out[denom].min() == 0:
+                continue
             # HACK: make sure price-offs are in the nominator.
             if denom == "price_off":
                 out["{}/{}".format(denom, nom)] = out[denom] / (out[nom] + 1)
@@ -262,6 +282,8 @@ class FeatureGenerator(object):
         for a, b in combinations:
             if (a[:3] == "woe") or (b[:3] == "woe"):
                 continue
+            if out[a].isnull().any() or out[b].isnull().any():
+                continue
             if (out[a].dtype == bool) & (out[b].dtype == bool):
                 out["{}*{}".format(a, b)] = out[a] & out[b]
             else:
@@ -277,7 +299,6 @@ if __name__ == "__main__":
     unknown = cleaning.clean(preddatapath)
 
     fg = FeatureGenerator()
-    X_known, y_known = fg.fit_transform(known, "return", ignore_woe=False)
+    X_known, y_known = fg.fit_transform(known, "return")
 
-    X_unknown = fg.transform(unknown, ignore_woe=False)
-    assert X_known.shape[1] == X_unknown.shape[1]
+    X_unknown = fg.transform(unknown)

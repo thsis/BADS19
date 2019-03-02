@@ -22,16 +22,28 @@ dtypes = {"item_id": object, "brand_id": object, "user_id": object}
 with open(colorpath) as f:
     colors = json.load(f)
 
-# Sizes
-label = ['m', 'M', 'l', 'L', 'xl', 'XL', '43+', '37+', '36+', 'XXL', 'xxl',
-         's', 'S', 'XS', 'xs', 'XXXL', 'xxxl', '8+', '8', '6+', '6', '9+',
-         '9', '4', '4+', '2', '2+', '7', '7+', '5', '5+', '39+', '38+', '10',
-         '10+', '11', '40+', '21', '20', '42+', '41+']
-size = [38, 38, 42, 42, 46, 46, 43, 37, 36, 50, 50, 36, 36, 34, 34, 54, 54,
-        36, 36, 34, 34, 38, 38, 32, 32, 30, 30, 36, 36, 33, 33, 39, 38, 38,
-        38, 39, 40, 48, 48, 42, 41]
 
-justin = {lab: siz for lab, siz in zip(label, size)}
+# Sizes
+def is_in_group(x, low, high):
+    group = np.linspace(low, high, num=6)
+    lower = group[:-1]
+    upper = group[1:]
+    label = ["XS", "S", "M", "L", "XL"]
+    for l, u, lab in zip(lower, upper, label):
+        if l <= x < u:
+            return lab
+
+
+def clean_size(x):
+    groups = [(0, 15), (18, 30), (30, 52), (52, 59), (75, 177), (2930, 4035)]
+    try:
+        x = float(x)
+        for (low, high) in groups:
+            out = is_in_group(x, low, high)
+            if out is not None:
+                return out
+    except (TypeError, ValueError):
+        return x
 
 
 def clean(datapath):
@@ -68,7 +80,7 @@ def clean(datapath):
     date_columns = ["order_date", "delivery_date", "user_dob", "user_reg_date"]
 
     # NA-Values
-    na_values = ["not_reported", "?", "1994-12-31"]
+    na_values = ["not_reported", "1994-12-31"]
 
     # ----- Data Cleaning -----
     # Read data
@@ -118,17 +130,18 @@ def clean(datapath):
     data["is_item_color_metal"] = data.item_color == "metal"
 
     # "Cleaned" item size column
-    data["item_size"] = data.item_size.apply(lambda x: justin.get(x, 0))
+    data["item_size"] = data.item_size.str.upper()
+    data["item_size"] = data.item_size.str.replace("+", ".5")
+    data["item_size"] = data.item_size.str.replace("[xX]{2,}[Ll]", "XL")
+    data["item_size"] = data.item_size.str.replace("[xX]{2,}[Ss]", "XS")
+    data["item_size"] = data.item_size.apply(clean_size)
 
     return data
 
 
 if __name__ == "__main__":
     datapath = os.path.join("data", "BADS_WS1819_known.csv")
+    unknownpath = os.path.join("data", "BADS_WS1819_unknown.csv")
     cleaned = clean(datapath)
     print(cleaned.describe(include="all"))
     print(cleaned.info())
-
-    data_filthy = pd.read_csv(datapath,
-                              index_col=["order_item_id"],
-                              dtype=dtypes)

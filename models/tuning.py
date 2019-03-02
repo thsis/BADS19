@@ -7,6 +7,7 @@ import numpy as np
 from hyperopt import fmin, tpe
 from tqdm import tqdm, trange
 from joblib import Parallel, delayed
+from matplotlib import pyplot as plt
 
 
 def minimizer(objective):
@@ -121,6 +122,7 @@ class GeneticAlgorithm():
         self.sample_size = None
         self.bootstrap = None
         self.oob_size, self.fitness, self.cutoffs = None, None, None
+        self.maxiter, self.reset_prob = None, None
 
     def fit(self, X, y, price, fit_intercept=True, loc=0, scale=1):
         """
@@ -144,6 +146,9 @@ class GeneticAlgorithm():
                                      size=(self.population_size, self.m))
 
     def run(self, maxiter=10, subsample=None, bootstrap=False, reset_prob=1):
+        self.maxiter = maxiter
+        self.reset_prob = reset_prob
+
         if subsample is None:
             self.sample_size = self.n
             self.bootstrap = False
@@ -198,6 +203,20 @@ class GeneticAlgorithm():
         self.optimal_candidate = self.history["best_candidate"][opt_idx]
         self.optimal_cutoff = self.history["best_cutoff"][opt_idx]
         return self.optimal_candidate
+
+    def plot(self, savepath=None, **kwargs):
+        fig, ax = plt.subplots(**kwargs)
+        ax.plot(self.history["best_fitness"], label="Training Fitness")
+        ax.plot(self.history["oob_fitness"], label="Test Fitness")
+        ax.set_xlabel("Iteration")
+        ax.set_ylabel("Fitness")
+        ax.set_xticks(range(self.maxiter))
+
+        plt.legend()
+        if savepath is not None:
+            fig.savefig(savepath)
+
+        return fig, ax
 
     def __get_sample(self):
         sample_idx = np.random.choice(range(self.n),
