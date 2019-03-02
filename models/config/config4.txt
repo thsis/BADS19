@@ -1,0 +1,7 @@
+--elitism 0.1
+--crossover-stratgy arithmetic
+--prob-mutation 0.3
+--init-scale 5
+--reset-prob 0.5
+--maxiter 50
+--subsample 0.01

@@ -45,7 +45,7 @@ def minimizer(objective):
     return outer
 
 
-class GeneticAlgorithm(object):
+class GeneticAlgorithm():
     """Minimize non-continuous functions through a Genetic Algorithm.
 
     Attributes

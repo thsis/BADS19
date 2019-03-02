@@ -34,7 +34,7 @@ LOGGER.addHandler(FH)
 LOGGER.info("================= Start new run =================")
 
 # 2. Create an argument parser
-PARSER = argparse.ArgumentParser()
+PARSER = argparse.ArgumentParser(fromfile_prefix_chars="@")
 PARSER.add_argument("-e", "--elitism", type=float, default=0.02,
                     help="percentage of population kept in next iteration")
 PARSER.add_argument("-p", "--population-size", type=int, default=100,
@@ -70,6 +70,7 @@ UNKNOWNPATH = os.path.join("data", "BADS_WS1819_unknown.csv")
 TIMECODE = datetime.datetime.now().strftime("%Y%m%d_%H%M")
 OUTPATH = os.path.join(
     "predictions", "genetic_predictions" + TIMECODE + ".csv")
+LOGGER.info(OUTPATH)
 
 KNOWN = clean(DATAPATH)
 UNKNOWN = clean(UNKNOWNPATH)
@@ -113,8 +114,8 @@ BASELINE = GA.get_utility(np.zeros(len(Y_TEST)), Y_TEST, X_TEST[:, 1], 0.5)
 
 # Log events
 LOGGER.info("------------------- Results -------------------")
-LOGGER.info("Baseline score: % -6.2f", BASELINE / len(Y_TEST) * len(UNKNOWN))
-LOGGER.info("Test score: % -6.2f", TEST_SCORE / len(TEST_PRED) * len(UNKNOWN))
+LOGGER.info("Baseline score: % -8.2f", BASELINE / len(Y_TEST) * len(UNKNOWN))
+LOGGER.info("Test score: % -12.2f", TEST_SCORE / len(TEST_PRED) * len(UNKNOWN))
 LOGGER.info("Coefficients: %s", RES.round(2))
 
 LOGGER.info("------------------- History -------------------")
