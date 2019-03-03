@@ -1,10 +1,9 @@
+Note that, while the Gradient Boosted Trees perform best on the test set, they also are most likely to overfit the training data and since this model has the highest discrepancy between train and test score it is not advisable to use it for  the final predictions. One would much rather choose either the Neural Network or the Random Forest. 
 
-Note that, while the Gradient Boosted Trees perform best on the test set, they also are most likely to overfit the training data and since this model has the highest discrepancy between train and test score it is not advisable to use it for  the final predictions. One would much rather choose either the Neural Network or the Random Forest. Again, between those two the Neural Network has the more favorable difference between the AUC of the train and test set and thus will most likely generalize better 
-than the Random Forest.
-
-\begin{table}[hb]
+\begin{wraptable}{r}{7.5cm}
 \centering
 \caption{Selected Results}
+\tiny
 \begin{tabular}{lcc}
 
                             & Train AUC & Test AUC \\ \hline
@@ -15,4 +14,8 @@ Feed forward Neural Network & 0.711     & 0.705    \\
 Random Forest               & 0.718     & 0.704    \\
 Gradient Boosted Trees      & 0.773     & 0.712   
 \end{tabular}
-\end{table}
+\end{wraptable}
+
+
+Again, between those two the Neural Network has the more favorable difference between the AUC of the train and test set and thus will most likely generalize better 
+than the Random Forest.

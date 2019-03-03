@@ -1,41 +1,5 @@
+Multiple different models and approaches were tried. Among which were Random Forests, Logistic Regressions, k-Nearest-Neighbor Classifiers, Support Vector Machines and simple feed forward Neural Networks.
 
-
-A Random Forest is a combination of decision trees, where each tree is fitted with a random subsample from all cases as well as a randomly selected subsample of the features \cite{rf01}.
-
-As the name suggests, a K-Nearest-Neighbor Classifier computes the distance of a new sample compared to every sample of the training set and then selects the $k$ closest cases, which are used to determine the new sample's label by a majority vote \cite{knn}.
-
-Support Vector Machines try to find the hyperplane defined by
-
-\begin{equation*}
-f(x) = \beta^T x, \text{ where } |\beta^T x| = 1
-\end{equation*}
-
-that maximizes the margin between two classes in a high, possibly infinite dimensional feature space using the so called kernel trick. Maximizing the margin can be reformulated into minimizing a function $\mathcal{L}(\beta)$ subject to some constraints, such that
-
-\begin{equation*}
-\min_{\beta} = \frac{1}{2} ||\beta||^2 \quad s.t. \quad y_i (\beta^T x_i) \geq 1 \forall i
-\end{equation*}
-
-which is a Lagrangian optimization problem, whose solution provide the optimal parameters for the separating hyperplane \cite{svm}.
-
-For determining the optimal parameters for each model the Python module \texttt{hyperopt} was used. The optimization routine deploys a Tree of Parzen Estimators in order to determine the best hyperparameters. A Tree of Parzen Estimator tries to maximize the so called information gain \textit{EI}, which is defined as
-
-\begin{equation*}
-EI_{y^\star}(x) = \int\limits_{-\infty}^{y^\star} (y^\star-y)p(y|x)dy,
-\end{equation*}
-
-where $y$ is some real valued objective function $y^\star$ is some threshold of $y$ and $x$ is a set of hyperparameters. Mainly the Tree of Parzen Estimators splits the conditional distribution of the parameter vector in two parts
-
-\begin{equation*}
-p(x|y) = \begin{cases}
-    l(x) \text{ if } y<y^\star \\
-    g(x) \text{ if } y \geq y^\star.
-    \end{cases}
-\end{equation*}
-
-Where it tries to avoid the distribution $g$ leading to a value above $y^\star$ and favors the distribtuion $l$ which tends to lead to values for $y$ which are lower than $y^\star$ \cite{tpe}.
-
-Table \ref{spaces} shows the different parameters along with their prior distributions which were optimized.
 
 \begin{table}
 \centering
@@ -71,6 +35,39 @@ Boosted Trees               & number of estimators        & uniform(10, 1000)   
 \end{tabular}
 \end{table}
 
+A Random Forest is a combination of decision trees, where each tree is fitted with a random subsample from all cases as well as a randomly selected subsample of the features \cite{rf01}.
 
+As the name suggests, a K-Nearest-Neighbor Classifier computes the distance of a new sample compared to every sample of the training set and then selects the $k$ closest cases, which are used to determine the new sample's label by a majority vote \cite{knn}.
 
-However, mostof these methods provided unsatisfactory results, and serve merely as a baseline. The most promising algorithms were a simple Feed Forward Network, the Random Forest that was used for determining the variable importance and the Gradient Boosted Trees.
+Support Vector Machines try to find the hyperplane defined by
+
+\begin{equation*}
+f(x) = \beta^T x, \text{ where } |\beta^T x| = 1
+\end{equation*}
+
+that maximizes the margin between two classes in a high, possibly infinite dimensional feature space using the so called kernel trick. Maximizing the margin can be reformulated into minimizing a function $\mathcal{L}(\beta)$ subject to some constraints, such that
+
+\begin{equation*}
+\min_{\beta} = \frac{1}{2} ||\beta||^2 \quad s.t. \quad y_i (\beta^T x_i) \geq 1\ \forall\ i
+\end{equation*}
+
+which is a Lagrangian optimization problem, whose solution provide the optimal parameters for the separating hyperplane \cite{svm}.
+
+For determining the optimal parameters for each model the Python module \texttt{hyperopt} was used. The optimization routine deploys a Tree of Parzen Estimators in order to determine the best hyperparameters. A Tree of Parzen Estimator tries to maximize the so called information gain \textit{EI}, which is defined as
+
+\begin{equation*}
+EI_{y^\star}(x) = \int\limits_{-\infty}^{y^\star} (y^\star-y)p(y|x)dy,
+\end{equation*}
+
+where $y$ is some real valued objective function $y^\star$ is some threshold of $y$ and $x$ is a set of hyperparameters. Mainly the Tree of Parzen Estimators splits the conditional distribution of the parameter vector in two parts
+
+\begin{equation*}
+p(x|y) = \begin{cases}
+    l(x) \text{ if } y<y^\star \\
+    g(x) \text{ if } y \geq y^\star.
+    \end{cases}
+\end{equation*}
+
+Where it tries to avoid the distribution $g$ leading to a value above $y^\star$ and favors the distribtuion $l$ which tends to lead to values for $y$ which are lower than $y^\star$ \cite{tpe}. Table \ref{spaces} shows the different parameters along with their prior distributions which were optimized.
+
+However, most of these methods provided unsatisfactory results, and serve merely as a baseline. The most promising algorithms were a simple Feed Forward Network, the Random Forest that was used for determining the variable importance and the Gradient Boosted Trees.
