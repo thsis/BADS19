@@ -68,6 +68,11 @@ class FeatureGenerator(object):
 
     def __init__(self, cols=None):
         self.cols = cols
+        self.target_col, self.features, self.target = None, None, None
+        self.items, self.orders, self.brands, self.states = None, None, None, None
+
+        self.color_woe = None
+        self.outfeatures = None
         with open(os.path.join("preprocessing", "blacklist.txt"), "r") as f:
             self.dropcols = f.read().splitlines()
 
@@ -139,7 +144,6 @@ class FeatureGenerator(object):
         out.loc[out.order_seqnum == 0, "order_seqnum"] += 1
         out.loc[out.item_orders.isnull()] = 1
         out.loc[out.order_num_sizes.isnull()] = 1
-        self.debug = out.copy()
 
         woetab = (self.color_woe, )
         if not ignore_woe:
@@ -170,7 +174,7 @@ class FeatureGenerator(object):
         if self.cols is None:
             self.cols = out.columns.tolist()
 
-        out = out.loc[:, self.cols].astype(np.float64)
+        out = out.loc[:, self.cols].values.astype(np.float64)
 
         # HACK:
         if self.target_col in X.columns:

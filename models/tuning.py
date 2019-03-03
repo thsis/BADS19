@@ -204,13 +204,14 @@ class GeneticAlgorithm():
         self.optimal_cutoff = self.history["best_cutoff"][opt_idx]
         return self.optimal_candidate
 
-    def plot(self, savepath=None, **kwargs):
+    def plot(self, savepath=None, title=None, **kwargs):
         fig, ax = plt.subplots(**kwargs)
         ax.plot(self.history["best_fitness"], label="Training Fitness")
         ax.plot(self.history["oob_fitness"], label="Test Fitness")
         ax.set_xlabel("Iteration")
         ax.set_ylabel("Fitness")
-        ax.set_xticks(range(self.maxiter))
+        ax.set_xticks(range(0, self.maxiter, 5))
+        ax.set_title(title)
 
         plt.legend()
         if savepath is not None:

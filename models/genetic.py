@@ -24,9 +24,10 @@ from preprocessing.cleaning import clean
 from preprocessing.features import FeatureGenerator
 
 # 1. Create a logger.
+TIMECODE = datetime.datetime.now().strftime("%Y%m%d_%H%M")
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
-FH = logging.FileHandler(os.path.join("logs", "genetic.log"))
+FH = logging.FileHandler(os.path.join("logs", "genetic"+ TIMECODE  +".log"))
 FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 FORMATTER = logging.Formatter(FORMAT)
 FH.setFormatter(FORMATTER)
@@ -65,7 +66,6 @@ ARGS = PARSER.parse_args()
 DATAPATH = os.path.join("data", "BADS_WS1819_known.csv")
 UNKNOWNPATH = os.path.join("data", "BADS_WS1819_unknown.csv")
 
-TIMECODE = datetime.datetime.now().strftime("%Y%m%d_%H%M")
 OUTPATH = os.path.join(
     "predictions", "genetic_predictions" + TIMECODE + ".csv")
 
@@ -76,11 +76,14 @@ HISTORY = KNOWN.append(UNKNOWN, sort=False)
 TRAIN, TEST = train_test_split(KNOWN, test_size=0.2)
 
 COLS = ["days_to_delivery",
-        "days_to_delivery/order_median_price",
-        "item_price",
+        "item_price*order_num_items",
+        "item_price*order_num_sizes",
         "days_to_delivery*order_seqnum",
-        "order_max_price",
-        "item_price*order_num_items"]
+        "days_to_delivery*brand_max_price",
+        "item_price",
+        "order_total_value",
+        "order_total_value/order_num_colors",
+        "is_item_clothes*order_median_price"]
 
 FG = FeatureGenerator(cols=COLS)
 FG.fit(HISTORY, 'return')
@@ -111,6 +114,10 @@ TEST_SCORE = GA.get_utility(TEST_PRED, Y_TEST, X_TEST[:, 1], GA.optimal_cutoff)
 # Baseline: everybody gets the message
 BASELINE = GA.get_utility(np.zeros(len(Y_TEST)), Y_TEST, X_TEST[:, 1], 0.5)
 
+# Create diagnostic plot
+GA.plot(os.path.join("logs", "genetic_" + TIMECODE + ".png"),
+        title="Real Data",
+        figsize=(7, 5))
 # Log events
 for arg, val in vars(ARGS).items():
     LOGGER.info("%s: %s", arg, val)
