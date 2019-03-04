@@ -77,13 +77,10 @@ TRAIN, TEST = train_test_split(KNOWN, test_size=0.2)
 
 COLS = ["days_to_delivery",
         "item_price*order_num_items",
-        "item_price*order_num_sizes",
         "days_to_delivery*order_seqnum",
         "days_to_delivery*brand_max_price",
         "item_price",
-        "order_total_value",
-        "order_total_value/order_num_colors",
-        "is_item_clothes*order_median_price"]
+        "order_total_value"]
 
 FG = FeatureGenerator(cols=COLS)
 FG.fit(HISTORY, 'return')

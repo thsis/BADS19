@@ -46,6 +46,18 @@ def minimizer(objective):
     return outer
 
 
+def sigmoid(x):
+    "Numerically stable sigmoid function."
+    if x >= 0:
+        z = np.exp(-x)
+        return 1 / (1 + z)
+    else:
+        # if x is less than zero then z will be small, denom can't be
+        # zero because it's 1+z.
+        z = np.exp(x)
+        return z / (1 + z)
+
+
 class GeneticAlgorithm():
     """Minimize non-continuous functions through a Genetic Algorithm.
 
@@ -253,7 +265,9 @@ class GeneticAlgorithm():
         """
         if b is None:
             b = self.optimal_candidate
-        out = 1 / (1 + np.exp(-X.dot(b)))
+
+        index = X.dot(b)
+        out = np.array([sigmoid(i) for i in index])
         return out
 
     def predict(self, X, cut=None):
@@ -351,7 +365,7 @@ class GeneticAlgorithm():
         best_cut : float
                    Threshold that leads to optimal utility.
         """
-        cut = np.linspace(0, 1, num=100)
+        cut = np.linspace(0, 1, num=30)
         utility = Parallel(n_jobs=self.n_jobs)(
             delayed(self.get_utility)(y_prob, y_true, price, c) for c in cut)
         best = np.argmax(utility)
