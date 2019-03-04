@@ -89,7 +89,6 @@ class GeneticAlgorithm():
 
     Methods
     -------
-
     fit
 
     run
@@ -137,7 +136,26 @@ class GeneticAlgorithm():
         self.maxiter, self.reset_prob = None, None
 
     def fit(self, X, y, price, fit_intercept=True, loc=0, scale=1):
-        """
+        """Stage Genetic Algorithm with regards to data.
+
+        Parameters
+        ----------
+        X : numpy.ndarray
+            Train-data to calculate fitness with.
+        y : array-like
+            Vector of true labels.
+        price : array-like
+            Vector of item prices.
+        fit_intercept : bool
+            Flag if intercept should be fitted.
+        loc : float
+            Location parameter during initialization.
+        scale : float
+            Scale parameter during initialization.
+
+        Returns
+        -------
+        self
         """
         self.fit_intercept = fit_intercept
         self.n, self.m = X.shape
@@ -158,6 +176,23 @@ class GeneticAlgorithm():
                                      size=(self.population_size, self.m))
 
     def run(self, maxiter=10, subsample=None, bootstrap=False, reset_prob=1):
+        """Train the algorithm.
+
+        Parameters
+        ----------
+        maxiter : int
+            Maximum number of training iterations.
+        subsample : float
+            Percentage of training data to be used for creating a subsample.
+        bootstrap : float
+            If true, draw with replacement.
+        reset_prob : float
+            Chance of redrawing the sample.
+
+        Returns
+        -------
+        optimal_candidate : numpy.array
+        """
         self.maxiter = maxiter
         self.reset_prob = reset_prob
 
@@ -217,6 +252,18 @@ class GeneticAlgorithm():
         return self.optimal_candidate
 
     def plot(self, savepath=None, title=None, **kwargs):
+        """Create diagnostic plots
+
+        Parameters
+        ----------
+
+        savepath : str
+            If set, save plot to `savepath`.
+        title : str
+            Title of figure. If `None` (default) omit title.
+        kwargs : dict
+            Additional arguments to `pyplot.subplots`.
+        """
         fig, ax = plt.subplots(**kwargs)
         ax.plot(self.history["best_fitness"], label="Training Fitness")
         ax.plot(self.history["oob_fitness"], label="Test Fitness")
@@ -278,14 +325,14 @@ class GeneticAlgorithm():
         X : numpy.ndarray
             Feature matrix.
         cut : float
-              Threshold for prediction. If probablity is larger than thres-
-              hold predict positive class. If `None` (default) use the opt-
-              imal parameter of the last iteration.
+            Threshold for prediction. If probablity is larger than thres-
+            hold predict positive class. If `None` (default) use the opt-
+            imal parameter of the last iteration.
 
         Returns
         -------
         out : numpy.array
-              Predicted class labels.
+            Predicted class labels.
         """
         if cut is None:
             cut = self.optimal_cutoff

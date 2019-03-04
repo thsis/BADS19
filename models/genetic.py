@@ -17,7 +17,11 @@ import argparse
 
 import numpy as np
 import pandas as pd
+
+from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 
 from models.tuning import GeneticAlgorithm
 from preprocessing.cleaning import clean
@@ -27,7 +31,7 @@ from preprocessing.features import FeatureGenerator
 TIMECODE = datetime.datetime.now().strftime("%Y%m%d_%H%M")
 LOGGER = logging.getLogger(__name__)
 LOGGER.setLevel(logging.INFO)
-FH = logging.FileHandler(os.path.join("logs", "genetic"+ TIMECODE  +".log"))
+FH = logging.FileHandler(os.path.join("logs", "genetic_" + TIMECODE + ".log"))
 FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 FORMATTER = logging.Formatter(FORMAT)
 FH.setFormatter(FORMATTER)
@@ -60,6 +64,7 @@ PARSER.add_argument("--bootstrap", action="store_true", default=False,
                     help="if set, sample with replacement")
 PARSER.add_argument("--reset-prob", type=float, default=0.25,
                     help="probability of redrawing the subsample")
+PARSER.add_argument("--pca", action="store_true", default=False)
 ARGS = PARSER.parse_args()
 
 # 3. Load and clean the data
@@ -75,17 +80,32 @@ HISTORY = KNOWN.append(UNKNOWN, sort=False)
 
 TRAIN, TEST = train_test_split(KNOWN, test_size=0.2)
 
-COLS = ["days_to_delivery",
-        "item_price*order_num_items",
-        "days_to_delivery*order_seqnum",
-        "days_to_delivery*brand_max_price",
-        "item_price",
-        "order_total_value"]
+if not ARGS.pca:
+    COLS = ["days_to_delivery",
+            "item_price*order_num_items",
+            "item_price*order_num_sizes",
+            "days_to_delivery*order_seqnum",
+            "days_to_delivery*brand_max_price",
+            "item_price",
+            "days_to_delivery*order_total_value",
+            "order_total_value/order_num_colors",
+            "order_total_value",
+            "order_num_items/order_num_colors",
+            "item_price*order_min_price",
+            "is_item_clothes*order_median_price"]
+else:
+    COLS = None
 
 FG = FeatureGenerator(cols=COLS)
 FG.fit(HISTORY, 'return')
 X_TRAIN, Y_TRAIN = FG.transform(TRAIN)
 X_TEST, Y_TEST = FG.transform(TEST)
+
+
+if ARGS.pca:
+    PCA_DECOMP = PCA(n_components=3)
+    X_TRAIN = PCA_DECOMP.fit_transform(X_TRAIN)
+    X_TEST = PCA_DECOMP.transform(X_TEST)
 
 # 4. Run Genetic Algorithm
 GA = GeneticAlgorithm(elitism=ARGS.elitism,
@@ -106,11 +126,33 @@ RES = GA.run(maxiter=ARGS.maxiter,
 # Save plot
 GA.plot(os.path.join("models", "genetic_run_" + TIMECODE + ".png"))
 TEST_PRED = GA.predict(X_TEST)
-TEST_SCORE = GA.get_utility(TEST_PRED, Y_TEST, X_TEST[:, 1], GA.optimal_cutoff)
+TEST_SCORE = GA.get_utility(y_prob=TEST_PRED,
+                            y_true=Y_TEST,
+                            price=TEST.item_price.values,
+                            cutoff=GA.optimal_cutoff)
 
 # Baseline: everybody gets the message
-BASELINE = GA.get_utility(np.zeros(len(Y_TEST)), Y_TEST, X_TEST[:, 1], 0.5)
+BASELINE = GA.get_utility(y_prob=np.ones(len(Y_TEST)),
+                          y_true=Y_TEST,
+                          price=TEST.item_price.values,
+                          cutoff=0.5)
 
+# Comparison: Train a shitty random forest
+RF = RandomForestClassifier(max_depth=87.0, min_samples_leaf=0.01432,
+                            min_samples_split=0.011417, n_estimators=392)
+RF.fit(X_TRAIN, Y_TRAIN)
+RF_COMP_PRED = RF.predict_proba(X_TEST)
+RF_COMPARISON, _ = GA.get_fitness(y_prob=RF_COMP_PRED[:, 1],
+                                  y_true=Y_TEST,
+                                  price=TEST.item_price.values)
+
+LR = LogisticRegression(solver="saga")
+LR.fit(X_TRAIN, Y_TRAIN)
+
+LR_COMP_PRED = LR.predict_proba(X_TEST)
+LR_COMPARISON, _ = GA.get_fitness(y_prob=LR_COMP_PRED[:, 1],
+                                  y_true=Y_TEST,
+                                  price=TEST.item_price.values)
 # Create diagnostic plot
 GA.plot(os.path.join("logs", "genetic_" + TIMECODE + ".png"),
         title="Real Data",
@@ -122,8 +164,10 @@ for arg, val in vars(ARGS).items():
 LOGGER.info(OUTPATH)
 
 LOGGER.info("------------------- Results -------------------")
-LOGGER.info("Baseline score: % 8.2f", BASELINE / len(Y_TEST) * len(UNKNOWN))
-LOGGER.info("Test score: % 12.2f", TEST_SCORE / len(TEST_PRED) * len(UNKNOWN))
+LOGGER.info("Baseline score: % 14.2f", BASELINE)
+LOGGER.info("RF score: % 20.2f", RF_COMPARISON)
+LOGGER.info("LR score: % 20.2f", LR_COMPARISON)
+LOGGER.info("Test score: % 18.2f", TEST_SCORE)
 LOGGER.info("Coefficients: %s", RES.round(2))
 
 LOGGER.info("------------------- History -------------------")
@@ -136,6 +180,9 @@ for best, avg, oob in zip(GA.history["best_fitness"],
 
 print("\nSave Predictions")
 X_PRED = FG.transform(UNKNOWN)
+if ARGS.pca:
+    X_PRED = PCA_DECOMP.transform(X_PRED)
+
 PREDICTIONS = GA.predict(X_PRED)
 PREDICTIONS = pd.DataFrame(PREDICTIONS, index=UNKNOWN.index,
                            columns=["return"], dtype=float)
