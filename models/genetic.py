@@ -123,8 +123,7 @@ RES = GA.run(maxiter=ARGS.maxiter,
              subsample=ARGS.subsample,
              bootstrap=ARGS.bootstrap,
              reset_prob=ARGS.reset_prob)
-# Save plot
-GA.plot(os.path.join("models", "genetic_run_" + TIMECODE + ".png"))
+
 TEST_PRED = GA.predict(X_TEST)
 TEST_SCORE = GA.get_utility(y_prob=TEST_PRED,
                             y_true=Y_TEST,

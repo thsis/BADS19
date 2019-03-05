@@ -58,7 +58,7 @@ def sigmoid(x):
         return z / (1 + z)
 
 
-class GeneticAlgorithm():
+class GeneticAlgorithm:
     """Minimize non-continuous functions through a Genetic Algorithm.
 
     Attributes
@@ -207,9 +207,6 @@ class GeneticAlgorithm():
             self.oob_size = self.n - self.sample_size
 
         for j in trange(maxiter, desc='Generation', leave=True, position=0):
-            # Initialize
-            self.fitness = np.full(self.population_size, -np.inf)
-            self.cutoffs = np.full(self.population_size, -np.inf)
             # Draw random subsample to prevent overfitting
             if j == 0:
                 samples = self.__get_sample()
@@ -218,13 +215,15 @@ class GeneticAlgorithm():
                 samples = self.__get_sample()
                 sample, sample_y, sample_p, oob, oob_y, oob_p = samples
 
-            # Determine fitness
-            for i, beta in enumerate(tqdm(self.pool, leave=True, position=1,
-                                          desc="Iteration Progress")):
-                y_pred = self.predict_proba(sample, beta)
-                fit, cut = self.get_fitness(y_pred, sample_y, sample_p)
-                self.fitness[i] = fit
-                self.cutoffs[i] = cut
+            # Determine fitness in a parallelized pool of workers
+            with Parallel(n_jobs=self.n_jobs) as parallel:
+                results = parallel(delayed(self.__get_fitness)(
+                    sample, sample_y, sample_p, beta)
+                    for beta in tqdm(self.pool))
+
+            results = np.array(results)
+            self.fitness = results[:, 0]
+            self.cutoffs = results[:, 1]
 
             # Save best candidate
             fitness_idx = np.argsort(-self.fitness)
@@ -250,6 +249,11 @@ class GeneticAlgorithm():
         self.optimal_candidate = self.history["best_candidate"][opt_idx]
         self.optimal_cutoff = self.history["best_cutoff"][opt_idx]
         return self.optimal_candidate
+
+    def __get_fitness(self, sample, sample_y, sample_p, beta):
+        y_pred = self.predict_proba(sample, beta)
+        fit, cut = self.get_fitness(y_pred, sample_y, sample_p)
+        return fit, cut
 
     def plot(self, savepath=None, title=None, **kwargs):
         """Create diagnostic plots
@@ -412,9 +416,8 @@ class GeneticAlgorithm():
         best_cut : float
                    Threshold that leads to optimal utility.
         """
-        cut = np.linspace(0, 1, num=30)
-        utility = Parallel(n_jobs=self.n_jobs)(
-            delayed(self.get_utility)(y_prob, y_true, price, c) for c in cut)
+        cut = np.linspace(0, 1, num=50)
+        utility = [self.get_utility(y_prob, y_true, price, c) for c in cut]
         best = np.argmax(utility)
         best_util, best_cut = utility[best], cut[best]
         return best_util, best_cut
