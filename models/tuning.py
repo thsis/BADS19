@@ -206,43 +206,43 @@ class GeneticAlgorithm:
             self.bootstrap = bootstrap
             self.oob_size = self.n - self.sample_size
 
-        for j in trange(maxiter, desc='Generation', leave=True, position=0):
-            # Draw random subsample to prevent overfitting
-            if j == 0:
-                samples = self.__get_sample()
-                sample, sample_y, sample_p, oob, oob_y, oob_p = samples
-            if np.random.random() < reset_prob:
-                samples = self.__get_sample()
-                sample, sample_y, sample_p, oob, oob_y, oob_p = samples
-
-            # Determine fitness in a parallelized pool of workers
-            with Parallel(n_jobs=self.n_jobs) as parallel:
+        with Parallel(n_jobs=self.n_jobs) as parallel:
+            for j in trange(maxiter, desc='Generation', leave=True, position=0):
+                # Draw random subsample to prevent overfitting
+                if j == 0:
+                    samples = self.__get_sample()
+                    sample, sample_y, sample_p, oob, oob_y, oob_p = samples
+                if np.random.random() < reset_prob:
+                    samples = self.__get_sample()
+                    sample, sample_y, sample_p, oob, oob_y, oob_p = samples
+    
+                # Determine fitness in a parallelized pool of workers
                 results = parallel(delayed(self.__get_fitness)(
                     sample, sample_y, sample_p, beta)
-                    for beta in tqdm(self.pool))
-
-            results = np.array(results)
-            self.fitness = results[:, 0]
-            self.cutoffs = results[:, 1]
-
-            # Save best candidate
-            fitness_idx = np.argsort(-self.fitness)
-            parents_idx = fitness_idx[:self.num_parents]
-            self.__update_history(fitness_idx, oob, oob_y, oob_p)
-
-            # Create new pool
-            self.pool = self.pool[parents_idx, :]
-
-            # Crossover
-            while self.pool.shape[0] < self.population_size:
-                parent_a_idx = np.random.choice(range(self.num_parents))
-                parent_b_idx = np.random.choice(range(self.num_parents))
-
-                candidate = self.crossover(parent_a_idx, parent_b_idx)
-                if np.random.random() < self.prob_mutation:
-                    candidate = self.__mutate(candidate)
-
-                self.pool = np.append(self.pool, [candidate], axis=0)
+                    for beta in tqdm(self.pool, desc="Iteration"))
+    
+                results = np.array(results)
+                self.fitness = results[:, 0]
+                self.cutoffs = results[:, 1]
+    
+                # Save best candidate
+                fitness_idx = np.argsort(-self.fitness)
+                parents_idx = fitness_idx[:self.num_parents]
+                self.__update_history(fitness_idx, oob, oob_y, oob_p)
+    
+                # Create new pool
+                self.pool = self.pool[parents_idx, :]
+    
+                # Crossover
+                while self.pool.shape[0] < self.population_size:
+                    parent_a_idx = np.random.choice(range(self.num_parents))
+                    parent_b_idx = np.random.choice(range(self.num_parents))
+    
+                    candidate = self.crossover(parent_a_idx, parent_b_idx)
+                    if np.random.random() < self.prob_mutation:
+                        candidate = self.__mutate(candidate)
+    
+                    self.pool = np.append(self.pool, [candidate], axis=0)
 
         # Determine Solution with best OOB-fitness
         opt_idx = np.argmax(self.history["oob_fitness"])
