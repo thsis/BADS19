@@ -169,6 +169,12 @@ LOGGER.info("LR score: % 20.2f", LR_COMPARISON)
 LOGGER.info("Test score: % 18.2f", TEST_SCORE)
 LOGGER.info("Coefficients: %s", RES.round(2))
 
+print("\nBaseline score: % 14.2f" % (BASELINE))
+print("RF score: % 20.2f" % (RF_COMPARISON))
+print("LR score: % 20.2f" % (LR_COMPARISON))
+print("Test score: % 18.2f" % (TEST_SCORE))
+print("Coefficients: %s" % (RES.round(2)))
+
 LOGGER.info("------------------- History -------------------")
 LOGGER.info("| Best Fitness | Mean Fitness | OOB Fitness")
 LOGGER.info("|--------------|--------------|-------------")
