@@ -7,6 +7,7 @@ from preprocessing.features import FeatureGenerator
 if __name__ == "__main__":
     train_data_path = os.path.join("data", "BADS_WS1819_known.csv")
     unknown_data_path = os.path.join("data", "BADS_WS1819_unknown.csv")
+    blacklist_path = os.path.join("preprocessing", "blacklist.txt")
 
     known = clean(train_data_path)
     unknown = clean(unknown_data_path)
@@ -29,10 +30,23 @@ if __name__ == "__main__":
     problematic = problematic[problematic > 3].index.tolist()
 
     update = input("Do you want to update the blacklist? y/n > ")
+    update_table = table.sort_values("correlation", ascending=False)[::2]
 
     if update == "y":
         print("Update blacklist.txt")
-        with open(os.path.join("preprocessing", "blacklist.txt"), "w") as f:
-            f.writelines("\n".join(problematic), )
-
-    print(table.sort_values("correlation", ascending=False)[::2])
+        for idx, row in update_table.iterrows():
+            var1, var2, corr = row
+            while True:
+                try:
+                    print(var1, var2, corr)
+                    var = input("Which variable do you want to kill? [1, 2]> ")
+                    if var == "n":
+                        break
+                    var_idx = int(var) - 1
+                    break
+                except Exception:
+                    print("Entry invalid.")
+                    continue
+            if var != "n":
+                with open(blacklist_path, "a") as f:
+                    f.writelines("\n" + row[var_idx])

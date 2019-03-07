@@ -121,10 +121,17 @@ def clean(datapath):
     # Time related features
     data["days_to_delivery"] = (data.delivery_date-data.order_date).dt.days
     data["user_tenure"] = (data.order_date - data.user_reg_date).dt.days
+    data["age"] = (data.order_date - data.user_dob).dt.days
+    data["month"] = data.delivery_date.dt.month.astype(object)
     # Constrain user_tenure to be non-negative.
     data.loc[data.user_tenure < 0, "user_tenure"] = 0
+
+    # Additional features
     data["delivery_thu"] = data.delivery_date.dt.dayofweek == 4
     data["delivery_fri"] = data.delivery_date.dt.dayofweek == 5
+    data["age2"] = data.age ** 2
+    data["user_tenure2"] = data.user_tenure ** 2
+    data["item_price2"] = data.item_price ** 2
 
     # Color related features
     data["is_item_color_metal"] = data.item_color == "metal"

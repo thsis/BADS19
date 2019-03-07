@@ -99,6 +99,10 @@ class FeatureGenerator(object):
 
         self.color_woe = self.__fit_woe(data[~data[target_col].isna()],
                                         "item_color")
+        self.month_woe = self.__fit_woe(data[~data[target_col].isna()],
+                                        "month")
+        self.size_woe = self.__fit_woe(data[~data[target_col].isna()],
+                                       "item_size")
 
         self.items = self.__fit_items()
         self.orders = self.__fit_orders()
@@ -145,7 +149,7 @@ class FeatureGenerator(object):
         out.loc[out.item_orders.isnull()] = 1
         out.loc[out.order_num_sizes.isnull()] = 1
 
-        woetab = (self.color_woe, )
+        woetab = (self.color_woe, self.month_woe, self.size_woe)
         if not ignore_woe:
             for right in woetab:
                 out = self.__merge(out, right)
@@ -164,7 +168,8 @@ class FeatureGenerator(object):
         out = self.__get_interactions(out, outnames)
 
         # Add dummies
-        dummies = pd.get_dummies(X[["user_title", "user_state", "item_size"]])
+        dummy_cols = ["user_title", "user_state", "item_size", "month"]
+        dummies = pd.get_dummies(X[dummy_cols])
         out = pd.concat([out, dummies], axis=1)
 
         out = out.fillna(out.mean())
