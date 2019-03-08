@@ -133,15 +133,12 @@ def clean(datapath):
     data["user_tenure2"] = data.user_tenure ** 2
     data["item_price2"] = data.item_price ** 2
 
-    # Color related features
-    data["is_item_color_metal"] = data.item_color == "metal"
-
     # "Cleaned" item size column
-    data["item_size"] = data.item_size.str.upper()
-    data["item_size"] = data.item_size.str.replace("+", ".5")
-    data["item_size"] = data.item_size.str.replace("[xX]{2,}[Ll]", "XL")
-    data["item_size"] = data.item_size.str.replace("[xX]{2,}[Ss]", "XS")
-    data["item_size"] = data.item_size.apply(clean_size)
+    data["item_size_cl"] = data.item_size.str.upper()
+    data["item_size_cl"] = data.item_size.str.replace("+", ".5")
+    data["item_size_cl"] = data.item_size.str.replace("[xX]{2,}[Ll]", "XL")
+    data["item_size_cl"] = data.item_size.str.replace("[xX]{2,}[Ss]", "XS")
+    data["item_size_cl"] = data.item_size.apply(clean_size)
 
     return data
 

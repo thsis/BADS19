@@ -71,7 +71,8 @@ class FeatureGenerator(object):
         self.target_col, self.features, self.target = None, None, None
         self.items, self.orders, self.brands, self.states = None, None, None, None
 
-        self.color_woe = None
+        self.color_woe, self.month_woe, self.size_woe = None, None, None
+        self.price_qs = None
         self.outfeatures = None
         with open(os.path.join("preprocessing", "blacklist.txt"), "r") as f:
             self.dropcols = f.read().splitlines()
@@ -109,9 +110,13 @@ class FeatureGenerator(object):
         self.brands = self.__fit_brands()
         self.states = self.__fit_states()
 
+        self.price_qs = np.quantile(data.item_price.values,
+                                    [0.25, 0.50, 0.75])
+
         return self
 
-    def transform(self, X, ignore_woe=True):
+    def transform(self, X, ignore_woe=True, add_dummies=False,
+                  add_interactions=True, add_ratios=True):
         """Add aggregated information to X and compute additional features.
 
         Parameters
@@ -162,15 +167,27 @@ class FeatureGenerator(object):
         out["price_off"] = price_off.fillna(value=0)
 
         # Create ratios
-        out = self.__get_ratios(out, outnames)
+        if add_ratios:
+            out = self.__get_ratios(out, outnames)
 
         # Create interactions
-        out = self.__get_interactions(out, outnames)
+        if add_interactions:
+            out = self.__get_interactions(out, outnames)
 
         # Add dummies
-        dummy_cols = ["user_title", "user_state", "item_size", "month"]
-        dummies = pd.get_dummies(X[dummy_cols])
-        out = pd.concat([out, dummies], axis=1)
+        if add_dummies:
+            dummy_cols = ["user_title", "user_state", "item_size_cl", "month"]
+            dummies = pd.get_dummies(X[dummy_cols])
+            out = pd.concat([out, dummies], axis=1)
+            q1, q2, q3 = self.price_qs
+            out["is_q1_value"] = out.item_price <= q1
+            out["is_q2_value"] = (out.item_price > q1) & (out.item_price <= q2)
+            out["is_q3_value"] = (out.item_price > q2) & (out.item_price <= q3)
+            out["is_q4_value"] = out.item_price > q3
+        if not add_dummies:
+            dummy_cols = [c for c in out.columns if c[:2] == "is"]
+            dummy_cols += ["delivery_thu", "delivery_fri", "order_has_gift"]
+            self.dropcols += dummy_cols
 
         out = out.fillna(out.mean())
         out = out.drop(columns=self.dropcols, errors="ignore")
@@ -187,10 +204,16 @@ class FeatureGenerator(object):
         else:
             return out
 
-    def fit_transform(self, data, target_col, ignore_woe=True):
+    def fit_transform(self, data, target_col, ignore_woe=True,
+                      add_dummies=False, add_interactions=True,
+                      add_ratios=True):
         """Fit data then transform it."""
         self.fit(data, target_col)
-        out = self.transform(data, ignore_woe)
+        out = self.transform(data,
+                             ignore_woe=ignore_woe,
+                             add_dummies=add_dummies,
+                             add_interactions=add_interactions,
+                             add_ratios=add_ratios)
         return out
 
     def __merge(self, left, right, impute=np.nan):
@@ -249,8 +272,8 @@ class FeatureGenerator(object):
 
     def __fit_states(self):
         states = self.features.groupby("user_state").agg({
-            "days_to_delivery": ["min", "mean", "max"]})
-        statecols = ["state_min_delivery", "state_mean_delivery",
+            "days_to_delivery": ["mean", "max"]})
+        statecols = ["state_mean_delivery",
                      "state_max_delivery"]
         states.columns = statecols
         return states
@@ -273,6 +296,8 @@ class FeatureGenerator(object):
                 continue
             if out[denom].min() == 0:
                 continue
+            if (nom == "month") or (denom == "month"):
+                continue
             # HACK: make sure price-offs are in the nominator.
             if denom == "price_off":
                 out["{}/{}".format(denom, nom)] = out[denom] / (out[nom] + 1)
@@ -292,6 +317,8 @@ class FeatureGenerator(object):
             if (a[:3] == "woe") or (b[:3] == "woe"):
                 continue
             if out[a].isnull().any() or out[b].isnull().any():
+                continue
+            if (a == "month") or (b == "month"):
                 continue
             if (out[a].dtype == bool) & (out[b].dtype == bool):
                 out["{}*{}".format(a, b)] = out[a] & out[b]

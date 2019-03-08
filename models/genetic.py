@@ -18,7 +18,9 @@ import argparse
 import numpy as np
 import pandas as pd
 
+from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -101,11 +103,14 @@ FG.fit(HISTORY, 'return')
 X_TRAIN, Y_TRAIN = FG.transform(TRAIN)
 X_TEST, Y_TEST = FG.transform(TEST)
 
-
 if ARGS.pca:
-    PCA_DECOMP = PCA(n_components=3)
-    X_TRAIN = PCA_DECOMP.fit_transform(X_TRAIN)
-    X_TEST = PCA_DECOMP.transform(X_TEST)
+    STEPS = [("scaler", StandardScaler()),
+             ("pca", PCA(n_components=10))]
+    PIPELINE = Pipeline(STEPS)
+    SCALER = PIPELINE.fit(X_TRAIN, Y_TRAIN)
+
+    X_TRAIN = SCALER.transform(X_TRAIN)
+    X_TEST = SCALER.transform(X_TEST)
 
 # 4. Run Genetic Algorithm
 GA = GeneticAlgorithm(elitism=ARGS.elitism,
@@ -186,7 +191,7 @@ for best, avg, oob in zip(GA.history["best_fitness"],
 print("\nSave Predictions")
 X_PRED = FG.transform(UNKNOWN)
 if ARGS.pca:
-    X_PRED = PCA_DECOMP.transform(X_PRED)
+    X_PRED = SCALER.transform(X_PRED)
 
 PREDICTIONS = GA.predict(X_PRED)
 PREDICTIONS = pd.DataFrame(PREDICTIONS, index=UNKNOWN.index,

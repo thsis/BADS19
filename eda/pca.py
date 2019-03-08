@@ -7,8 +7,10 @@ import os
 import numpy as np
 import pandas as pd
 
+from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
 
 from matplotlib import pyplot as plt
 
@@ -28,33 +30,24 @@ HISTORY = KNOWN.append(UNKNOWN, sort=False)
 
 TRAIN, TEST = train_test_split(KNOWN, test_size=0.2)
 
-COLS = ["days_to_delivery",
-        "item_price*order_num_items",
-        "item_price*order_num_sizes",
-        "days_to_delivery*order_seqnum",
-        "days_to_delivery*brand_max_price",
-        "item_price",
-        "days_to_delivery*order_total_value",
-        "order_total_value/order_num_colors",
-        "order_total_value",
-        "days_to_delivery*order_min_price",
-        "order_num_items/order_num_colors",
-        "item_price*order_min_price",
-        "is_item_clothes*order_median_price",
-        "is_item_clothes*order_min_price"]
-
 FG = FeatureGenerator()
-
 FG.fit(HISTORY, 'return')
-X_TRAIN, Y_TRAIN = FG.transform(TRAIN)
-X_TEST, Y_TEST = FG.transform(TEST)
+X_TRAIN, Y_TRAIN = FG.transform(TRAIN,
+                                add_ratios=True,
+                                add_interactions=True,
+                                add_dummies=False)
+X_TEST, Y_TEST = FG.transform(TEST,
+                              add_ratios=True,
+                              add_interactions=True,
+                              add_dummies=False)
 
 
-COLSSET = set(COLS)
-FGSET = set(FG.outfeatures.columns)
+steps = [('scaler', StandardScaler()),
+         ('pca', PCA())]
+pipeline = Pipeline(steps)
+scaler = pipeline.fit(X_TRAIN, Y_TRAIN)
+PCA_DECOMP = pipeline.named_steps["pca"]
 
-PCA_DECOMP = PCA(n_components=15)
-PCA_DECOMP.fit(X_TRAIN)
 
 FIG, AX = plt.subplots(figsize=(6, 4))
 AX.plot(PCA_DECOMP.explained_variance_ratio_)
