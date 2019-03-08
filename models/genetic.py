@@ -66,7 +66,7 @@ PARSER.add_argument("--bootstrap", action="store_true", default=False,
                     help="if set, sample with replacement")
 PARSER.add_argument("--reset-prob", type=float, default=0.25,
                     help="probability of redrawing the subsample")
-PARSER.add_argument("--pca", action="store_true", default=False)
+PARSER.add_argument("--pca", type=int, default=None)
 ARGS = PARSER.parse_args()
 
 # 3. Load and clean the data
@@ -82,30 +82,17 @@ HISTORY = KNOWN.append(UNKNOWN, sort=False)
 
 TRAIN, TEST = train_test_split(KNOWN, test_size=0.2)
 
-if not ARGS.pca:
-    COLS = ["days_to_delivery",
-            "item_price*order_num_items",
-            "item_price*order_num_sizes",
-            "days_to_delivery*order_seqnum",
-            "days_to_delivery*brand_max_price",
-            "item_price",
-            "days_to_delivery*order_total_value",
-            "order_total_value/order_num_colors",
-            "order_total_value",
-            "order_num_items/order_num_colors",
-            "item_price*order_min_price",
-            "is_item_clothes*order_median_price"]
-else:
-    COLS = None
+with open("variables.txt", "r") as f:
+    COLS = f.read().splitlines()
 
 FG = FeatureGenerator(cols=COLS)
 FG.fit(HISTORY, 'return')
-X_TRAIN, Y_TRAIN = FG.transform(TRAIN)
-X_TEST, Y_TEST = FG.transform(TEST)
+X_TRAIN, Y_TRAIN = FG.transform(TRAIN, ignore_woe=False, add_dummies=True)
+X_TEST, Y_TEST = FG.transform(TEST, ignore_woe=False, add_dummies=True)
 
 if ARGS.pca:
     STEPS = [("scaler", StandardScaler()),
-             ("pca", PCA(n_components=10))]
+             ("pca", PCA(n_components=ARGS.pca))]
     PIPELINE = Pipeline(STEPS)
     SCALER = PIPELINE.fit(X_TRAIN, Y_TRAIN)
 
@@ -189,7 +176,7 @@ for best, avg, oob in zip(GA.history["best_fitness"],
     LOGGER.info("| % 12.7f | % 12.7f | % 12.7f", best, avg, oob)
 
 print("\nSave Predictions")
-X_PRED = FG.transform(UNKNOWN)
+X_PRED = FG.transform(UNKNOWN, ignore_woe=False, add_dummies=True)
 if ARGS.pca:
     X_PRED = SCALER.transform(X_PRED)
 
