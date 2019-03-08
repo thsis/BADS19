@@ -263,3 +263,4 @@ is_dob_missing*order_num_sizes
 is_letter_coded*order_median_price
 item_max_delivery*order_has_gift
 order_num_colors
+month

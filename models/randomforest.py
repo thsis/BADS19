@@ -80,13 +80,15 @@ known = clean(datapath)
 unknown = clean(unknownpath)
 history = known.append(unknown, sort=False)
 
-
 train, test = train_test_split(known, test_size=0.2)
 
-fg = FeatureGenerator()
+with open("variables.txt", "r") as f:
+    cols = f.read().splitlines()
+
+fg = FeatureGenerator(cols=cols)
 fg.fit(history, 'return')
-X_train, y_train = fg.transform(train, ignore_woe=False)
-X_test, y_test = fg.transform(test, ignore_woe=False)
+X_train, y_train = fg.transform(train, ignore_woe=False, add_dummies=True)
+X_test, y_test = fg.transform(test, ignore_woe=False, add_dummies=True)
 
 # 4. Define model pipeline.
 steps = [('scaler', StandardScaler()),
@@ -96,17 +98,17 @@ pipeline = Pipeline(steps)
 # 5. Define hyperparameter space.
 paramspace = {
     "rf__n_estimators": scope.int(hp.quniform("rf__n_estimators",
-                                              100, 25000, 1)),
+                                              100, 250, 1)),
     "rf__max_features": hp.uniform("rf__max_features", 0.2, 0.7),
     "rf__max_depth": scope.int(hp.quniform("rf__max_depth",
-                                           1, 250, 1)),
+                                           1, 500, 1)),
     "rf__min_samples_split": hp.uniform("rf__min_samples_split", 0.0001, 0.05),
     "rf__min_samples_leaf": hp.uniform("rf__min_samples_leaf", 0.001, 0.05),
     "rf__n_jobs": -1}
 
 # 6. Perform hyperparameter tuning with train data.
 trials = Trials()
-best = max_auc(paramspace=paramspace, trials=trials, max_evals=100)
+best = max_auc(paramspace=paramspace, trials=trials, max_evals=10)
 
 logger.info("{0} Optimal Parameter Space {0}".format("-" * 12))
 for param, val in best.items():
@@ -117,10 +119,10 @@ best["rf__max_depth"] = int(best["rf__max_depth"])
 
 # 7. Fit pipeline with whole dataset and save predictions.
 print("Generate Features")
-fg = FeatureGenerator()
+fg = FeatureGenerator(cols=cols)
 fg.fit(history, 'return')
-X, y = fg.transform(known, ignore_woe=False)
-X_pred = fg.transform(unknown, ignore_woe=False)
+X, y = fg.transform(known, ignore_woe=False, add_dummies=True)
+X_pred = fg.transform(unknown, ignore_woe=False, add_dummies=True)
 
 print("Calculate Predictions")
 clf = pipeline.set_params(**best)

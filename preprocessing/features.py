@@ -6,7 +6,7 @@ import pandas as pd
 from preprocessing import cleaning
 
 
-class FeatureGenerator(object):
+class FeatureGenerator:
     """Generate Features for the different algorithms.
 
     This class interface facilitates the fitting and transforming of different
@@ -73,6 +73,7 @@ class FeatureGenerator(object):
 
         self.color_woe, self.month_woe, self.size_woe = None, None, None
         self.price_qs = None
+        self.dummies = None
         self.outfeatures = None
         with open(os.path.join("preprocessing", "blacklist.txt"), "r") as f:
             self.dropcols = f.read().splitlines()
@@ -177,8 +178,8 @@ class FeatureGenerator(object):
         # Add dummies
         if add_dummies:
             dummy_cols = ["user_title", "user_state", "item_size_cl", "month"]
-            dummies = pd.get_dummies(X[dummy_cols])
-            out = pd.concat([out, dummies], axis=1)
+            self.dummies = pd.get_dummies(X[dummy_cols])
+            out = pd.concat([out, self.dummies], axis=1)
             q1, q2, q3 = self.price_qs
             out["is_q1_value"] = out.item_price <= q1
             out["is_q2_value"] = (out.item_price > q1) & (out.item_price <= q2)
@@ -196,7 +197,7 @@ class FeatureGenerator(object):
         if self.cols is None:
             self.cols = out.columns.tolist()
 
-        out = out.loc[:, self.cols].values.astype(np.float64)
+        out = out[self.cols].values.astype(np.float64)
 
         # HACK:
         if self.target_col in X.columns:
@@ -329,12 +330,14 @@ class FeatureGenerator(object):
 
 
 if __name__ == "__main__":
-    traindatapath = os.path.join("data", "BADS_WS1819_known.csv")
-    preddatapath = os.path.join("data", "BADS_WS1819_unknown.csv")
-    known = cleaning.clean(traindatapath)
-    unknown = cleaning.clean(preddatapath)
+    DATAPATH = os.path.join("data", "BADS_WS1819_known.csv")
+    UNKNOWNPATH = os.path.join("data", "BADS_WS1819_unknown.csv")
 
-    fg = FeatureGenerator()
-    X_known, y_known = fg.fit_transform(known, "return")
+    KNOWN = cleaning.clean(DATAPATH)
+    UNKNOWN = cleaning.clean(UNKNOWNPATH)
+    HISTORY = KNOWN.append(UNKNOWN, sort=False)
+    FG = FeatureGenerator()
+    FG.fit(HISTORY, "return")
 
-    X_unknown = fg.transform(unknown)
+    X_KNOWN, Y_KNOWN = FG.transform(KNOWN, add_dummies=True)
+    X_KNOWN.describe(include="all")

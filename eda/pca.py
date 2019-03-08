@@ -30,7 +30,10 @@ HISTORY = KNOWN.append(UNKNOWN, sort=False)
 
 TRAIN, TEST = train_test_split(KNOWN, test_size=0.2)
 
-FG = FeatureGenerator()
+with open("variables.txt", "r") as f:
+    COLS = f.read().splitlines()
+
+FG = FeatureGenerator(cols=COLS)
 FG.fit(HISTORY, 'return')
 X_TRAIN, Y_TRAIN = FG.transform(TRAIN,
                                 add_ratios=True,

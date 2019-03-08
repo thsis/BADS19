@@ -135,10 +135,10 @@ def clean(datapath):
 
     # "Cleaned" item size column
     data["item_size_cl"] = data.item_size.str.upper()
-    data["item_size_cl"] = data.item_size.str.replace("+", ".5")
-    data["item_size_cl"] = data.item_size.str.replace("[xX]{2,}[Ll]", "XL")
-    data["item_size_cl"] = data.item_size.str.replace("[xX]{2,}[Ss]", "XS")
-    data["item_size_cl"] = data.item_size.apply(clean_size)
+    data["item_size_cl"] = data.item_size_cl.str.replace("+", ".5")
+    data["item_size_cl"] = data.item_size_cl.str.replace("[xX]{2,}[Ll]", "XL")
+    data["item_size_cl"] = data.item_size_cl.str.replace("[xX]{2,}[Ss]", "XS")
+    data["item_size_cl"] = data.item_size_cl.apply(clean_size)
 
     return data
 
