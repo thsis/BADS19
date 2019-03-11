@@ -278,7 +278,7 @@ class GeneticAlgorithm:
         ax.plot(self.history["oob_fitness"], label="Test Fitness")
         ax.set_xlabel("Iteration")
         ax.set_ylabel("Fitness")
-        ax.set_xticks(range(0, self.maxiter, 5))
+        ax.set_xticks(np.linspace(1, self.maxiter, num=10, dtype=int))
         ax.set_title(title)
 
         plt.legend()
