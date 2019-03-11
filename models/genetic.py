@@ -122,11 +122,17 @@ TEST_SCORE = GA.get_utility(y_prob=TEST_PRED,
                             price=TEST.item_price.values,
                             cutoff=GA.optimal_cutoff)
 
-# Baseline: everybody gets the message
-BASELINE = GA.get_utility(y_prob=np.ones(len(Y_TEST)),
-                          y_true=Y_TEST,
-                          price=TEST.item_price.values,
-                          cutoff=0.5)
+# Baseline 0: nobody gets the message
+BASELINE_0 = GA.get_utility(y_prob=np.zeros(len(Y_TEST)),
+                            y_true=Y_TEST,
+                            price=TEST.item_price.values,
+                            cutoff=0.5)
+
+# Baseline 1: everybody gets the message
+BASELINE_1 = GA.get_utility(y_prob=np.ones(len(Y_TEST)),
+                            y_true=Y_TEST,
+                            price=TEST.item_price.values,
+                            cutoff=0.5)
 
 # Comparison: Train a shitty random forest
 RF = RandomForestClassifier(max_depth=87.0, min_samples_leaf=0.01432,
@@ -155,13 +161,14 @@ for arg, val in vars(ARGS).items():
 LOGGER.info(OUTPATH)
 
 LOGGER.info("------------------- Results -------------------")
-LOGGER.info("Baseline score: % 14.2f", BASELINE)
+LOGGER.info("Baseline score: % 14.2f", BASELINE_1)
 LOGGER.info("RF score: % 20.2f", RF_COMPARISON)
 LOGGER.info("LR score: % 20.2f", LR_COMPARISON)
 LOGGER.info("Test score: % 18.2f", TEST_SCORE)
 LOGGER.info("Coefficients: %s", RES.round(2))
 
-print("\nBaseline score: % 14.2f" % (BASELINE))
+print("\nBaseline 0 score: % 12.2f" % (BASELINE_0))
+print("Baseline 1 score: % 12.2f" % (BASELINE_1))
 print("RF score: % 20.2f" % (RF_COMPARISON))
 print("LR score: % 20.2f" % (LR_COMPARISON))
 print("Test score: % 18.2f" % (TEST_SCORE))
