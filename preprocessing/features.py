@@ -110,6 +110,7 @@ class FeatureGenerator:
         self.orders = self.__fit_orders()
         self.brands = self.__fit_brands()
         self.states = self.__fit_states()
+        self.return_history = self.__fit_return_history()
 
         self.price_qs = np.quantile(data.item_price.values,
                                     [0.25, 0.50, 0.75])
@@ -125,14 +126,14 @@ class FeatureGenerator:
         X : pd.DataFrame
             DataFrame to be transformed.
         ignore_woe : bool, optional
-                     Flag if Weight of Evidence columns should be ignored.
-                     Default is `True`.
+            Flag if Weight of Evidence columns should be ignored.
+            Default is `True`.
 
         Returns
         -------
         out, [y] : np.ndarray
-                   Note that `y` will only be returned if columns of `X`
-                   contain the target column.
+            Note that `y` will only be returned if columns of `X`
+            contain the target column.
         """
         # Merge fitted tables for items, orders, brands and states
         out = X.loc[:, X.columns != self.target_col]
@@ -148,6 +149,7 @@ class FeatureGenerator:
             "order_seqnum": 1})
         out = self.__merge(out, self.brands, impute=self.brands.mean())
         out = self.__merge(out, self.states, impute=self.states.mean())
+        out = self.__merge(out, self.return_history, impute=0)
 
         # Fix broken columns after merge
         out["order_has_gift"] = (out.order_min_price == 0).astype(float)
@@ -258,11 +260,30 @@ class FeatureGenerator:
                      "order_total_value", "order_median_price",
                      "order_min_price", "order_num_sizes", "order_num_colors"]
         orders.columns = ordercols
-        seqnum = orders.reset_index().groupby("user_id").order_date.rank()
+        seqnum = orders.reset_index().groupby("user_id").order_date.rank(
+            method="dense")
         seqnum.index = orders.index
         orders["order_seqnum"] = seqnum
 
         return orders
+
+    def __fit_return_history(self):
+        # Create indicator if the order contained any returned items
+        returns = self.target.dropna().groupby(
+            [self.features.user_id, self.features.order_date]
+            ).max().reset_index()
+
+        # Create lag in order to avoid a target leak
+        returns["history"] = returns.groupby(
+            "user_id")["return"].shift(1).fillna(0)
+        returns["seqnum"] = returns.groupby("user_id").order_date.rank(
+            method="dense")
+        returns["history_cumsum"] = returns.groupby("user_id").history.cumsum()
+        returns["history_perc"] = returns.history_cumsum / returns.seqnum
+        outcols = ["history", "history_cumsum", "history_perc"]
+        returns = returns.set_index(["user_id", "order_date"])
+
+        return returns[outcols]
 
     def __fit_brands(self):
         brands = self.features.groupby("brand_id").agg({
@@ -340,4 +361,3 @@ if __name__ == "__main__":
     FG.fit(HISTORY, "return")
 
     X_KNOWN, Y_KNOWN = FG.transform(KNOWN, add_dummies=True)
-    X_KNOWN.describe(include="all")
