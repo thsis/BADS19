@@ -265,6 +265,12 @@ class FeatureGenerator:
         seqnum.index = orders.index
         orders["order_seqnum"] = seqnum
 
+        brandcounts = self.features.groupby(
+            ["user_id", "order_date"]).brand_id.value_counts()
+        brandcounts = brandcounts.rename("order_num_brand_id").reset_index()
+
+        orders = orders.reset_index().merge(brandcounts, how="left")
+        orders = orders.set_index(["user_id", "order_date"])
         return orders
 
     def __fit_return_history(self):
