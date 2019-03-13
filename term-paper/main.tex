@@ -1,12 +1,14 @@
 \documentclass{article}
 
-\usepackage{hyperref}
+\usepackage[urlcolor=blue]{hyperref}
 \usepackage{apacite}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{wrapfig}
+\usepackage{subcaption}
 
+\usepackage{eurosym}
 \usepackage{amsmath}
 \usepackage{amssymb}
 
@@ -15,6 +17,8 @@
 \usepackage{algpseudocode}
 
 \usepackage[font={small,bf}]{caption}
+
+\captionsetup[subfigure]{font=footnotesize}
 
 \begin{document}
 
@@ -36,7 +40,7 @@
 \label{preparation}
 \input{preparation.tex}
 
-\section{    }
+\section{Model Tuning and Selection}
 \label{tuning}
 \input{tuning.tex}
 
@@ -45,7 +49,7 @@
 \label{evaluation}
 \input{evaluation.tex}
 
-\section{Minimizing Costs directly}
+\section{Cost Minimization using a Genetic Algorithm}
 \label{special}
 \input{special.tex}
 
@@ -53,7 +57,6 @@
 \label{conclusion}
 \input{conclusion.tex}
 
-\newpage
 \bibliographystyle{apacite}
 \bibliography{references}
 \end{document}

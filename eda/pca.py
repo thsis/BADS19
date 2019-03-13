@@ -5,7 +5,6 @@ Try to reduce dimensionality by a PCA-decomposition.
 import os
 
 import numpy as np
-import pandas as pd
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
@@ -38,12 +37,8 @@ FG.fit(HISTORY, 'return')
 X_TRAIN, Y_TRAIN = FG.transform(TRAIN,
                                 add_ratios=True,
                                 add_interactions=True,
-                                add_dummies=False)
-X_TEST, Y_TEST = FG.transform(TEST,
-                              add_ratios=True,
-                              add_interactions=True,
-                              add_dummies=False)
-
+                                add_dummies=True,
+                                ignore_woe=False)
 
 steps = [('scaler', StandardScaler()),
          ('pca', PCA())]
@@ -59,3 +54,4 @@ AX.set_ylabel("Explained Variance in %")
 
 FIG.savefig(OUTPATH)
 print(PCA_DECOMP.explained_variance_ratio_.cumsum())
+PCA_DECOMP.explained_variance_ratio_.cumsum()[19]

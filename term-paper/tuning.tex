@@ -7,7 +7,8 @@ Multiple different models and approaches were tried. Among which were Random For
 \label{spaces}
 \tiny
 \begin{tabular}{lll}
-                            & Parameters                  & Choices                                \\ \hline
+\toprule
+Model                       & Parameters                  & Choices                                \\ \midrule
 Logistic Regression         & Penalty                     & L1, L2                                 \\
                             & $\lambda$, penalty parameter       & uniform(0, 1)                          \\
 Support Vector Machine      & Kernel                      & linear \\
@@ -31,7 +32,8 @@ Neural Network              & activation function         & tanh \\
                             & solver                      & adam \\
                             &                             & Gradient Descent     \\
 Boosted Trees               & number of estimators        & uniform(10, 1000)                      \\
-                            & maximum depth               & uniform(1, 5)                         
+                            & maximum depth               & uniform(1, 5)                         \\
+\bottomrule
 \end{tabular}
 \end{table}
 

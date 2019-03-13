@@ -69,12 +69,12 @@ def clean(datapath):
     Parameters
     ----------
     datapath : str
-               Path to dataset.
+        Path to dataset.
 
     Returns
     -------
     data : pd.DataFrame
-           Cleaned dataset.
+        Cleaned dataset.
     """
     # Dates
     date_columns = ["order_date", "delivery_date", "user_dob", "user_reg_date"]
@@ -93,9 +93,10 @@ def clean(datapath):
 
     # Compute Mean Number of Days until Delivery
     na_del = pd.isna(data.delivery_date)
-    ndd_med = (data.delivery_date - data.order_date).mean()
+    ndd_med = (data.delivery_date - data.order_date).median()
     # Impute missing values for "delivery_date" by mean
     data.loc[na_del, "delivery_date"] = data.loc[na_del, "order_date"]+ndd_med
+    data["is_na_delivery_date"] = na_del
 
     # Remove user_dob from 1900
     data.loc[data.user_dob.dt.year <= 1926, "user_dob"] = np.nan

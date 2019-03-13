@@ -14,56 +14,65 @@ class FeatureGenerator:
 
     Parameters
     ----------
-    cols : list
+    `cols` : `list`
            List of column names to be returned at most. Must be a subset of all
            columns that are defined within the `fit` method.
 
     Attributes
     ----------
-    cols : list
+    `cols` : `list`
            Column names of the returned array.
 
-    dropcols : list
+    `dropcols` : `list`
                Column names that should be dropped, because their correlation
                with other variables is too high.
 
-    target : pd.Series
+    `target` : `pd.Series`
              Series of class values/labels.
 
-    features : pd.DataFrame
+    `features` : `pd.DataFrame`
                Original features, copy of `data`.
 
-    item_woe : pd.DataFrame
+    `item_woe` : `pd.DataFrame`
                `item_id` and associated weight of evidence.
 
-    color_woe : pd.DataFrame
+    `color_woe` : `pd.DataFrame`
                 `item_color` and associated weight of evidence.
 
-    brand_woe : pd.DataFrame
+    `brand_woe` : `pd.DataFrame`
                 `brand_id` and associated weight of evidence.
 
-    size_woe : pd.DataFrame
+    `size_woe` : `pd.DataFrame`
                `item_size` and associated weight of evidence.
 
-    items : pd.DataFrame
+    `items` : `pd.DataFrame`
             Contains general information on items. Groupby-Keys: `item_id`.
 
-    orders : pd.DataFrame
+    `orders` : `pd.DataFrame`
             Contains general information on orders. Groupby-Keys: `user_id`
             `order_date`.
 
-    brands : pd.DataFrame
+    `brands` : `pd.DataFrame`
             Contains general information on brands. Groupby-Keys: `brand_id`.
 
-    states : pd.DataFrame
+    `states` : `pd.DataFrame`
             Contains general information on states. Groupby-Keys: `user_state`.
 
-    outfeatures: pd.DataFrame
+    `outfeatures` : `pd.DataFrame`
                  DataFrame version of the returned `numpy.ndarray`.
 
     Methods
     -------
+    `fit(self, data, target_col)` :
+        Fit data.
 
+    `transformself, X, ignore_woe=True, add_dummies=False, \
+    add_interactions=True, add_ratios=True)` :
+        Tranform data.
+
+    `fit_transform(self, data, target_col, ignore_woe=True, add_dummies=False, \
+    add_interactions=True, add_ratios=True)` :
+        Fit data, then transform it.
     """
 
     def __init__(self, cols=None):
@@ -89,11 +98,11 @@ class FeatureGenerator:
 
         Parameters
         ----------
-        data : pd.DataFrame
-               Full set of information to be used. This can be the `known`
-               dataset or a concatenation of `known` and `unknown`.
-        target_col : str
-                     Name of the column that contains the labels
+        `data` : `pd.DataFrame`
+            Full set of information to be used. This can be the `known`
+            dataset or a concatenation of `known` and `unknown`.
+        `target_col` : `str`
+            Name of the column that contains the labels
         """
         self.target_col = target_col
         self.features = data.loc[:, data.columns != self.target_col].copy()
@@ -123,15 +132,15 @@ class FeatureGenerator:
 
         Parameters
         ----------
-        X : pd.DataFrame
+        `X` : `pd.DataFrame`
             DataFrame to be transformed.
-        ignore_woe : bool, optional
+        `ignore_woe` : `bool`, optional
             Flag if Weight of Evidence columns should be ignored.
             Default is `True`.
 
         Returns
         -------
-        out, [y] : np.ndarray
+        `out, [y]` : `np.ndarray`
             Note that `y` will only be returned if columns of `X`
             contain the target column.
         """

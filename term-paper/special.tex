@@ -62,23 +62,37 @@ These modifications mean that it was not possible to use an out-of-the-box imple
 \begin{subfigure}[b]{0.5\textwidth}            
             \includegraphics[width=\textwidth, height=110px]{%
             ../eda/genetic_test.png}
-            \caption{For the simulated test case \\ %
-                     it is easy to find an optimum that \\%
-                     generalizes well.}
+            \caption{For the simulated test case it is easy                 to \\find an optimum that generalizes well.}
     \end{subfigure}%
     \begin{subfigure}[b]{0.5\textwidth}
             \centering
             \includegraphics[width=\textwidth, height=110px]{%
-            ../logs/genetic_20190304_1457.png}
-            \caption{For the real data con-\\%
-                     siderable overfitting is to be \\%
-                     expected.}
+            ../logs/genetic_20190311_1103.png}
+            \caption{For the real data numerous generations \\are required for convergence.}
     \end{subfigure}
 \end{figure}
 
-
 In order to test the customized algorithm a simulation study was used. A data matrix $X$ was randomly initialized and a vector of known, 'true' coefficients $\beta_{true}$ was used to calculate deterministic true labels $y_{true}$ with the threshold $c_{true} = 0.7$ much in the same way as described above. The results of the simulation are described in the left part of figure \ref{gaplot}. The algorithm was able to find an approximate solution that was a scaled version of $\beta_{true}$ with a different threshold which provided a cost on the out-of-bag sample that was sufficiently close to zero. Having confirmed the reliabilty of the handcrafted routine in such a way it is possible to further assess the cost on the real data.
 
-Furthermore, in order to reduce the dimensionality of the solution and thus to facilitate the search of the algorithm, the original feature space was decomposed into it's 4 Principal Components. Due to the long run times of the algorithm, it was too costly to deploy a traditional grid search or a search by a tree of Parzen Estimators, with sufficient trials. Instead a grid of numerous configurations has been determined and only a random selection of this grid has been evaluated. The run that provided the best average cost per item on its respective out-of-bag samples was used for the final predictions.
+Furthermore, in order to reduce the dimensionality of the solution and thus to facilitate the search of the algorithm, the original feature space was decomposed into it's 20 first Principal Components. Due to the long run times of the algorithm, it was too costly to deploy a traditional grid search or a search by a tree of Parzen Estimators, with sufficient trials. Instead a grid of numerous configurations has been determined and only a random selection of this grid has been evaluated. The iteration that provided the best average cost per item on its respective out-of-bag samples was used for the final predictions.
+
+\begin{wraptable}[9]{r}{5.5cm}
+\centering
+\caption{Resulting Cost}
+\tiny
+\begin{tabular}{lcc}
+\toprule
+                       & \multicolumn{2}{c}{Test Score }\\
+\cmidrule(lr){2-3}                       
+Model                  &    Total     &  Average \\
+\midrule
+Baseline               &  -339828.25  &  -16.99  \\
+Logistic Regression    &  -251312.01  &  -12.57  \\
+Random Forest          &  -245776.94  &  -12.29  \\
+Genetic Algorithm      &  -233277.08  &  -11.66  \\
+\bottomrule
+\end{tabular}
+\end{wraptable}
 
 
+The resulting predictions appear to be able to beat a naive baseline that never predicts a returned item, as well as a traditional Logistic Regression and a Random Forest, which do not account for the costs of misclassification. Moreover, with the prediction of the Genetic Algorithm it is possible to decrease the average cost by almost \EUR{1} compared to a Logistic Regression.

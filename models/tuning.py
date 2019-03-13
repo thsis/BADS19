@@ -17,15 +17,18 @@ def minimizer(objective):
 
     Parameters
     ----------
-    objective
-                The objective function that will be optimized. This function
-                should return a dictionary of the form
-                `{"loss": loss, "status": hyperopt.STATUS_OK}`.
+
+    `objective` : `callable`
+        The objective function that will be optimized. This function
+        should return a dictionary of the form
+        `{"loss": loss, "status": hyperopt.STATUS_OK}`.
+
     Returns
     -------
-    function
-                This decorated function will be optimized over a provided
-                parameter space.
+
+    `function` : `callable`
+        This decorated function will be optimized over a provided
+        parameter space.
     """
     def outer(paramspace, trials, max_evals=100):
         """Call fmin and manage the progress bar."""
@@ -63,43 +66,63 @@ class GeneticAlgorithm:
 
     Attributes
     ----------
-    elitism : float
-              Percentage of individuals to be kept in next iteration
-              and used to form offspring for the next iteration.
-    population_size : int
-                      Number of individuals in pool.
-    prob_mutation : float
-                    Probability of mutating a particular individual.
-    num_parents : int
-                  Number of parents.
-    n_jobs : int
-             Number of processors used. When -1, all processors are
-             used, when -2 all but one are used.
-    history: dict
-             Dictionary containing information of the current run.
-             Keeps records on the average and optimal fitness of the
-             population, the optimal candidate and threshold and the
-             out of bag fitness in each iteration.
-    optimal_candidate : numpy.array
-                        Optimal parameter vector.
-    optimal_cutoff : float
-                     Optimal threshold for transforming probablistic
-                     predictions into class labels.
+    `elitism` : `float`
+        Percentage of individuals to be kept in next iteration
+        and used to form offspring for the next iteration.
 
+    `population_size` : `int`
+        Number of individuals in pool.
+
+    `prob_mutation` : `float`
+        Probability of mutating a particular individual.
+
+    `num_parents` : `int`
+        Number of parents.
+
+    `n_jobs` : `int`
+        Number of processors used. When -1, all processors are used, when -2
+        all but one are used.
+
+    `history`: `dict`
+        Dictionary containing information of the current run. Keeps records on
+        the average and optimal fitness of the population, the optimal
+        candidate and threshold and the out of bag fitness in each iteration.
+
+    `optimal_candidate` : `numpy.array`
+        Optimal parameter vector.
+
+    `optimal_cutoff` : `float`
+        Optimal threshold for transforming probablistic
+        predictions into class labels.
 
     Methods
     -------
-    fit
+    `fit(self, X, y, price, fit_intercept=True, loc=0, scale=1)` :
+        Fit features to data. This is especially useful to avoid data leaks.
 
-    run
+    `run(self, maxiter=10, subsample=None, bootstrap=False, reset_prob=1)` :
+        Run Genetic Algorithm, determine optimal coefficients and threshold.
 
-    predict_proba
+    `predict_proba(self, X, b=None)` :
+        Return predicted probabilities of the positive class based on the
+        optimal coefficients.
 
-    predict
+    `predict(self, X, cut=None)` :
+        Return binary predictions based on the optimal coefficients and thres-
+        hold.
 
-    get_fitness
+    `predict_cost(self, X=None, y_true=None, price=None, b=None, cutoff=None)` :
+        Return predicted cost.
 
-    get_utility
+
+    `get_fitness(self, y_prob, y_true, price)` :
+        Compute optimal costs of misclassification and optimal threshold.
+
+    `get_utility(self, y_prob=None, y_true=None, price=None, cutoff=None)` :
+        Compute costs of misclassification based on arbitrary threshold.
+
+    `plot(self, savepath=None, title=None, **kwargs)` :
+        Draw diagnostic plot.
     """
 
     def __init__(self, elitism=0.02, population_size=100, n_jobs=-1,
@@ -140,22 +163,22 @@ class GeneticAlgorithm:
 
         Parameters
         ----------
-        X : numpy.ndarray
+        `X` : `numpy.ndarray`
             Train-data to calculate fitness with.
-        y : array-like
+        `y` : `array-like`
             Vector of true labels.
-        price : array-like
+        `price` : `array-like`
             Vector of item prices.
-        fit_intercept : bool
+        `fit_intercept` : `bool`
             Flag if intercept should be fitted.
-        loc : float
+        `loc` : `float`
             Location parameter during initialization.
-        scale : float
+        `scale` : `float`
             Scale parameter during initialization.
 
         Returns
         -------
-        self
+        `self`
         """
         self.fit_intercept = fit_intercept
         self.n, self.m = X.shape
@@ -180,18 +203,18 @@ class GeneticAlgorithm:
 
         Parameters
         ----------
-        maxiter : int
+        `maxiter` : `int`
             Maximum number of training iterations.
-        subsample : float
+        `subsample` : `float`
             Percentage of training data to be used for creating a subsample.
-        bootstrap : float
+        `bootstrap` : `float`
             If true, draw with replacement.
-        reset_prob : float
+        `reset_prob` : `float`
             Chance of redrawing the sample.
 
         Returns
         -------
-        optimal_candidate : numpy.array
+        `optimal_candidate` : `numpy.array`
         """
         self.maxiter = maxiter
         self.reset_prob = reset_prob
@@ -266,11 +289,11 @@ class GeneticAlgorithm:
         Parameters
         ----------
 
-        savepath : str
+        `savepath` : `str`
             If set, save plot to `savepath`.
-        title : str
+        `title` : `str`
             Title of figure. If `None` (default) omit title.
-        kwargs : dict
+        `kwargs` : `dict`
             Additional arguments to `pyplot.subplots`.
         """
         fig, ax = plt.subplots(**kwargs)
@@ -308,15 +331,15 @@ class GeneticAlgorithm:
 
         Parameters
         ----------
-        X : numpy.ndarray
+        `X` : `numpy.ndarray`
             Feature matrix.
-        b : numpy.array
+        `b` : `numpy.array`
             Parameter vector. If `None` (default) use optimal parameter
             of the last iteration.
 
         Returns
         -------
-        out : numpy.array
+        `out` : `numpy.array`
               Probabilities of the positive class computed by a logit-model.
         """
         if b is None:
@@ -331,16 +354,16 @@ class GeneticAlgorithm:
 
         Parameters
         ----------
-        X : numpy.ndarray
+        `X` : `numpy.ndarray`
             Feature matrix.
-        cut : float
+        `cut` : `float`
             Threshold for prediction. If probablity is larger than thres-
             hold predict positive class. If `None` (default) use the opt-
             imal parameter of the last iteration.
 
         Returns
         -------
-        out : numpy.array
+        `out` : `numpy.array`
             Predicted class labels.
         """
         if cut is None:
@@ -352,7 +375,8 @@ class GeneticAlgorithm:
         out = proba > cut
         return out
 
-    def predict_cost(self, X=None, y_true=None, price=None, b=None, cutoff=None):
+    def predict_cost(self, X=None, y_true=None, price=None, b=None,
+                     cutoff=None):
         """Return predicted cost.
 
         Predict cost for a given feature matrix, labels, price and cutoff
@@ -360,21 +384,28 @@ class GeneticAlgorithm:
 
         Parameters
         ----------
-        X : numpy.ndarray
+        `X` : `numpy.ndarray`
             Feature matrix. If `None` (default) use the whole training data.
-        y_true : array-like
-                 Vector of true labels. If `None` (default) use the whole training data.
-        price : array-like
-                Vector of prices. If `None` (default) use the whole training data.
-        b : array-like
-            Vector of coefficients. If `None` use the optimal solution of the last iteration.
-        cutoff : float
-                 Threshold for prediction. If `None` (default) use the optimal threshold of
-                 the last iteration.
+
+        `y_true` : `array-like`
+                 Vector of true labels. If `None` (default) use the whole
+                 training data.
+
+        `price` : `array-like`
+                Vector of prices. If `None` (default) use the whole training
+                data.
+
+        `b` : `array-like`
+            Vector of coefficients. If `None` use the optimal solution of the
+            last iteration.
+
+        `cutoff` : `float`
+                 Threshold for prediction. If `None` (default) use the optimal
+                 threshold of the last iteration.
 
         Returns
         -------
-        out : float
+        `out` : `float`
               Predicted cost.
         """
         if X is None:
@@ -407,21 +438,24 @@ class GeneticAlgorithm:
 
         Parameters
         ----------
-        y_prob : array-like
-                 Vector of predicted probablities of positive class.
-        y_true : array-like
-                 Vector of true labels.
-        price : array-like
-                Vector of item prices.
+        `y_prob` : `array-like`
+            Vector of predicted probablities of positive class.
+
+        `y_true` : `array-like`
+            Vector of true labels.
+
+        `price` : `array-like`
+            Vector of item prices.
 
         Returns
         -------
-        best_util : float
-                    Best achievable utility.
-        best_cut : float
-                   Threshold that leads to optimal utility.
+        `best_util` : `float`
+            Best achievable utility.
+
+        `best_cut` : `float`
+            Threshold that leads to optimal utility.
         """
-        cut = np.linspace(0, 1, num=50)
+        cut = np.linspace(0, 1, num=100)
         utility = [self.get_utility(y_prob, y_true, price, c) for c in cut]
         best = np.argmax(utility)
         best_util, best_cut = utility[best], cut[best]
@@ -434,18 +468,21 @@ class GeneticAlgorithm:
 
         Parameters
         ----------
-        y_prob : array-like
-                 Vector of predicted probabilities of positive class.
-        y_true : array-like
-                 Vector of true labels.
-        price : array-like
-                Vector of item prices.
-        cutoff : float
-                 Threshold for creating predictions.
+        `y_prob` : `array-like`
+            Vector of predicted probabilities of positive class.
+
+        `y_true` : `array-like`
+            Vector of true labels.
+
+        `price` : `array-like`
+            Vector of item prices.
+
+        `cutoff` : `float`
+            Threshold for creating predictions.
 
         Returns
         -------
-        utility : float
+        `utility` : `float`
                   Cost/utility.
         """
         if all((y_prob is None, y_true is None, price is None, cutoff is None)):

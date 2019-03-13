@@ -1,18 +1,20 @@
 Note that, while the Gradient Boosted Trees perform best on the test set, they also are most likely to overfit the training data and since this model has the highest discrepancy between train and test score it is not advisable to use it for  the final predictions. One would much rather choose either the Neural Network or the Random Forest. 
 
-\begin{wraptable}{r}{7.5cm}
+\begin{wraptable}[8]{r}{7.5cm}
 \centering
-\caption{Selected Results}
+\caption{Results of the trained models}
 \tiny
 \begin{tabular}{lcc}
-
-                            & Train AUC & Test AUC \\ \hline
+\toprule
+Model                       & Train AUC & Test AUC \\
+\midrule
 Logistic Regression         & 0.620     & 0.617    \\
 K-Nearest-Neighbors         & 0.690     & 0.647    \\
 Support Vector Machines     & 0.598     & 0.596    \\
 Feed forward Neural Network & 0.711     & 0.705    \\
 Random Forest               & 0.718     & 0.704    \\
-Gradient Boosted Trees      & 0.773     & 0.712   
+Gradient Boosted Trees      & 0.773     & 0.712    \\
+\bottomrule  
 \end{tabular}
 \end{wraptable}
 

@@ -303,3 +303,10 @@ item_orders*order_num_colors
 order_max_price/order_num_brand_id
 age2/order_num_brand_id
 user_tenure2/order_num_brand_id
+
+is_na_delivery_date*state_mean_delivery
+is_na_delivery_date*state_mean_delivery
+is_na_delivery_date*state_max_delivery
+is_na_delivery_date*order_num_colors
+is_na_delivery_date*order_median_price
+is_na_delivery_date*order_median_price
