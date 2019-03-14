@@ -85,6 +85,8 @@ train, test = train_test_split(known, test_size=0.2)
 with open("variables.txt", "r") as f:
     cols = f.read().splitlines()
 
+cols = None
+
 fg = FeatureGenerator(cols=cols)
 fg.fit(history, 'return')
 X_train, y_train = fg.transform(train, ignore_woe=False, add_dummies=True)

@@ -30,7 +30,7 @@ if __name__ == "__main__":
     OUT = pd.DataFrame(OUT, columns=COLS)
 
     CORR = OUT.corr()
-    FIG, AX = plt.subplots(figsize=(10, 8))
+    FIG, AX = plt.subplots(figsize=(11, 7))
     sns.set(font_scale=0.75)
     sns.heatmap(CORR, vmin=-1, vmax=1, center=0,
                 cmap=plt.cm.seismic,

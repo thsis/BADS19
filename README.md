@@ -4,6 +4,7 @@
 * `data`: contains `known` and `unknown` datasets.
 * `eda`: module that contains scripts for **exploratory data analysis**.
 * `models`: module that contains scripts that perform **parameter tuning** and generate **predictions** for different algorithms.
+    + `Genetic Algorithm` (in `tuning.py`)
     + `Random Forest`
     + `Logistic Regression`
     + `Support Vector Machines`
@@ -15,7 +16,7 @@
 
 ![Correlation Plot of Features](https://github.com/thsis/BADS19/blob/master/eda/corrplot.png)
 
-Some of the engineered features are still highly correlated and need to be removed before training time.
+All features which had a correlation higher than 95% have been removed.
 
 ## Getting the code of this repo to run
 
