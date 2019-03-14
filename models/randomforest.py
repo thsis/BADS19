@@ -63,7 +63,7 @@ def max_auc(params):
                                                               test_score, 3)
     logger.info(info)
     # HACK: Prevent selecting a overfitting solution
-    score = test_score - (np.abs(test_score - train_score) > 0.03)
+    score = test_score - ((train_score - test_score) > 0.03)
 
     return {"loss": -score, "status": STATUS_OK}
 
@@ -100,7 +100,7 @@ pipeline = Pipeline(steps)
 # 5. Define hyperparameter space.
 paramspace = {
     "rf__n_estimators": scope.int(hp.quniform("rf__n_estimators",
-                                              100, 250, 1)),
+                                              100, 25000, 1)),
     "rf__max_features": hp.uniform("rf__max_features", 0.2, 0.7),
     "rf__max_depth": scope.int(hp.quniform("rf__max_depth",
                                            1, 500, 1)),
@@ -110,7 +110,7 @@ paramspace = {
 
 # 6. Perform hyperparameter tuning with train data.
 trials = Trials()
-best = max_auc(paramspace=paramspace, trials=trials, max_evals=10)
+best = max_auc(paramspace=paramspace, trials=trials, max_evals=100)
 
 logger.info("{0} Optimal Parameter Space {0}".format("-" * 12))
 for param, val in best.items():
